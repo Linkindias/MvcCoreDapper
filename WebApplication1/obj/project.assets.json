@@ -11834,11 +11834,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\NetCore\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
+      "projectUniqueName": "D:\\GitHub\\MvcCore\\WebApplication1\\WebApplication1.csproj",
       "projectName": "WebApplication1",
-      "projectPath": "D:\\NetCore\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
+      "projectPath": "D:\\GitHub\\MvcCore\\WebApplication1\\WebApplication1.csproj",
       "packagesPath": "C:\\Users\\doctor\\.nuget\\packages\\",
-      "outputPath": "D:\\NetCore\\WebApplication1\\WebApplication1\\obj\\",
+      "outputPath": "D:\\GitHub\\MvcCore\\WebApplication1\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

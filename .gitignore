@@ -1,7 +1,7 @@
 
-.vs/WebApplication1/DesignTimeBuild/.dtbcache
-.vs/WebApplication1/v16/Server/sqlite3/db.lock
-.vs/WebApplication1/v16/Server/sqlite3/storage.ide
-WebApplication1/bin/Debug/netcoreapp2.1/
-WebApplication1/obj/Debug/netcoreapp2.1/
-
+.vs/
+WebApplication1/bin/
+WebApplication1/obj/
+BLL/obj/
+WebApplication1/obj/
+DAL/obj/
