@@ -12,4 +12,8 @@
     <Folder Include="DTOModel\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Base\Base.csproj" />
+  </ItemGroup>
+
 </Project>
