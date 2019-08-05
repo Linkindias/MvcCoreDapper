@@ -22,7 +22,7 @@ namespace DAL.Repository
         /// <param name="EmployeeId">員工編號</param>
         /// <param name="CostomerId">客戶編號</param>
         /// <param name="PassWord">密碼</param>
-        public (Result rtn,Authentication auth) GetAuthenticationByParams(int EmployeeId, string CostomerId, string PassWord)
+        public (Result rtn, Authentication auth) GetAuthenticationByParams(int EmployeeId, string CostomerId, string PassWord)
         {
             Result rtn = new Result();
             string sqlCmd = "SELECT * FROM Authentication ";
@@ -53,15 +53,9 @@ namespace DAL.Repository
                 sqlCmd += " and State = @State";
                 parameters.Add("@State", (int)DataStatus.Enable);
 
-                try
-                {
-                    authentication = connection.Query<Authentication>(sqlCmd, parameters).FirstOrDefault();
-                }
-                catch( Exception ex)
-                {
-                    rtn.IsSuccess = false;
-                    rtn.ErrorMsg = ex.Message.ToString();
-                }
+                var result = this.GetFirstDefault<Authentication>(sqlCmd, parameters);
+                rtn = result.rtn;
+                authentication = result.result;
             }
             return (rtn, authentication);
         }
