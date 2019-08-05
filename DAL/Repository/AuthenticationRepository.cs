@@ -33,25 +33,25 @@ namespace DAL.Repository
             {
                 if (EmployeeId > 0)
                 {
-                    sqlCmd += "WHERE EmployeesId == @EmpId";
+                    sqlCmd += "WHERE EmployeesId = @EmpId";
                     parameters.Add("@EmpId", EmployeeId);
                 }
 
                 if (!string.IsNullOrEmpty(CostomerId))
                 {
                     sqlCmd += sqlCmd.IndexOf("WHERE") == -1 ? "Where " : "and ";
-                    sqlCmd += "CustomersId == @CusId";
+                    sqlCmd += "CustomersId = @CusId";
                     parameters.Add("@CusId", CostomerId);
                 }
 
                 if (!string.IsNullOrEmpty(PassWord))
                 {
-                    sqlCmd += "and Password == @PassWord";
+                    sqlCmd += " and Password = @PassWord";
                     parameters.Add("@PassWord", PassWord);
                 }
 
-                sqlCmd += "and Status = @Status";
-                parameters.Add("@Status", (int)DataStatus.Enable);
+                sqlCmd += " and State = @State";
+                parameters.Add("@State", (int)DataStatus.Enable);
 
                 try
                 {
