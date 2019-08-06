@@ -20,7 +20,7 @@ namespace DAL
             this.CommandTimeout = timeout;
         }
 
-        public (Result rtn ,T result) GetFirstDefault<T>(string sqlCmd , DynamicParameters[] Params)
+        public (Result rtn ,T result) GetFirstDefault<T>(string sqlCmd , DynamicParameters Params)
         {
             Result rtn = new Result();
             T result = (T)Convert.ChangeType(null,typeof(T));
@@ -41,7 +41,7 @@ namespace DAL
             return (rtn, result);
         }
 
-        public (Result rtn, IEnumerable<T> result) GetList<T>(string sqlCmd, DynamicParameters[] Params)
+        public (Result rtn, IEnumerable<T> result) GetList<T>(string sqlCmd, DynamicParameters Params)
         {
             Result rtn = new Result();
             List<T> result = null;
@@ -61,7 +61,7 @@ namespace DAL
             return (rtn, result);
         }
 
-        public (Result rtn, int Rows) GetStoredProcedureOfRow(string sqlCmd, DynamicParameters[] Params)
+        public (Result rtn, int Rows) GetStoredProcedureOfRow(string sqlCmd, DynamicParameters Params)
         {
             Result rtn = new Result();
             int Rows = 0;
@@ -83,7 +83,7 @@ namespace DAL
             return (rtn, Rows);
         }
 
-        public (Result rtn, List<DynamicParameters> Params) GetStoredProcedureOfParams(string sqlCmd, DynamicParameters[] Params)
+        public (Result rtn, DynamicParameters Params) GetStoredProcedureOfParams(string sqlCmd, DynamicParameters Params)
         {
             Result rtn = new Result();
             using (var connection = new SqlConnection(this.ConnectionString))
@@ -101,7 +101,7 @@ namespace DAL
                     rtn.ErrorMsg = ex.Message.ToString();
                 }
             }
-            return (rtn, Rowdds);
+            return (rtn, Params);
         }
     }
 }
