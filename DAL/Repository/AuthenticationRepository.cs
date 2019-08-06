@@ -12,7 +12,7 @@ namespace DAL.Repository
 {
     public class AuthenticationRepository : ConnectionBase
     {
-        public AuthenticationRepository(string con) : base(con)
+        public AuthenticationRepository(string con, int timeout) : base(con, timeout)
         {
         }
 

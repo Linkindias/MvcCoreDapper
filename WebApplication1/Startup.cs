@@ -26,6 +26,7 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             string strCon = Configuration.GetValue<string>("NorthwindConnection");
+            int cmdTimeOut = Configuration.GetValue<int>("CommandTimeout");
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -34,7 +35,7 @@ namespace WebApplication1
             });
 
             services.AddSingleton<AuthenticationRepository>(x => 
-                new AuthenticationRepository(strCon)); //權限倉
+                new AuthenticationRepository(strCon, cmdTimeOut)); //權限倉
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
