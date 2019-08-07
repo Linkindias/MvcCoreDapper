@@ -20,7 +20,7 @@ namespace DAL
             this.CommandTimeout = timeout;
         }
 
-        public (Result rtn ,T result) GetFirstDefault<T>(string sqlCmd , DynamicParameters Params)
+        public (Result rtn ,T result) GetSingleDefault<T>(string sqlCmd , DynamicParameters Params)
         {
             Result rtn = new Result();
             T result = (T)Convert.ChangeType(null,typeof(T));
@@ -28,7 +28,7 @@ namespace DAL
             {
                 try
                 {
-                    result = connection.Query<T>(sqlCmd, Params).FirstOrDefault();
+                    result = connection.Query<T>(sqlCmd, Params).SingleOrDefault(); //只允許查出一筆
                     rtn.IsSuccess = true;
                 }
                 catch (Exception ex)
