@@ -103,5 +103,27 @@ namespace DAL
             }
             return (rtn, Params);
         }
+
+        public (Result rtn, int Rows) GetCUDOfRow(string sqlCmd, DynamicParameters Params)
+        {
+            Result rtn = new Result();
+            int Rows = 0;
+            using (var connection = new SqlConnection(this.ConnectionString))
+            {
+                try
+                {
+                    Rows = connection.Execute(sqlCmd, Params,
+                                                        commandTimeout: this.CommandTimeout,
+                                                        commandType: CommandType.StoredProcedure);
+                    rtn.IsSuccess = true;
+                }
+                catch (Exception ex)
+                {
+                    rtn.IsSuccess = false;
+                    rtn.ErrorMsg = ex.Message.ToString();
+                }
+            }
+            return (rtn, Rows);
+        }
     }
 }

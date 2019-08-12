@@ -22,12 +22,10 @@ namespace DAL.Repository
         /// <param name="EmployeeId">員工編號</param>
         /// <param name="CostomerId">客戶編號</param>
         /// <param name="PassWord">密碼</param>
-        public (Result rtn, Authentication auth) GetAuthenticationByParams(int EmployeeId, string CostomerId, string PassWord)
+        public (Result rtn, Authentication auth) GetAuthenticationByParams(int EmployeeId, string CostomerId, string PassWord, int Status)
         {
-            Result rtn = new Result();
             string sqlCmd = "SELECT * FROM Authentication ";
             DynamicParameters parameters = new DynamicParameters();
-            Authentication authentication = null;
 
             if (EmployeeId > 0)
             {
@@ -49,13 +47,35 @@ namespace DAL.Repository
             }
 
             sqlCmd += " and State = @State";
-            parameters.Add("@State", (int)DataStatus.Enable);
+            parameters.Add("@State", Status);
 
-            var result = this.GetFirstDefault<Authentication>(sqlCmd, parameters);
-            rtn = result.rtn;
-            authentication = result.result;
+            var result = this.GetSingleDefault<Authentication>(sqlCmd, parameters);
 
-            return (rtn, authentication);
+            return (result.rtn, result.result);
+        }
+
+        /// <summary>
+        /// 更新權限的認證碼
+        /// </summary>
+        /// <param name="Id">員工編號</param>
+        /// <param name="VerifyCode">認證碼</param>
+        public (Result rtn, int exeRows) UpdateAuthCode(string Id, Guid? VerifyCode, int Statue)
+        {
+            int EmployeeId = 0;
+            int.TryParse(Id, out EmployeeId);
+            //實值型別初始化為0
+            if (EmployeeId == 0) EmployeeId = -1;
+
+            string sqlCmd = "Update Authentication Set VerifyCode = @Code Where (EmployeeId = @Id or CustomersId = @Id) and State = @State";
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@Id", EmployeeId);
+            parameters.Add("@State", Statue);
+            parameters.Add("@Code", VerifyCode);
+
+            var result = this.GetCUDOfRow(sqlCmd, parameters);
+
+            return (result.rtn, result.Rows);
         }
     }
 }
