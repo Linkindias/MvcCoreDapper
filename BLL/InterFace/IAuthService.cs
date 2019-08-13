@@ -1,12 +1,11 @@
 ﻿using Base;
 using DAL.DBModel;
 using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace BLL.InterFace
 {
-    public interface IAuthenticationService
+    public interface IAuthService
     {
         /// <summary>
         /// 登入

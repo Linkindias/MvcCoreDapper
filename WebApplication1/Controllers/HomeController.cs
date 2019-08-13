@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using BLL.InterFace;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 
@@ -10,9 +7,21 @@ namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
+        IAuthService AuthService;
+
+        public HomeController(IAuthService authenticationService)
+        {
+            this.AuthService = authenticationService;
+        }
+
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult LogIn()
+        {
+            return RedirectToAction("Index", "LogIn");
         }
 
         public IActionResult About()
