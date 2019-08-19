@@ -19,7 +19,7 @@ namespace DAL.Repository
         /// 依訂單編號取得訂單資訊
         /// </summary>
         /// <param name="Account">帳號</param>
-        public (OrderDTO orderDto, Orders order) GetOrderById(int OrderId)
+        public OrderDTO GetOrderById(int OrderId)
         {
             string sqlCmd = @"
 select o.*,od.* from orders as o 
@@ -58,7 +58,7 @@ where o.OrderID = @Id";
                 }
             }
 
-            return (myOrderDTO, null);
+            return myOrderDTO;
         }
     }
 }
