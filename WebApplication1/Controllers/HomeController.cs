@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using BLL.InterFace;
+using DAL.Repository;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 
@@ -8,10 +9,12 @@ namespace WebApplication1.Controllers
     public class HomeController : Controller
     {
         IAuthService AuthService;
+        OrderRepository orderRep;
 
-        public HomeController(IAuthService authenticationService)
+        public HomeController(IAuthService authenticationService, OrderRepository orderRepository)
         {
             this.AuthService = authenticationService;
+            this.orderRep = orderRepository;
         }
 
         public IActionResult Index()

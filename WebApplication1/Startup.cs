@@ -38,6 +38,7 @@ namespace WebApplication1
             services.AddSingleton<AuthenticationRepository>(x => new AuthenticationRepository(strCon, cmdTimeOut)); //權限倉
             services.AddSingleton<CustomerRepository>(x => new CustomerRepository(strCon, cmdTimeOut)); //客戶倉
             services.AddSingleton<EmployeeRepository>(x => new EmployeeRepository(strCon, cmdTimeOut)); //員工倉
+            services.AddSingleton<OrderRepository>(x => new OrderRepository(strCon, cmdTimeOut)); //訂單倉
 
             services.AddSession();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

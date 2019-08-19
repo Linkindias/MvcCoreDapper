@@ -6,6 +6,7 @@ using Dapper;
 using Base;
 using System.Linq;
 using System.Data;
+using static DAL.ConnectionBase;
 
 namespace DAL
 {
@@ -13,6 +14,10 @@ namespace DAL
     {
         public string ConnectionString { get; set; }
         public int CommandTimeout { get; set; }
+
+        public ConnectionBase()
+        {
+        }
 
         public ConnectionBase(string con, int timeout)
         {
