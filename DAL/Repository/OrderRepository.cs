@@ -19,8 +19,9 @@ namespace DAL.Repository
         /// 依訂單編號取得訂單資訊
         /// </summary>
         /// <param name="Account">帳號</param>
-        public OrderDTO GetOrderById(int OrderId)
+        public (Result rtn, OrderDTO orderDto) GetOrderById(int OrderId)
         {
+            Result result = new Result();
             string sqlCmd = @"
 select o.*,od.* from orders as o 
 inner join[Order Details] as od on o.OrderID = od.OrderID
@@ -52,13 +53,17 @@ where o.OrderID = @Id";
                         },
                         parameters,
                         splitOn: "OrderID").Distinct().FirstOrDefault();
+
+                    result.IsSuccess = true;
                 }
                 catch (Exception ex)
                 {
+                    result.IsSuccess = false;
+                    result.ErrorMsg = ex.Message;
                 }
             }
 
-            return myOrderDTO;
+            return (result, myOrderDTO);
         }
     }
 }
