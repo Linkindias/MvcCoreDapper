@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BLL.InterFace;
 using DAL.DTOModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplication1.Controllers
@@ -22,9 +23,19 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        public IActionResult In(LogInDTO LogIn)
+        public IActionResult Login(LogInDTO LogIn)
         {
             var result = AuthService.LogIn(LogIn.account, LogIn.password);
+            if (result.rtn.IsSuccess)
+                HttpContext.Session.SetString(LogIn.account, LogIn.account);
+            return View();
+        }
+
+        public IActionResult Logout(string Id)
+        {
+            var result = AuthService.LogOut(Id);
+            if (result.IsSuccess)
+                HttpContext.Session.Remove(Id);
             return View();
         }
     }
