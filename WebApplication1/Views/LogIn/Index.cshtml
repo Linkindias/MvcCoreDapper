@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-4"></div>
         <div class="col-4">
-            @using (Html.BeginForm("In", "LogIn", FormMethod.Post))
+            @using (Html.BeginForm("LoginAsync", "LogIn", FormMethod.Post))
             {
                 <div class="form-group">
                     @Html.ValidationMessageFor(m => m.account, "", new { @class = "text-danger" })
