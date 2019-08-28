@@ -35,7 +35,16 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="LogIn">LogIn</a></li>
+                    @{
+                        if (ViewData["Code"] == null)
+                        {
+                            <li><a asp-area="" asp-controller="Home" asp-action="LogIn">LogIn</a></li>
+                        }
+                        else
+                        {
+                            <li><a asp-area="" asp-controller="LogIn" asp-action="Out" href="@Url.Action("Out", "LogIn")">LogOut</a></li>
+                        }
+                    }
                 </ul>
             </div>
         </div>

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using BLL.InterFace;
 using DAL.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 
@@ -19,6 +20,8 @@ namespace WebApplication1.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Code = HttpContext.Session.GetString("Id");
+
             return View();
         }
 
