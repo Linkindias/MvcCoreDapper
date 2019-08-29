@@ -59,19 +59,15 @@ namespace DAL.Repository
         /// </summary>
         /// <param name="Id">員工編號</param>
         /// <param name="VerifyCode">認證碼</param>
-        public (Result rtn, int exeRows) UpdateAuthCode(string Id, Guid? VerifyCode, int Statue)
+        public (Result rtn, int exeRows) UpdateAuthCode(int EmpId, string CusId, Guid? VerifyCode, int Statue)
         {
-            int EmployeeId = 0;
-            int.TryParse(Id, out EmployeeId);
-            //實值型別初始化為0
-            if (EmployeeId == 0) EmployeeId = -1;
-
-            string sqlCmd = "Update Authentication Set VerifyCode = @Code Where (EmployeeId = @Id or CustomersId = @Id) and State = @State";
+            string sqlCmd = "Update Authentication Set VerifyCode = @Code Where (EmployeesId = @EmpId or CustomersId = @CusId) and State = @State";
 
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@Id", EmployeeId);
+            parameters.Add("@EmpId", EmpId);
+            parameters.Add("@CusId", CusId);
             parameters.Add("@State", Statue);
-            parameters.Add("@Code", VerifyCode);
+            parameters.Add("@Code", VerifyCode.HasValue ? VerifyCode.Value : VerifyCode);
 
             var result = this.GetCUDOfRow(sqlCmd, parameters);
 

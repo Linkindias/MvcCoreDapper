@@ -119,7 +119,7 @@ namespace DAL
                 {
                     Rows = connection.Execute(sqlCmd, Params,
                                                         commandTimeout: this.CommandTimeout,
-                                                        commandType: CommandType.StoredProcedure);
+                                                        commandType: CommandType.Text);
                     rtn.IsSuccess = true;
                 }
                 catch (Exception ex)

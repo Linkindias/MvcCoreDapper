@@ -73,8 +73,7 @@ namespace BLL.Model
                     {
                         rtn.IsSuccess = true;
                         guid = Guid.NewGuid();
-                        string Id = EmployeeID != 0 ? EmployeeID.ToString() : CustomerID;
-                        AuthRep.UpdateAuthCode(Id, guid, (int)DataStatus.Enable);
+                        AuthRep.UpdateAuthCode(EmployeeID, CustomerID, guid, (int)DataStatus.Enable);
                     }
                 }
             }
@@ -92,7 +91,7 @@ namespace BLL.Model
             int EmployeeId = 0;
             int.TryParse(Id, out EmployeeId);
             var myEmployee = EmployeeRep.GetEmployeeById(EmployeeId, (int)DataStatus.Enable); //員工
-            var myCustomer = CustomerRep.GetCustomerById(EmployeeId, (int)DataStatus.Enable); //客戶
+            var myCustomer = CustomerRep.GetCustomerById(Id, (int)DataStatus.Enable); //客戶
 
             //當人員不正確，則顯示訊息，否則檢查權限
             if (myEmployee.employee == null && myCustomer.customer == null)
@@ -101,9 +100,13 @@ namespace BLL.Model
                 rtn.ErrorMsg = $"查無此帳號 {Id}，請確認";
             }
             else
-                updateAuthCode = AuthRep.UpdateAuthCode(Id, null, (int)DataStatus.Enable);
+                updateAuthCode = AuthRep.UpdateAuthCode(EmployeeId, Id, null, (int)DataStatus.Enable);
 
-            if (updateAuthCode.rtn.IsSuccess) rtn.SuccessMsg = $"{Id} 登出成功";
+            if (updateAuthCode.rtn.IsSuccess)
+            {
+                rtn.IsSuccess = updateAuthCode.rtn.IsSuccess;
+                rtn.SuccessMsg = $"{Id} 登出成功";
+            }
             return rtn;
         }
     }

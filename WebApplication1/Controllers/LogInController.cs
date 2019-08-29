@@ -30,19 +30,27 @@ namespace WebApplication1.Controllers
             var result = AuthService.LogIn(LogIn.account, LogIn.password);
             if (result.rtn.IsSuccess)
             {
-                HttpContext.Session.SetString("Id", LogIn.account);
+                HttpContext.Session.SetString("Account", LogIn.account);
+                HttpContext.Session.SetString("Id", result.employee != null 
+                                                        ? result.employee.EmployeeID.ToString() 
+                                                        : result.customer.CustomerID);
                 return Ok();
             }
             return BadRequest(result.rtn.ErrorMsg);
         }
 
         
-        public IActionResult Out(string Id)
+        public IActionResult Out(string Id, string account)
         {
             var result = AuthService.LogOut(Id);
             if (result.IsSuccess)
+            {
                 HttpContext.Session.Remove(Id);
-            return View();
+                HttpContext.Session.Remove(account);
+                return RedirectToAction("Index", "LogIn");
+            }
+
+            return BadRequest(result.ErrorMsg);
         }
     }
 }

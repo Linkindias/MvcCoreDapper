@@ -20,7 +20,8 @@ namespace WebApplication1.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.Code = HttpContext.Session.GetString("Id");
+            ViewBag.Account = HttpContext.Session.GetString("Account");
+            ViewBag.Id = HttpContext.Session.GetString("Id");
 
             return View();
         }

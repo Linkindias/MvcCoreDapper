@@ -36,7 +36,7 @@ namespace DAL.Repository
         /// 依會員編號取得人員
         /// </summary>
         /// <param name="CostomerId">會員編號</param>
-        public (Result rtn, Customers customer) GetCustomerById(int CustomerID, int Status)
+        public (Result rtn, Customers customer) GetCustomerById(string CustomerID, int Status)
         {
             string sqlCmd = "SELECT * FROM Customers Where CustomerID = @Id And Status = @Status ";
             DynamicParameters parameters = new DynamicParameters();
