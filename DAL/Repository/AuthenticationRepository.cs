@@ -42,7 +42,7 @@ namespace DAL.Repository
 
             if (!string.IsNullOrEmpty(PassWord))
             {
-                sqlCmd += " and Password = @PassWord";
+                sqlCmd += " and PasswordSha512 = @PassWord";
                 parameters.Add("@PassWord", PassWord);
             }
 

@@ -10,6 +10,11 @@
         return Xsrf.GetAndStoreTokens(Context).RequestToken;
     }
 }
+
+<script src="~/lib/crypto-js/crypto-js.js"></script>
+<script src="~/lib/crypto-js/aes.js"></script>
+<script src="~/lib/crypto-js/hmac-sha512.js"></script>
+<script src="~/lib/crypto-js/sha512.js"></script>
 <style type="text/css">
     .container {
         width: 400px !important;
@@ -91,7 +96,6 @@
     $(function () {
 
         $("#submit").click(function () {
-
             //當檢查輸入錯誤，則顯示訊息
             if (!checkInput()) return;
 
@@ -101,7 +105,7 @@
                 data: {
                     __RequestVerificationToken: '@GetAntiXsrfRequestToken()',
                     account: $("#account").val(),
-                    password: $("#password").val()
+                    password: CryptoJS.SHA512($("#password").val()).toString(),
                 },
                 async: true,
                 success: function (data) {

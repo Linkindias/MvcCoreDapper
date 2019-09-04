@@ -1,0 +1,13 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "crypto-js@3.1.9-1",
+      "destination": "wwwroot/lib/crypto-js/",
+      "files": [
+        "crypto-js.min.js"
+      ]
+    }
+  ]
+}
