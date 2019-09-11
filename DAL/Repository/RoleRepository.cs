@@ -19,8 +19,13 @@ namespace DAL.Repository
         /// 依帳號取得角色資訊
         /// </summary>
         /// <param name="EmployeeId">帳號</param>
-        public (Result rtn, List<RoleOfMenuDTO> roleDto) GetRoleInfoById(int Id)
+        public (Result rtn, List<RoleOfMenuDTO> roles) GetRolesByAccount(string Id)
         {
+            int EmployeeId = 0;
+            int.TryParse(Id, out EmployeeId);
+            //實值型別初始化為0
+            if (EmployeeId == 0) EmployeeId = -1;
+
             string sqlCmd = @"
 select RoleId,RoleName from Role
 where RoleId in (
@@ -29,6 +34,7 @@ where RoleId in (
 	)
 and Status = 10";
             DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", EmployeeId);
             parameters.Add("@Id", Id);
 
             var result = this.GetList<RoleOfMenuDTO>(sqlCmd, parameters);

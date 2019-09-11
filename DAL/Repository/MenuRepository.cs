@@ -19,7 +19,7 @@ namespace DAL.Repository
         /// 依帳號取得父層選單資訊
         /// </summary>
         /// <param name="Id">帳號</param>
-        public (Result rtn, List<MenuDTO> menus) GetMasterMenuByAccount(string Id)
+        public (Result rtn, List<MenuDTO> menus) GetMenusByAccount(string Id)
         {
             int EmployeeId = 0;
             int.TryParse(Id, out EmployeeId);
@@ -34,7 +34,7 @@ where MenuId in (
         select distinct RoleId from RoleEmployee
         where (EmployeeId = @EmployeeId or CustomerId = @Id) and Status = 10
 	) and Status = 10
-) and Status = 10 and ParentID = 0 and MenuCode != 'Person'";
+) and Status = 10";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@EmployeeId", EmployeeId);
             parameters.Add("@Id", Id);

@@ -2,7 +2,7 @@
 using DAL.DBModel;
 using DAL.DTOModel;
 using System;
-
+using System.Collections.Generic;
 
 namespace BLL.InterFace
 {
@@ -12,6 +12,6 @@ namespace BLL.InterFace
         /// 取得選單清單
         /// </summary>
         /// <param name="EmployeeId">帳號</param>
-        (Result rtn, MenuDTO menus) GetMenusByAccount(string Id);
+        (Result rtn, List<MenuDTO> menus, List<RoleOfMenuDTO> roles) GetMenusByAccount(string Id);
     }
 }
