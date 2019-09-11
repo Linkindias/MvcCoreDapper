@@ -1,0 +1,20 @@
+﻿<div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+        @{
+            if (ViewData["Account"] == null)
+            {
+                <li><a asp-area="" asp-controller="Home" asp-action="LogIn">LogIn</a></li>
+            }
+        }
+    </ul>
+    <ul class="nav navbar-nav right">
+        @{
+            if (ViewData["Account"] != null)
+            {
+                <li><a asp-route-id="@ViewData["Id"]" asp-route-account="@ViewData["Account"]" asp-controller="LogIn" asp-action="Out">LogOut</a></li>
+            }
+        }
+        <li><label class="menu">@ViewData["Account"]</label></li>
+    </ul>
+</div>
