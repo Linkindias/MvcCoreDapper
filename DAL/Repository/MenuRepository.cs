@@ -16,7 +16,7 @@ namespace DAL.Repository
         }
 
         /// <summary>
-        /// 依帳號取得父層選單資訊
+        /// 依帳號取得選單資訊
         /// </summary>
         /// <param name="Id">帳號</param>
         public (Result rtn, List<MenuDTO> menus) GetMenusByAccount(string Id)

@@ -46,7 +46,8 @@ namespace WebApplication1
             services.AddSingleton<CustomerRepository>(x => new CustomerRepository(strCon, cmdTimeOut)); //客戶倉
             services.AddSingleton<EmployeeRepository>(x => new EmployeeRepository(strCon, cmdTimeOut)); //員工倉
             services.AddSingleton<OrderRepository>(x => new OrderRepository(strCon, cmdTimeOut)); //訂單倉
-            services.AddSingleton<MenuRepository>(x => new MenuRepository(strCon, cmdTimeOut)); //角色倉
+            services.AddSingleton<MenuRepository>(x => new MenuRepository(strCon, cmdTimeOut)); //選單倉
+            services.AddSingleton<RoleRepository>(x => new RoleRepository(strCon, cmdTimeOut)); //角色倉
 
             services.AddSession();
             services.AddMvc(options =>

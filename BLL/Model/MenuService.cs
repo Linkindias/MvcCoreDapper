@@ -23,7 +23,7 @@ namespace BLL.Model
         /// <summary>
         /// 取得選單清單
         /// </summary>
-        /// <param name="EmployeeId">帳號</param>
+        /// <param name="Id">帳號</param>
         public (Result rtn, List<MenuDTO> menus, List<RoleOfMenuDTO> roles) GetMenusByAccount(string Id)
         {
             var roleResult = RoleRep.GetRolesByAccount(Id);
@@ -31,15 +31,35 @@ namespace BLL.Model
 
             if (roleResult.rtn.IsSuccess && menuResult.rtn.IsSuccess)
             {
-                IEnumerable<MenuDTO> menuMaster = menuResult.menus;
+                IEnumerable<MenuDTO> menuMaster = menuResult.menus.Where(o => o.ParentID == 0);
 
+                //當角色不為管理者，則無個人設定選單
                 if (roleResult.roles.Any(o => o.RoleName.ToLower() != "admin"))
                     menuMaster = menuResult.menus.Where(o => o.MenuCode != "Person");
 
+                foreach (MenuDTO menu in menuMaster)
+                    FunGetSubMenus(menu, menuResult.menus);
 
+                return (new Result() { IsSuccess = true }, menuMaster.ToList(), roleResult.roles);
             }
 
             return (!roleResult.rtn.IsSuccess ? roleResult.rtn : menuResult.rtn, new List<MenuDTO>(), new List<RoleOfMenuDTO>());
+        }
+
+        /// <summary>
+        /// 取得子選單 遞回
+        /// </summary>
+        /// <param name="MasterMenu">父選單 </param>
+        /// <param name="SubMenus">子選單清單 </param>
+        private void FunGetSubMenus(MenuDTO MasterMenu, List<MenuDTO> SubMenus)
+        {
+            MasterMenu.SubMenus = SubMenus.Where(o => o.ParentID == MasterMenu.MenuId).ToList(); //依父層編號取得子選單
+
+            //當無子選單，則跳出該層選單
+            if (MasterMenu.SubMenus.Count == 0) return;
+
+            foreach (MenuDTO menu in MasterMenu.SubMenus)
+                FunGetSubMenus(menu, SubMenus);
         }
     }
 }
