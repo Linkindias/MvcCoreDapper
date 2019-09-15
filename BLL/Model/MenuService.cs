@@ -26,6 +26,7 @@ namespace BLL.Model
         /// <param name="Id">帳號</param>
         public (Result rtn, List<MenuDTO> menus, List<RoleOfMenuDTO> roles) GetMenusByAccount(string Id)
         {
+            
             var roleResult = RoleRep.GetRolesByAccount(Id);
             var menuResult = MenuRep.GetMenusByAccount(Id);
 
@@ -40,7 +41,8 @@ namespace BLL.Model
                 foreach (MenuDTO menu in menuMaster)
                     FunGetSubMenus(menu, menuResult.menus);
 
-                return (new Result() { IsSuccess = true }, menuMaster.ToList(), roleResult.roles);
+                Result rtn = new Result() { IsSuccess = true };
+                return (rtn, menuMaster.ToList(), roleResult.roles);
             }
 
             return (!roleResult.rtn.IsSuccess ? roleResult.rtn : menuResult.rtn, new List<MenuDTO>(), new List<RoleOfMenuDTO>());

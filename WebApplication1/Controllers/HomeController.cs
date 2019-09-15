@@ -1,5 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using Base;
 using BLL.InterFace;
+using DAL.DTOModel;
+using DAL.PageModel;
 using DAL.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,13 +14,11 @@ namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
-        IAuthService AuthService;
-        OrderRepository orderRep;
+        IMenuService MenuService;
 
-        public HomeController(IAuthService authenticationService, OrderRepository orderRepository)
+        public HomeController(IMenuService menuService)
         {
-            this.AuthService = authenticationService;
-            this.orderRep = orderRepository;
+            this.MenuService = menuService;
         }
 
         public IActionResult Index()
@@ -23,7 +26,14 @@ namespace WebApplication1.Controllers
             ViewBag.Account = HttpContext.Session.GetString("Account");
             ViewBag.Id = HttpContext.Session.GetString("Id");
 
-            return View();
+            if (ViewBag.Id != null)
+            {
+                (Result rtn, List<MenuDTO> menus, List<RoleOfMenuDTO> roles) result = result = MenuService.GetMenusByAccount(ViewBag.Id);
+                if (result.rtn.IsSuccess)
+                    return View(new MenuModel() { Menus = result.menus });
+            }
+
+            return View(new MenuModel() { Menus = new List<MenuDTO>() });
         }
 
         public IActionResult LogIn()

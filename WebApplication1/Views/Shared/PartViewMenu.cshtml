@@ -1,10 +1,18 @@
-﻿<div class="navbar-collapse collapse">
+﻿@model DAL.PageModel.MenuModel
+<div class="navbar-collapse collapse">
     <ul class="nav navbar-nav">
         <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
         @{
             if (ViewData["Account"] == null)
             {
                 <li><a asp-area="" asp-controller="Home" asp-action="LogIn">LogIn</a></li>
+            }
+        }
+        @if (Model != null)
+        {
+            foreach (var menu in Model.Menus)
+            {
+                <li><a asp-area="" asp-controller="@menu.MenuCode" asp-action="Index">@menu.MenuName</a></li>
             }
         }
     </ul>

@@ -1,5 +1,6 @@
 ﻿using BLL.InterFace;
 using DAL.DTOModel;
+using DAL.PageModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,12 @@ namespace WebApplication1.Controllers
     public class LogInController : Controller
     {
         IAuthService AuthService;
+        IMenuService MenuService;
 
-        public LogInController(IAuthService authService)
+        public LogInController(IAuthService authService, IMenuService menuService)
         {
             this.AuthService = authService;
+            this.MenuService = menuService;
         }
 
         public IActionResult Index()
