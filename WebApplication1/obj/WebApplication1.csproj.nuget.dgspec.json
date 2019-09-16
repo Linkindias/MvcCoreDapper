@@ -56,6 +56,69 @@
         }
       }
     },
+    "D:\\GitHub\\MvcCore\\BLL\\BLL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\GitHub\\MvcCore\\BLL\\BLL.csproj",
+        "projectName": "BLL",
+        "projectPath": "D:\\GitHub\\MvcCore\\BLL\\BLL.csproj",
+        "packagesPath": "C:\\Users\\doctor\\.nuget\\packages\\",
+        "outputPath": "D:\\GitHub\\MvcCore\\BLL\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\doctor\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {
+              "D:\\GitHub\\MvcCore\\Base\\Base.csproj": {
+                "projectPath": "D:\\GitHub\\MvcCore\\Base\\Base.csproj"
+              },
+              "D:\\GitHub\\MvcCore\\DAL\\DAL.csproj": {
+                "projectPath": "D:\\GitHub\\MvcCore\\DAL\\DAL.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "System.Runtime.Caching": {
+              "target": "Package",
+              "version": "[4.5.0, )"
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    },
     "D:\\GitHub\\MvcCore\\DAL\\DAL.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -142,6 +205,9 @@
         "frameworks": {
           "netcoreapp2.1": {
             "projectReferences": {
+              "D:\\GitHub\\MvcCore\\BLL\\BLL.csproj": {
+                "projectPath": "D:\\GitHub\\MvcCore\\BLL\\BLL.csproj"
+              },
               "D:\\GitHub\\MvcCore\\DAL\\DAL.csproj": {
                 "projectPath": "D:\\GitHub\\MvcCore\\DAL\\DAL.csproj"
               }
@@ -163,6 +229,10 @@
               "version": "[2.1.1, )",
               "autoReferenced": true
             },
+            "Microsoft.AspNetCore.Authentication": {
+              "target": "Package",
+              "version": "[2.1.1, )"
+            },
             "Microsoft.AspNetCore.Razor.Design": {
               "suppressParent": "All",
               "target": "Package",
@@ -172,6 +242,10 @@
               "target": "Package",
               "version": "[2.1.0, )",
               "autoReferenced": true
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[2.1.9, )"
             }
           },
           "imports": [

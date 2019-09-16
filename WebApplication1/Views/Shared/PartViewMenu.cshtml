@@ -1,9 +1,30 @@
 ﻿@model DAL.PageModel.MenuModel
+@using Microsoft.AspNetCore.Html
+
+@functions{
+
+    private static string GetSubMenus(List<DAL.DTOModel.MenuDTO> subMenus)
+    {
+        if (subMenus.Count > 0)
+        {
+            string htmlStatement = "<ul class='dropdown-menu'>";
+            foreach (var menuSub in subMenus)
+            {
+                htmlStatement += $"<li><a class='dropdown-item' asp-area='' asp-controller='{menuSub.MenuCode}' asp-action='Index'>{menuSub.MenuName}</a></li>";
+                htmlStatement += GetSubMenus(menuSub.SubMenus);
+            }
+            htmlStatement += "</ul>";
+            return htmlStatement;
+        }
+        return string.Empty;
+    }
+}
 <div class="navbar-collapse collapse">
-    <ul class="nav navbar-nav " >
-        <li >
+    <ul class="nav navbar-nav ">
+        <li>
             <a class="font" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
         </li>
+
         @{
             if (ViewData["Account"] == null)
             {
@@ -16,24 +37,10 @@
         {
             foreach (var menu in Model.Menus)
             {
-            <li class="dropdown">
-                <a class="font dropdown-toggle" data-toggle="dropdown" asp-area="">@menu.MenuName</a>
-                @{
-                    if (menu.SubMenus.Count > 0)
-                    {
-                        <ul class="dropdown-menu" >
-                            @{
-                                foreach (var menuSub in menu.SubMenus)
-                                {
-                                    <li>
-                                        <a class="dropdown-item" asp-area="" asp-controller="@menuSub.MenuCode" asp-action="Index">@menuSub.MenuName</a>
-                                    </li>
-                                }
-                            }
-                        </ul>
-                    }
-                }
-            </li>
+                <li class="dropdown">
+                    <a class="font dropdown-toggle" data-toggle="dropdown" asp-area="">@menu.MenuName</a>
+                    @Html.Raw(GetSubMenus(menu.SubMenus))
+                </li>
             }
         }
     </ul>
@@ -41,7 +48,7 @@
         @{
             if (ViewData["Account"] != null)
             {
-                <li><a asp-route-id="@ViewData["Id"]" asp-route-account="@ViewData["Account"]" asp-controller="LogIn" asp-action="Out">LogOut</a></li>
+                <li><a class="font" asp-route-id="@ViewData["Id"]" asp-route-account="@ViewData["Account"]" asp-controller="LogIn" asp-action="Out">LogOut</a></li>
             }
         }
         <li><label class="menu">@ViewData["Account"]</label></li>
