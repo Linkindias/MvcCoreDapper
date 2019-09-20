@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.IISIntegration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebApplication1.Filters;
 
 namespace WebApplication1
 {
@@ -53,6 +54,7 @@ namespace WebApplication1
             services.AddMvc(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.Filters.Add(new AuthorizeActionFilter());
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -71,7 +73,6 @@ namespace WebApplication1
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
 
             app.UseSession();
             app.UseAuthentication();

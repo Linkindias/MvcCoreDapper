@@ -6,6 +6,7 @@ using BLL.InterFace;
 using DAL.DTOModel;
 using DAL.PageModel;
 using DAL.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
@@ -34,11 +35,6 @@ namespace WebApplication1.Controllers
             }
 
             return View(new MenuModel() { Menus = new List<MenuDTO>() });
-        }
-
-        public IActionResult LogIn()
-        {
-            return RedirectToAction("Index", "LogIn");
         }
 
         public IActionResult About()
