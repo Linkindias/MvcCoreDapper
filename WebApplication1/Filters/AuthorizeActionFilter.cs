@@ -22,7 +22,7 @@ namespace WebApplication1.Filters
                 string Account = session.GetString("Account");
                 if (string.IsNullOrEmpty(Account))
                 {
-                    context.Result = new UnauthorizedResult();
+                    context.Result = new RedirectResult("/LogIn");
                 }
             }
         }
