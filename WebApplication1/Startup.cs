@@ -1,4 +1,5 @@
-﻿using BLL.InterFace;
+﻿using BLL.Commons;
+using BLL.InterFace;
 using BLL.Model;
 using DAL.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -41,6 +42,7 @@ namespace WebApplication1
             //Service
             services.AddSingleton<IAuthService,AuthService>(); //權限服務
             services.AddSingleton<IMenuService, MenuService>(); //選單服務
+            services.AddSingleton<IMemberService, MemberService>(); //會員服務
 
             //Repository
             services.AddSingleton<AuthenticationRepository>(x => new AuthenticationRepository(strCon, cmdTimeOut)); //權限倉
@@ -56,6 +58,8 @@ namespace WebApplication1
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 options.Filters.Add(new AuthorizeActionFilter());
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            CacheHelper.CreateCache(); //建立快取
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

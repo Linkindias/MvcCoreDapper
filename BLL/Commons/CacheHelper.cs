@@ -11,7 +11,7 @@ namespace BLL.Commons
         static MemoryCache cache;
         static CacheItemPolicy cacheItemPolicy;
 
-        const string LockKey = "mvc"; //識別唯一的 lock
+        const string LockKey = "core"; //識別唯一的 lock
 
         /// <summary>
         /// 取得快取物件
