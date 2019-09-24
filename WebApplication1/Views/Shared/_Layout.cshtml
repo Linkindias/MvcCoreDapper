@@ -68,9 +68,11 @@
                 </button>
                 <a asp-area="" style="color: white !important;" asp-controller="Home" asp-action="Index" class="navbar-brand">Northwind</a>
             </div>
-            @{
-                Html.RenderPartial("../Shared/PartViewMenu");
-            }
+            @await Component.InvokeAsync("MenuC", new { Id = ViewData["Id"] != null ? ViewData["Id"] : ""})
+
+            @*@{
+            Html.RenderPartial("../Shared/PartViewMenu");
+        }*@
         </div>
     </nav>
 

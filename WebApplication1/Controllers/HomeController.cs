@@ -26,15 +26,8 @@ namespace WebApplication1.Controllers
         {
             ViewBag.Account = HttpContext.Session.GetString("Account");
             ViewBag.Id = HttpContext.Session.GetString("Id");
-
-            if (ViewBag.Id != null)
-            {
-                (Result rtn, List<MenuDTO> menus, List<RoleOfMenuDTO> roles) result = result = MenuService.GetMenusByAccount(ViewBag.Id);
-                if (result.rtn.IsSuccess)
-                    return View(new MenuModel() { Menus = result.menus });
-            }
-
-            return View(new MenuModel() { Menus = new List<MenuDTO>() });
+            
+            return View();
         }
 
         public IActionResult About()

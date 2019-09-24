@@ -1,0 +1,59 @@
+﻿@model List<DAL.DTOModel.MenuDTO>
+@using Microsoft.AspNetCore.Html;
+@using System.Collections.Generic;
+
+@functions{
+    private string GetSubMenus(List<DAL.DTOModel.MenuDTO> subMenus, string controller)
+    {
+        if (subMenus.Count > 0)
+        {
+            string htmlStatement = "<ul class='dropdown-menu'>";
+            foreach (var menuSub in subMenus)
+            {
+                htmlStatement += $"<li><a class='dropdown-item' href='{controller}/{menuSub.MenuCode}'>{menuSub.MenuName}</a></li>";
+                htmlStatement += GetSubMenus(menuSub.SubMenus, menuSub.MenuCode);
+            }
+            htmlStatement += "</ul>";
+            return htmlStatement;
+        }
+        return string.Empty;
+    }
+}
+<div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav ">
+        <li>
+            <a class="font" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+        </li>
+
+        @{
+            if (ViewData["Account"] == null)
+            {
+                <li>
+                    <a class="font" asp-area="" asp-controller="LogIn" asp-action="Index">LogIn</a>
+                </li>
+            }
+        }
+        @if (Model != null)
+        {
+            foreach (var menu in Model)
+            {
+                <li class="dropdown">
+                    <a class="font dropdown-toggle" data-toggle="dropdown" asp-area="">@menu.MenuName</a>
+                    @Html.Raw(GetSubMenus(menu.SubMenus, menu.MenuCode))
+                </li>
+            }
+        }
+    </ul>
+    <ul class="nav navbar-nav right">
+        @{
+            if (ViewData["Account"] != null)
+            {
+                <li><a class="font" asp-route-id="@ViewData["Id"]" asp-route-account="@ViewData["Account"]" asp-controller="LogIn" asp-action="Out">LogOut</a></li>
+            }
+        }
+        <li><label class="menu">@ViewData["Account"]</label></li>
+    </ul>
+</div>
+
+<script type="text/javascript">
+</script>
