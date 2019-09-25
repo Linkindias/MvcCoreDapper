@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -30,6 +31,9 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
     <style>
+        .navstyle{
+            width: 60%;
+        }
         .menu {
             padding: 15px;
             color: white;
@@ -57,6 +61,30 @@
 </head>
 
 <body>
+    <script type="text/javascript">
+        $(function () {
+            var Id = '@ViewBag.Id';
+            if ($("#menu").html().length == 0 && Id.length > 0) {
+                console.log('call menu');
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("Index", "Menu")',
+                    data: {
+                        Id: Id
+                    },
+                    success: function (data) {
+                        
+                        if (data != null ) {
+                            $("#menu").after(data);
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+        });
+    </script>
     <nav class="navbar navbar-fixed-top bg-primary">
         <div class="container">
             <div class="navbar-header">
@@ -68,11 +96,37 @@
                 </button>
                 <a asp-area="" style="color: white !important;" asp-controller="Home" asp-action="Index" class="navbar-brand">Northwind</a>
             </div>
-            @await Component.InvokeAsync("MenuC", new { Id = ViewData["Id"] != null ? ViewData["Id"] : ""})
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navstyle">
+                    <li>
+                        <a class="font" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+
+                    @{
+                        if (ViewBag.Account == null)
+                        {
+                            <li>
+                                <a class="font" asp-area="" asp-controller="LogIn" asp-action="Index">LogIn</a>
+                            </li>
+                        }
+                    }
+                    <div id="menu"></div>
+                </ul>
+                <ul class="nav navbar-nav right">
+                    @{
+                        if (ViewBag.Account != null)
+                        {
+                            <li><a class="font" asp-route-id="@ViewBag.Id" asp-route-account="@ViewBag.Account" asp-controller="LogIn" asp-action="Out">LogOut</a></li>
+                        }
+                    }
+                    <li><label class="menu">@ViewBag.Account</label></li>
+                </ul>
+            </div>
+            @*@await Component.InvokeAsync("MenuC", new { Id = ViewBag.Id != null ? ViewBag.Id : "" })*@
 
             @*@{
-            Html.RenderPartial("../Shared/PartViewMenu");
-        }*@
+                    Html.RenderPartial("../Shared/PartViewMenu");
+                }*@
         </div>
     </nav>
 
@@ -86,7 +140,7 @@
         </footer>
     </div>
 
-    
+
 
     @RenderSection("Scripts", required: false)
 </body>

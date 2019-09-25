@@ -1,8 +1,4 @@
 ﻿@model DAL.DTOModel.LogInDTO
-@{
-    ViewData["Title"] = "Index";
-}
-
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
 @functions{
     public string GetAntiXsrfRequestToken()

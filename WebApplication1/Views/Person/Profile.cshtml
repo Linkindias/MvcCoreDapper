@@ -1,15 +1,66 @@
-﻿
-@{
-    Layout = null;
-}
+﻿@model DAL.PageModel.MemberModel
+@using System.Collections.Generic;
+<style type="text/css">
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            @using (Html.BeginForm("Save", "Person", FormMethod.Post, new { id = "ProFileForm" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    @Html.LabelFor(m => m.customer.CompanyName)
+                    @Html.TextBoxFor(m => m.customer.CompanyName, "請輸入公司名稱!", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.customer.ContactName)
+                    @Html.TextBoxFor(m => m.customer.ContactName, "請輸入聯絡名稱!", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.customer.ContactTitle)
+                    @Html.TextBoxFor(m => m.customer.ContactTitle, "請輸入聯絡頭銜!", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.customer.Phone)
+                    @Html.TextBoxFor(m => m.customer.Phone, "請輸入手機!", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.customer.Fax)
+                    @Html.TextBoxFor(m => m.customer.Fax, "請輸入傳真!", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.customer.City)
+                    @Html.TextBoxFor(m => m.customer.City, "請輸入城市!", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.customer.Address)
+                    @Html.TextBoxFor(m => m.customer.Address, "請輸入地址!", new { @class = "form-control" })
+                </div>
+                <input type="button" class="btn btn-primary btn-block" id="submit" value="Save" />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            }
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="msgModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="msgModalTitle"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label id="msgModalbody"></label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="closeModal();">確定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Profile</title>
-</head>
-<body>
-</body>
-</html>
+<script type="text/javascript">
+</script>

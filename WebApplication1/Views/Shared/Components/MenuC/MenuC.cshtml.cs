@@ -22,7 +22,7 @@ namespace WebApplication1.Component
         {
             if (!string.IsNullOrEmpty(Id))
             {
-                var result = await GetItemsAsync(Id);
+                List<MenuDTO> result = await GetItemsAsync(Id);
 
                 return View("MenuC", result);
             }
