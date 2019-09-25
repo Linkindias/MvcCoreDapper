@@ -26,7 +26,7 @@ namespace WebApplication1.Controllers
         {
             if (!string.IsNullOrEmpty(Id))
             {
-                ViewBag.Account = HttpContext.Session.GetString("Account");
+                ViewBag.Name = HttpContext.Session.GetString("Name");
                 ViewBag.Id = HttpContext.Session.GetString("Id");
 
                 MemberModel memberModel = MemberService.GetMember(Id);

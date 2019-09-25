@@ -24,7 +24,7 @@ namespace WebApplication1.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.Account = HttpContext.Session.GetString("Account");
+            ViewBag.Name = HttpContext.Session.GetString("Name");
             ViewBag.Id = HttpContext.Session.GetString("Id");
             
             return View();

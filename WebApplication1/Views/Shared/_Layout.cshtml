@@ -66,7 +66,6 @@
         $(function () {
             var Id = '@ViewBag.Id';
             if ($("#menu").html().length == 0 && Id.length > 0) {
-                console.log('call menu');
                 $.ajax({
                     type: 'GET',
                     url: '@Url.Action("Index", "Menu")',
@@ -104,7 +103,7 @@
                     </li>
 
                     @{
-                        if (ViewBag.Account == null)
+                        if (ViewBag.Name == null)
                         {
                             <li>
                                 <a class="font" asp-area="" asp-controller="LogIn" asp-action="Index">LogIn</a>
@@ -115,12 +114,12 @@
                 </ul>
                 <ul class="nav navbar-nav right">
                     @{
-                        if (ViewBag.Account != null)
+                        if (ViewBag.Name != null)
                         {
-                            <li><a class="font" asp-route-id="@ViewBag.Id" asp-route-account="@ViewBag.Account" asp-controller="LogIn" asp-action="Out">LogOut</a></li>
+                            <li><a class="font" asp-route-id="@ViewBag.Id" asp-route-account="@ViewBag.Name" asp-controller="LogIn" asp-action="Out">LogOut</a></li>
                         }
                     }
-                    <li><label class="menu">@ViewBag.Account</label></li>
+                    <li><label class="menu">@ViewBag.Name</label></li>
                 </ul>
             </div>
             @*@await Component.InvokeAsync("MenuC", new { Id = ViewBag.Id != null ? ViewBag.Id : "" })*@

@@ -33,7 +33,9 @@ namespace WebApplication1.Controllers
             var result = AuthService.LogIn(LogIn.account, LogIn.password);
             if (result.rtn.IsSuccess)
             {
-                HttpContext.Session.SetString("Account", LogIn.account);
+                HttpContext.Session.SetString("Name", result.employee != null
+                                                        ? result.employee.FirstName + result.employee.LastName
+                                                        : result.customer.ContactName);
                 HttpContext.Session.SetString("Id", result.employee != null 
                                                         ? result.employee.EmployeeID.ToString() 
                                                         : result.customer.CustomerID);
@@ -48,8 +50,8 @@ namespace WebApplication1.Controllers
             var result = AuthService.LogOut(Id);
             if (result.IsSuccess)
             {
-                HttpContext.Session.Remove(Id);
-                HttpContext.Session.Remove(account);
+                HttpContext.Session.Remove("Id");
+                HttpContext.Session.Remove("Name");
                 return RedirectToAction("Index", "LogIn");
             }
 
