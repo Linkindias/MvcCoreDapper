@@ -1,43 +1,85 @@
 ﻿@model DAL.PageModel.MemberModel
 @using System.Collections.Generic;
 <style type="text/css">
+    .container {
+        width: 800px !important;
+    }
+
+    .row {
+        margin-top: 10%;
+    }
 </style>
 <div class="container">
     <div class="row">
         <div class="col-12">
-            @using (Html.BeginForm("Save", "Person", FormMethod.Post, new { id = "ProFileForm" }))
-            {
-                @Html.AntiForgeryToken()
-                <div class="form-group">
-                    @Html.LabelFor(m => m.customer.CompanyName)
-                    @Html.TextBoxFor(m => m.customer.CompanyName, "請輸入公司名稱!", new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.customer.ContactName)
-                    @Html.TextBoxFor(m => m.customer.ContactName, "請輸入聯絡名稱!", new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.customer.ContactTitle)
-                    @Html.TextBoxFor(m => m.customer.ContactTitle, "請輸入聯絡頭銜!", new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.customer.Phone)
-                    @Html.TextBoxFor(m => m.customer.Phone, "請輸入手機!", new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.customer.Fax)
-                    @Html.TextBoxFor(m => m.customer.Fax, "請輸入傳真!", new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.customer.City)
-                    @Html.TextBoxFor(m => m.customer.City, "請輸入城市!", new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.customer.Address)
-                    @Html.TextBoxFor(m => m.customer.Address, "請輸入地址!", new { @class = "form-control" })
-                </div>
-                <input type="button" class="btn btn-primary btn-block" id="submit" value="Save" />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @{
+                if (Model.customer != null)
+                {
+                    using (Html.BeginForm("Save", "Person", FormMethod.Post, new { id = "ProFileForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.customer.CompanyName)
+                            @Html.TextBoxFor(m => m.customer.CompanyName,  new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.customer.ContactName)
+                            @Html.TextBoxFor(m => m.customer.ContactName,  new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.customer.ContactTitle)
+                            @Html.TextBoxFor(m => m.customer.ContactTitle,  new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.customer.Phone)
+                            @Html.TextBoxFor(m => m.customer.Phone,  new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.customer.Fax)
+                            @Html.TextBoxFor(m => m.customer.Fax,  new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.customer.City)
+                            @Html.TextBoxFor(m => m.customer.City,  new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.customer.Address)
+                            @Html.TextBoxFor(m => m.customer.Address,  new { @class = "form-control" })
+                        </div>
+                        <input type="button" class="btn btn-primary btn-block" id="submit" value="Save" />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    }
+                }
+                else
+                {
+                    using (Html.BeginForm("Save", "Person", FormMethod.Post, new { id = "ProFileForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            @Html.Label("name", "姓名")
+                            @Html.TextBoxFor(m => m.employee.FirstName,  new { @class = "form-control" })
+                            @Html.TextBoxFor(m => m.employee.LastName,  new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.employee.BirthDate)
+                            @Html.TextBoxFor(m => m.employee.BirthDate,  new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.employee.HomePhone)
+                            @Html.TextBoxFor(m => m.employee.HomePhone,  new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.employee.Address)
+                            @Html.TextBoxFor(m => m.employee.Address,  new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.employee.Account)
+                            @Html.TextBoxFor(m => m.employee.Account,  new { @class = "form-control" })
+                        </div>
+                        <input type="button" class="btn btn-primary btn-block" id="submit" value="Save" />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    }
+                }
             }
         </div>
     </div>
@@ -63,4 +105,15 @@
 </div>
 
 <script type="text/javascript">
+     $(function () {
+        $("#employee_BirthDate").datepicker({
+            format: "yyyy-mm-dd",
+            locale: "zh-tw"
+        });
+
+        //format Data control
+        if ($('#employee_BirthDate').val().length > 0) $('#employee_BirthDate').val($('#employee_BirthDate').val().substring(0,10));
+        
+        $('#employee_BirthDate').datepicker("setDate", $('#employee_BirthDate').val());
+    });
 </script>
