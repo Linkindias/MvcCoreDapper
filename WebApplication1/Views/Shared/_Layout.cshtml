@@ -65,8 +65,10 @@
     <script type="text/javascript">
         $(function () {
             var Id = '@ViewBag.Id';
-            
-            if (window.localStorage.getItem('menu') == null && Id.length > 0) {
+            console.log(Id.length);
+
+            if (Id.length > 0) {
+                if (window.localStorage.getItem('menu') == null ) {
                 $.ajax({
                     type: 'GET',
                     url: '@Url.Action("Index", "Menu")',
@@ -76,12 +78,15 @@
                     success: function (data) {
                         if (data != null) {
                             $("#menu").after(data);
-                            window.localStorage.setItem("menu",data)
+                            window.localStorage.setItem("menu", data)
                         }
                     },
                     error: function (error) {
                     }
                 });
+                }
+                else
+                    $("#menu").after(window.localStorage.getItem('menu'));
             }
         });
     </script>
