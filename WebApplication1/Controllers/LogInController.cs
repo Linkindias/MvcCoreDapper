@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Controllers
 {
-
     public class LogInController : Controller
     {
         IAuthService AuthService;
@@ -44,8 +43,7 @@ namespace WebApplication1.Controllers
             return BadRequest(result.rtn.ErrorMsg);
         }
 
-        
-        public IActionResult Out(string Id, string account)
+        public IActionResult Out(string Id)
         {
             var result = AuthService.LogOut(Id);
             if (result.IsSuccess)

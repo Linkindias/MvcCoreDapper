@@ -65,7 +65,8 @@
     <script type="text/javascript">
         $(function () {
             var Id = '@ViewBag.Id';
-            if ($("#menu").html().length == 0 && Id.length > 0) {
+            
+            if (window.localStorage.getItem('menu') == null && Id.length > 0) {
                 $.ajax({
                     type: 'GET',
                     url: '@Url.Action("Index", "Menu")',
@@ -73,13 +74,12 @@
                         Id: Id
                     },
                     success: function (data) {
-                        
-                        if (data != null ) {
+                        if (data != null) {
                             $("#menu").after(data);
+                            window.localStorage.setItem("menu",data)
                         }
                     },
                     error: function (error) {
-                        console.log(error);
                     }
                 });
             }
@@ -116,7 +116,7 @@
                     @{
                         if (ViewBag.Name != null)
                         {
-                            <li><a class="font" asp-route-id="@ViewBag.Id" asp-route-account="@ViewBag.Name" asp-controller="LogIn" asp-action="Out">LogOut</a></li>
+                            <li><a class="font" asp-route-id="@ViewBag.Id" asp-controller="LogIn" asp-action="Out">LogOut</a></li>
                         }
                     }
                     <li><label class="menu">@ViewBag.Name</label></li>

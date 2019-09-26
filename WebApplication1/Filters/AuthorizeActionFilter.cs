@@ -19,7 +19,7 @@ namespace WebApplication1.Filters
             {
                 ISession session = context.HttpContext.Session;
 
-                string Account = session.GetString("Account");
+                string Account = session.GetString("Name");
                 if (string.IsNullOrEmpty(Account))
                 {
                     context.Result = new RedirectResult("/LogIn");
