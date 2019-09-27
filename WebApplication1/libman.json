@@ -8,6 +8,10 @@
       "files": [
         "crypto-js.min.js"
       ]
+    },
+    {
+      "library": "jqueryui@1.12.1",
+      "destination": "wwwroot/lib/jquery-ui/"
     }
   ]
 }

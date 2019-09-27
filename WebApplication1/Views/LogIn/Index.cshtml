@@ -23,6 +23,10 @@
     .message{
         color:red;
     }
+
+    .ui-button{
+        margin-top:10px;
+    }
 </style>
 
 <div class="container">
@@ -40,6 +44,7 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.password)
                 @Html.TextBoxFor(m => m.password, "請輸入密碼!", new { @class = "form-control" })
+                <button class="ui-button ui-widget ui-corner-all" type="button"><span id="pw" class="ui-icon ui-icon-unlocked"></span></button>
                 <span asp-validation-for='password' class="message"></span>
             </div>
             <input type="button" class="btn btn-primary btn-block" id="submit" value="Login" />
@@ -97,6 +102,18 @@
 
     $(function () {
         window.localStorage.clear();
+
+        $("button").button().click(function () {
+            //當密碼為未鎖，則隱藏密碼，否則顯示密碼
+            if ($("#pw").attr('class') == 'ui-icon ui-icon-unlocked') {
+                $("#password").attr("type", "password");
+                $("#pw").attr("class", "ui-icon ui-icon-locked");
+            }
+            else {
+                $("#password").attr("type", "text");
+                $("#pw").attr("class", "ui-icon ui-icon-unlocked");
+            }
+        });
 
         $("#submit").click(function () {
             //當檢查輸入錯誤，則顯示訊息
