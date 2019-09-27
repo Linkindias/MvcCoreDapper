@@ -1,4 +1,5 @@
-﻿using BLL.InterFace;
+﻿using Base;
+using BLL.InterFace;
 using DAL.DTOModel;
 using DAL.PageModel;
 using DAL.Repository;
@@ -38,6 +39,24 @@ namespace BLL.Model
             if (cusResult.rtn.IsSuccess && cusResult.customer != null) memberModel.customer = cusResult.customer;
 
             return memberModel;
+        }
+
+        /// <summary>
+        /// 更新會員
+        /// </summary>
+        /// <param name="member">會員</param>
+        public Result UpdateMember(MemberModel member)
+        {
+            (Result rtn, int exeRows) updateMember = (new Result(), 0);
+
+            if (member.customer.CustomerID != null)
+                updateMember = CustomerRep.UpdateCustomer(member.customer); 
+            else
+                updateMember = EmployeeRep.UpdateEmployee(member.employee);
+
+            if (updateMember.rtn.IsSuccess) updateMember.rtn.SuccessMsg = "會員更新成功";
+
+            return updateMember.rtn;
         }
     }
 }

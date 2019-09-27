@@ -46,5 +46,29 @@ namespace DAL.Repository
 
             return (result.rtn, result.result);
         }
+
+        /// <summary>
+        /// 更新客戶
+        /// </summary>
+        /// <param name="customer">客戶</param>
+        public (Result rtn, int exeRows) UpdateCustomer(Customers customer)
+        {
+            string sqlCmd = @"Update Customers Set CompanyName = @CompanyName, ContactName = @ContactName, ContactTitle = @ContactTitle, Phone = @Phone, Address = @Address, Account = @Account
+                                Where CustomerId = @CusId";
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CompanyName", customer.CompanyName);
+            parameters.Add("@ContactName", customer.ContactName);
+            parameters.Add("@ContactTitle", customer.ContactTitle);
+            parameters.Add("@Phone", customer.Phone);
+            parameters.Add("@Fax", customer.Fax);
+            parameters.Add("@Address", customer.Address);
+            parameters.Add("@Account", customer.Account);
+            parameters.Add("@CusId", customer.CustomerID);
+
+            var result = this.GetCUDOfRow(sqlCmd, parameters);
+
+            return (result.rtn, result.Rows);
+        }
     }
 }

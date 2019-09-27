@@ -45,5 +45,28 @@ namespace DAL.Repository
 
             return (result.rtn, result.result);
         }
+
+        /// <summary>
+        /// 更新員工
+        /// </summary>
+        /// <param name="employee">員工</param>
+        public (Result rtn, int exeRows) UpdateEmployee(Employees employee)
+        {
+            string sqlCmd = @"Update Employees Set FirstName = @FirstName, LastName = @LastName, BirthDate = @BirthDate, HomePhone = @HomePhone, Address = @Address, Account = @Account
+                                Where EmployeeId = @EmpId";
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@FirstName", employee.FirstName);
+            parameters.Add("@LastName", employee.LastName);
+            parameters.Add("@BirthDate", employee.BirthDate);
+            parameters.Add("@HomePhone", employee.HomePhone);
+            parameters.Add("@Address", employee.Address);
+            parameters.Add("@Account", employee.Account);
+            parameters.Add("@EmpId", employee.EmployeeID);
+
+            var result = this.GetCUDOfRow(sqlCmd, parameters);
+
+            return (result.rtn, result.Rows);
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Base;
 using BLL.InterFace;
 using DAL.DBModel;
 using DAL.DTOModel;
@@ -36,9 +37,16 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        public ActionResult CreateCustomer(Customers customer)
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult UpdateMember(MemberModel member)
         {
-            return View();
+            Result result = MemberService.UpdateMember(member);
+
+            if (result.IsSuccess) return Ok(result.SuccessMsg);
+
+            return BadRequest(result.ErrorMsg);
         }
     }
 }

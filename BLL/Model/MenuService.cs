@@ -49,10 +49,6 @@ namespace BLL.Model
                 {
                     menus = menuResult.menus.Where(o => o.ParentID == 0);
 
-                    //當角色不為管理者，則無個人設定選單
-                    if (roleResult.roles.Any(o => o.RoleName.ToLower() != "admin"))
-                        menus = menuResult.menus.Where(o => o.MenuCode != "Person");
-
                     foreach (MenuDTO menu in menus)
                         FunGetSubMenus(menu, menuResult.menus);
 

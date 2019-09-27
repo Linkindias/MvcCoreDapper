@@ -14,5 +14,11 @@ namespace BLL.InterFace
         /// </summary>
         /// <param name="Id">編號</param>
         MemberModel GetMember(string Id);
+
+        /// <summary>
+        /// 更新會員
+        /// </summary>
+        /// <param name="member">會員</param>
+        Result UpdateMember(MemberModel member);
     }
 }

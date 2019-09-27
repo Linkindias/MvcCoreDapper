@@ -43,7 +43,7 @@ namespace BLL.Model
             }
             else
             {
-                int EmployeeID = myEmployee.employee != null ? myEmployee.employee.EmployeeID : 0; //員工
+                int EmployeeID = myEmployee.employee != null ? myEmployee.employee.EmployeeID : -1; //員工
                 string CustomerID = myCustomer.custom != null ? myCustomer.custom.CustomerID : string.Empty; //客戶
                 var myAuth = AuthRep.GetAuthenticationByParams(EmployeeID, CustomerID, Password, (int)DataStatus.Enable);
 
@@ -86,8 +86,7 @@ namespace BLL.Model
         /// <param name="Id">帳號</param>
         public Result LogOut(string Id)
         {
-            Result rtn = new Result();
-            (Result rtn, int exeRows) updateAuthCode = (rtn, 0);
+            (Result rtn, int exeRows) updateAuthCode = (new Result(), 0);
             int EmployeeId = 0;
             int.TryParse(Id, out EmployeeId);
             var myEmployee = EmployeeRep.GetEmployeeById(EmployeeId, (int)DataStatus.Enable); //員工
@@ -96,18 +95,15 @@ namespace BLL.Model
             //當人員不正確，則顯示訊息，否則檢查權限
             if (myEmployee.employee == null && myCustomer.customer == null)
             {
-                rtn.IsSuccess = false;
-                rtn.ErrorMsg = $"查無此帳號 {Id}，請確認";
+                updateAuthCode.rtn.IsSuccess = false;
+                updateAuthCode.rtn.ErrorMsg = $"查無此帳號 {Id}，請確認";
             }
             else
                 updateAuthCode = AuthRep.UpdateAuthCode(EmployeeId, Id, null, (int)DataStatus.Enable);
 
-            if (updateAuthCode.rtn.IsSuccess)
-            {
-                rtn.IsSuccess = updateAuthCode.rtn.IsSuccess;
-                rtn.SuccessMsg = $"{Id} 登出成功";
-            }
-            return rtn;
+            if (updateAuthCode.rtn.IsSuccess) updateAuthCode.rtn.SuccessMsg = $"{Id} 登出成功";
+
+            return updateAuthCode.rtn;
         }
     }
 }
