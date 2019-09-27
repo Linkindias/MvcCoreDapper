@@ -9,9 +9,11 @@ namespace DAL.DTOModel
     public class LogInDTO
     {
         [Required(ErrorMessage = "帳號是必填欄位")]
+        [StringLength(20)]
         public string account { get; set; }
 
         [Required(ErrorMessage = "密碼是必填欄位")]
+        [StringLength(20)]
         public string password { get; set; }
     }
 }
