@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Repository\bin\**" />
+    <EmbeddedResource Remove="Repository\bin\**" />
+    <None Remove="Repository\bin\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="1.60.6" />
   </ItemGroup>
 

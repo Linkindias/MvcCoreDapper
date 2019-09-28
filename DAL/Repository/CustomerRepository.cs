@@ -53,7 +53,7 @@ namespace DAL.Repository
         /// <param name="customer">客戶</param>
         public (Result rtn, int exeRows) UpdateCustomer(Customers customer)
         {
-            string sqlCmd = @"Update Customers Set CompanyName = @CompanyName, ContactName = @ContactName, ContactTitle = @ContactTitle, Phone = @Phone, Address = @Address, Account = @Account
+            string sqlCmd = @"Update Customers Set CompanyName = @CompanyName, ContactName = @ContactName, ContactTitle = @ContactTitle, Phone = @Phone, Address = @Address
                                 Where CustomerId = @CusId";
 
             DynamicParameters parameters = new DynamicParameters();
@@ -63,7 +63,6 @@ namespace DAL.Repository
             parameters.Add("@Phone", customer.Phone);
             parameters.Add("@Fax", customer.Fax);
             parameters.Add("@Address", customer.Address);
-            parameters.Add("@Account", customer.Account);
             parameters.Add("@CusId", customer.CustomerID);
 
             var result = this.GetCUDOfRow(sqlCmd, parameters);
