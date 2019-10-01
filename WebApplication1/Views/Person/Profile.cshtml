@@ -14,6 +14,10 @@
     .row {
         margin-top: 10%;
     }
+
+    .name {
+        display:flex;
+    }
 </style>
 <div class="container">
     <div class="row">
@@ -61,7 +65,7 @@
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     }
                 }
-                else
+                else if (Model.employee != null)
                 {
                     using (Html.BeginForm("Save", "Person", FormMethod.Post, new { id = "EmployeeForm" }))
                     {
@@ -71,10 +75,12 @@
                         </div>
                         <div class="form-group">
                             @Html.Label("name", "姓名")
-                            @Html.TextBoxFor(m => m.employee.FirstName, new { @class = "form-control" })
-                            <span asp-validation-for='employee.FirstName' class="message"></span>
-                            @Html.TextBoxFor(m => m.employee.LastName, new { @class = "form-control" })
-                            <span asp-validation-for='employee.LastName' class="message"></span>
+                            <div class="name">
+                                @Html.TextBoxFor(m => m.employee.FirstName, new { @class = "form-control", @width = "50%" })
+                                <span asp-validation-for='employee.FirstName' class="message"></span>
+                                @Html.TextBoxFor(m => m.employee.LastName, new { @class = "form-control", @width = "50%" })
+                                <span asp-validation-for='employee.LastName' class="message"></span>
+                            </div>
                         </div>
                         <div class="form-group">
                             @Html.LabelFor(m => m.employee.BirthDate)
@@ -94,6 +100,13 @@
                         <input type="button" class="btn btn-primary btn-block" id="submit" value="Save" />
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     }
+                }
+                else if (!Model.IsSuccess)
+                {
+                    <script type="text/javascript">
+                        $('#msgModalbody').text('@Model.ErrorMsg').css({ 'color': 'blue'});;
+                        $('#msgModal').modal('show');
+                    </script>
                 }
             }
         </div>
@@ -148,7 +161,7 @@
             } else {
                 isValid = $("#CustomerForm").valid();
             }
-            
+
             if (isValid) {
                 var data = {
                     employee: {
@@ -188,7 +201,6 @@
                     data.customer.Address = $("#customer_Address").val();
                     data.customer.Account = $("#customer_Account").val();
                 }
-                console.log(data);
                 $.ajax({
                     type: 'POST',
                     url: '@Url.Action("UpdateMember", "Person")',
@@ -215,5 +227,5 @@
             }
         });
     });
-</script>
+                    </script>
 

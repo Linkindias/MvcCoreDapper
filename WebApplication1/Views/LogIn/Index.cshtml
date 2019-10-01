@@ -39,8 +39,8 @@
             </div>
             <div class="form-group">
                 @Html.LabelFor(m => m.password)
-                @Html.TextBoxFor(m => m.password, "請輸入密碼!", new { @class = "form-control" })
-                <button class="ui-button ui-widget ui-corner-all" type="button"><span id="pw" class="ui-icon ui-icon-unlocked"></span></button>
+                @Html.TextBoxFor(m => m.password, "請輸入密碼!", new { @class = "form-control", @type = "password" })
+                <button class="ui-button ui-widget ui-corner-all" type="button"><span id="pw" class="ui-icon ui-icon-locked"></span></button>
                 <span asp-validation-for='password' class="message"></span>
             </div>
             <input type="button" class="btn btn-primary btn-block" id="submit" value="Login" />
