@@ -11,6 +11,7 @@
 <script src="~/lib/crypto-js/aes.js"></script>
 <script src="~/lib/crypto-js/hmac-sha512.js"></script>
 <script src="~/lib/crypto-js/sha512.js"></script>
+<script src="~/js/Encryption.js"></script>
 <style type="text/css">
     .container {
         width: 400px !important;
@@ -121,7 +122,7 @@
                     url: '@Url.Action("In", "LogIn")',
                     data: {
                         __RequestVerificationToken: '@GetAntiXsrfRequestToken()',
-                        account: $("#account").val(),
+                        account: Encrypt($("#account").val()),
                         password: CryptoJS.SHA512($("#password").val()).toString(),
                     },
                     async: true,

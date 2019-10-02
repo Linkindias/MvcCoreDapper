@@ -10,6 +10,7 @@
 <script src="~/lib/crypto-js/aes.js"></script>
 <script src="~/lib/crypto-js/hmac-sha512.js"></script>
 <script src="~/lib/crypto-js/sha512.js"></script>
+<script src="~/js/Encryption.js"></script>
 <style type="text/css">
     .container {
         width: 800px !important;
@@ -85,7 +86,9 @@
         $('#msgModal').modal('hide');
     }
 
-     $(function () {
+    $(function () {
+        $("#Account").val(Decrypt('@Model.Account')); //帳號解碼
+
         $("#submit").click(function () {
             if ($("#APForm").valid()) {
                 $.ajax({
@@ -94,7 +97,7 @@
                     data: {
                         __RequestVerificationToken: '@GetAntiXsrfRequestToken()',
                         authenticId: $("#AuthenticId").val(),
-                        account: $("#Account").val(),
+                        account: Encrypt($("#Account").val()),
                         password: CryptoJS.SHA512($("#Password").val()).toString(),
                     },
                     async: true,

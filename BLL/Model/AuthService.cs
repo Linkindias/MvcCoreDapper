@@ -19,6 +19,8 @@ namespace BLL.Model
         AuthenticationRepository AuthRep;
         EmployeeRepository EmployeeRep;
         CustomerRepository CustomerRep;
+        static string keyCode = "abcd1234EFGH0987";
+        static string ivCode = "ABCD7890efgh4321";
 
         public AuthService(AuthenticationRepository authenticationRepository,
                 EmployeeRepository employeeRepository, CustomerRepository customerRepository)
@@ -28,8 +30,6 @@ namespace BLL.Model
             this.CustomerRep = customerRepository;
         }
 
-
-
         /// <summary>
         /// 登入
         /// </summary>
@@ -38,15 +38,16 @@ namespace BLL.Model
         public (Result rtn, Employees employee, Customers customer, Guid guid) LogIn(string Account, string Password)
         {
             Result rtn = new Result();
-            var myEmployee = EmployeeRep.GetEmployeeByAccount(Account, (int)DataStatus.Enable); //員工
-            var myCustomer = CustomerRep.GetCustomerByAccount(Account, (int)DataStatus.Enable); //客戶
+            string account = this.DecryptAES(Account);
+            var myEmployee = EmployeeRep.GetEmployeeByAccount(account, (int)DataStatus.Enable); //員工
+            var myCustomer = CustomerRep.GetCustomerByAccount(account, (int)DataStatus.Enable); //客戶
             Guid guid = Guid.Empty;
 
             //當人員不正確，則顯示訊息，否則檢查權限
             if (myEmployee.employee == null && myCustomer.custom == null)
             {
                 rtn.IsSuccess = false;
-                rtn.ErrorMsg = $"查無此帳號 {Account}，請確認";
+                rtn.ErrorMsg = $"查無此帳號 {account}，請確認";
             }
             //當員工錯誤，則回傳錯誤訊息
             else if (!myEmployee.rtn.IsSuccess && myEmployee.employee != null)
@@ -64,7 +65,7 @@ namespace BLL.Model
                 if (myAuth.auth == null)
                 {
                     rtn.IsSuccess = false;
-                    rtn.ErrorMsg = $"帳號 {Account}或密碼不正確，請確認";
+                    rtn.ErrorMsg = $"帳號 {account}或密碼不正確，請確認";
                 }
                 else
                 {
@@ -72,15 +73,15 @@ namespace BLL.Model
 
                     //當權限鎖定，則無法登入
                     if (myAuth.auth.State == (int)DataStatus.Lock)
-                        rtn.ErrorMsg = $"帳號 {Account}已鎖定，無法登入，請連絡客服!";
+                        rtn.ErrorMsg = $"帳號 {account}已鎖定，無法登入，請連絡客服!";
 
                     //當有效期小於今日，則已離職
                     else if (DateTime.Compare(DateTime.Now, myAuth.auth.EffectiveDate) >= 0)
-                        rtn.ErrorMsg = $"帳號 {Account}已離職，無法登入";
+                        rtn.ErrorMsg = $"帳號 {account}已離職，無法登入";
 
                     //當已有認證，則已登入中
                     else if (myAuth.auth.VerifyCode != null)
-                        rtn.ErrorMsg = $"帳號 {Account}已登入中，無法登入";
+                        rtn.ErrorMsg = $"帳號 {account}已登入中，無法登入";
 
                     else
                     {
@@ -126,33 +127,22 @@ namespace BLL.Model
         public AuthModel GetAuth(string Id)
         {
             AuthModel auth = new AuthModel();
-            string keyAuth = $"GetAuth{Id}";
-            var cacheAuth = CacheHelper.GetCacheObject(keyAuth); //由快取取得選單資訊
 
-            if (cacheAuth.Iskey)
+            var result = AuthRep.GetAuthById(Id, (int)DataStatus.Enable);
+            if (result.rtn.IsSuccess)
             {
-                auth = (AuthModel)cacheAuth.value;
-                auth.IsSuccess = true;
+                auth = new AuthModel()
+                {
+                    AuthenticId = result.auth.AuthenticId,
+                    Account = this.Encrypt(result.auth.Account),
+                    Password = string.Empty,
+                };
+                auth.IsSuccess = result.rtn.IsSuccess;
             }
             else
             {
-                var result = AuthRep.GetAuthById(Id, (int)DataStatus.Enable);
-                if (result.rtn.IsSuccess)
-                {
-                    auth = new AuthModel()
-                    {
-                        AuthenticId = result.auth.AuthenticId,
-                        Account = result.auth.Account,
-                        Password = string.Empty,
-                    };
-                    auth.IsSuccess = result.rtn.IsSuccess;
-                    CacheHelper.AddCache(keyAuth, auth, CacheStatus.Absolute, 0, 1); //權限加入快取
-                }
-                else
-                {
-                    auth.IsSuccess = result.rtn.IsSuccess;
-                    auth.ErrorMsg = result.rtn.ErrorMsg;
-                }
+                auth.IsSuccess = result.rtn.IsSuccess;
+                auth.ErrorMsg = result.rtn.ErrorMsg;
             }
             return auth;
         }
@@ -164,12 +154,82 @@ namespace BLL.Model
         public Result UpdateAuth(AuthModel auth)
         {
             (Result rtn, int exeRows) updateAuth = (new Result(), 0);
+            string Account = this.DecryptAES(auth.Account); //帳號解碼
 
-            updateAuth = AuthRep.UpdateAuth(auth.AuthenticId,auth.Account,auth.Password, (int)DataStatus.Enable);
+            updateAuth = AuthRep.UpdateAuth(auth.AuthenticId, Account, auth.Password, (int)DataStatus.Enable);
 
-            if (updateAuth.rtn.IsSuccess) updateAuth.rtn.SuccessMsg = $"{auth.Account} 更新成功";
+            if (updateAuth.rtn.IsSuccess) updateAuth.rtn.SuccessMsg = $"{Account} 更新成功";
 
             return updateAuth.rtn;
         }
+
+        private string DecryptAES(string Value)
+        {
+            var keybytes = Encoding.UTF8.GetBytes(keyCode);
+            var iv = Encoding.UTF8.GetBytes(ivCode);
+
+            var encrypted = Convert.FromBase64String(Value);
+            var decriptedFromJavascript = DecryptFromBytes(encrypted, keybytes, iv);
+
+            return decriptedFromJavascript;
+        }
+
+        private string DecryptFromBytes(byte[] cipherText, byte[] key, byte[] iv)
+        {
+            string value = null;
+
+            using (var rijAlg = new RijndaelManaged())
+            {
+                rijAlg.Mode = CipherMode.CBC;
+                rijAlg.Padding = PaddingMode.PKCS7;
+                rijAlg.FeedbackSize = 128;
+
+                rijAlg.Key = key;
+                rijAlg.IV = iv;
+
+                var decryptor = rijAlg.CreateDecryptor(rijAlg.Key, rijAlg.IV);
+
+                using (var msDecrypt = new MemoryStream(cipherText))
+                using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                using (var srDecrypt = new StreamReader(csDecrypt))
+                {
+                    value = srDecrypt.ReadToEnd();
+                }
+            }
+            return value;
+        }
+
+        private string Encrypt(string value)
+        {
+            byte[] strText = new System.Text.UTF8Encoding().GetBytes(value);
+            RijndaelManaged myRijndael = new RijndaelManaged();
+            myRijndael.BlockSize = 128;
+            myRijndael.KeySize = 128;
+            myRijndael.IV = Encoding.UTF8.GetBytes(ivCode);
+
+            myRijndael.Padding = PaddingMode.PKCS7;
+            myRijndael.Mode = CipherMode.CBC;
+            myRijndael.Key = this.GenerateKey("coremvc", Encoding.UTF8.GetBytes(keyCode), 1000);
+            ICryptoTransform transform = myRijndael.CreateEncryptor();
+            byte[] cipherText = transform.TransformFinalBlock(strText, 0, strText.Length);
+            return Convert.ToBase64String(cipherText);
+        }
+
+        public byte[] HexStringToByteArray(string strHex)
+        {
+            byte[] r = new byte[strHex.Length / 2];
+            for (int i = 0; i <= strHex.Length - 1; i += 2)
+            {
+                r[i / 2] = Convert.ToByte(Convert.ToInt32(strHex.Substring(i, 2), 16));
+            }
+            return r;
+        }
+
+        private byte[] GenerateKey(string strPassword, byte[] salt, int iterations)
+        {
+            Rfc2898DeriveBytes rfc2898 = new Rfc2898DeriveBytes(Encoding.UTF8.GetBytes(strPassword), salt, iterations);
+            return rfc2898.GetBytes(128 / 8);
+        }
     }
 }
+
