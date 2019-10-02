@@ -33,6 +33,11 @@ namespace BLL.Commons
             return CacheHelper.AddCacheObject(key, value, status, minutes, days);
         }
 
+        public static Object AddCache<T>(string key, T value, CacheStatus status, int minutes = 0, int days = 0)
+        {
+            return CacheHelper.AddCacheObject(key, value, status, minutes, days);
+        }
+
         public static Object AddCacheString(string key, string value, CacheStatus status, int minutes = 0, int days = 0)
         {
             return CacheHelper.AddCacheObject(key, value, status, minutes, days);

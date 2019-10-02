@@ -1,5 +1,6 @@
 ﻿using Base;
 using DAL.DBModel;
+using DAL.DTOModel;
 using Dapper;
 using System;
 using System.Collections.Generic;
@@ -68,6 +69,69 @@ namespace DAL.Repository
             parameters.Add("@CusId", CusId);
             parameters.Add("@State", Statue);
             parameters.Add("@Code", VerifyCode.HasValue ? VerifyCode.Value : VerifyCode);
+
+            var result = this.GetCUDOfRow(sqlCmd, parameters);
+
+            return (result.rtn, result.Rows);
+        }
+
+        /// <summary>
+        /// 依帳號取得權限
+        /// </summary>
+        /// <param name="Id">編號</param>
+        public (Result rtn, AuthenticationDTO auth) GetAuthById(string Id, int Statue)
+        {
+            int EmployeeId = 0;
+            int.TryParse(Id, out EmployeeId);
+            //實值型別初始化為0
+            if (EmployeeId == 0) EmployeeId = -1;
+
+            string SqlCom = @"
+select AuthenticId, isnull(Employees.Account,Customers.Account) as 'Account', PasswordSha512 from Authentication
+left join Employees on Authentication.EmployeesId = Employees.EmployeeId
+left join Customers on Authentication.CustomersId = Customers.CustomerID
+where (Authentication.EmployeesId = @EmployeeId or Authentication.CustomersId = @Id) and Authentication.State = @State";
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@EmployeeId", EmployeeId);
+            parameters.Add("@Id", Id);
+            parameters.Add("@State", Statue);
+
+            var result = this.GetSingleDefault<AuthenticationDTO>(SqlCom, parameters);
+
+            return (result.rtn, result.result);
+        }
+
+        /// <summary>
+        /// 更新帳密的權限
+        /// </summary>
+        /// <param name="AuthId">權限編號</param>
+        /// <param name="Account">帳號</param>
+        /// <param name="Password">密碼</param>
+        public (Result rtn, int exeRows) UpdateAuth(int AuthId, string Account, string Password, int Statue)
+        {
+            string sqlCmd = @"
+Update Authentication Set PasswordSha512 = @Password Where AuthenticId = @AuthId and State = @State
+
+if ((select EmployeesId from Authentication where AuthenticId = @AuthId)  <> 0)
+Begin
+	update Employees
+	set Account = @Account
+	where EmployeeID = (select EmployeesId from Authentication where AuthenticId = @AuthId)
+End
+
+if ((select CustomersId from Authentication where AuthenticId = @AuthId) Is Not Null)
+Begin
+	update Customers
+	set Account = @Account
+	where CustomerID = (select CustomersId from Authentication where AuthenticId = @AuthId)
+End";
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@AuthId", AuthId);
+            parameters.Add("@State", Statue);
+            parameters.Add("@Account", Account);
+            parameters.Add("@Password", Password);
 
             var result = this.GetCUDOfRow(sqlCmd, parameters);
 

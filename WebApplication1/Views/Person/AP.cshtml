@@ -1,0 +1,118 @@
+﻿@model DAL.PageModel.AuthModel
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+<script src="~/lib/crypto-js/crypto-js.js"></script>
+<script src="~/lib/crypto-js/aes.js"></script>
+<script src="~/lib/crypto-js/hmac-sha512.js"></script>
+<script src="~/lib/crypto-js/sha512.js"></script>
+<style type="text/css">
+    .container {
+        width: 800px !important;
+    }
+
+    .row {
+        margin-top: 30%;
+    }
+
+    .span {
+        color: blue;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            @{
+                if (!Model.IsSuccess)
+                {
+                    <script type="text/javascript">
+                            $('#msgModalbody').text('@Model.ErrorMsg').css({ 'color': 'blue'});;
+                            $('#msgModal').modal('show');
+                    </script>
+                }
+
+                using (Html.BeginForm("Save", "Person", FormMethod.Post, new { id = "APForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-group" style="display:none;">
+                        @Html.TextBoxFor(m => m.AuthenticId)
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Account)
+                        @Html.TextBoxFor(m => m.Account, new { @class = "form-control" })
+                        <span asp-validation-for='Account' class="message"></span>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Password)
+                        @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @type = "password" })
+                        <span class="span">需變動密碼時，請重新輸入</span>
+                        <span asp-validation-for='Password' class="message"></span>
+                    </div>
+                    <input type="button" class="btn btn-primary btn-block" id="submit" value="Save" />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                }
+            }
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="msgModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="msgModalTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label id="msgModalbody"></label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="closeModal();">確定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //關閉Alert
+    function closeModal() {
+        $('#msgModal').modal('hide');
+    }
+
+     $(function () {
+        $("#submit").click(function () {
+            if ($("#APForm").valid()) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("UpdateAuth", "Person")',
+                    data: {
+                        __RequestVerificationToken: '@GetAntiXsrfRequestToken()',
+                        authenticId: $("#AuthenticId").val(),
+                        account: $("#Account").val(),
+                        password: CryptoJS.SHA512($("#Password").val()).toString(),
+                    },
+                    async: true,
+                    success: function (data) {
+                        if (data != null) {
+                            $('#msgModalbody').text(data).css({ 'color': 'blue' });;
+                            $('#msgModal').modal('show');
+                        }
+                    },
+                    error: function (error) {
+                        if (error != null && error.responseText != '') {
+                            $('#msgModalbody').text(error.responseText).css({ 'color': 'red' });
+                            $('#msgModal').modal('show');
+                        }
+                    }
+                });
+                $("#Password").val('');
+            }
+        });
+    });
+</script>

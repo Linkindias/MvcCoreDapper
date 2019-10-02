@@ -2,9 +2,14 @@
 using BLL.Commons;
 using BLL.InterFace;
 using DAL.DBModel;
+using DAL.DTOModel;
+using DAL.PageModel;
 using DAL.Repository;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using static Base.Enums;
 
 namespace BLL.Model
@@ -22,6 +27,8 @@ namespace BLL.Model
             this.EmployeeRep = employeeRepository;
             this.CustomerRep = customerRepository;
         }
+
+
 
         /// <summary>
         /// 登入
@@ -41,6 +48,12 @@ namespace BLL.Model
                 rtn.IsSuccess = false;
                 rtn.ErrorMsg = $"查無此帳號 {Account}，請確認";
             }
+            //當員工錯誤，則回傳錯誤訊息
+            else if (!myEmployee.rtn.IsSuccess && myEmployee.employee != null)
+                rtn = myEmployee.rtn;
+            //當會員錯誤，則回傳錯誤訊息
+            else if (!myCustomer.rtn.IsSuccess && myCustomer.custom != null)
+                rtn = myCustomer.rtn;
             else
             {
                 int EmployeeID = myEmployee.employee != null ? myEmployee.employee.EmployeeID : -1; //員工
@@ -104,6 +117,59 @@ namespace BLL.Model
             if (updateAuthCode.rtn.IsSuccess) updateAuthCode.rtn.SuccessMsg = $"{Id} 登出成功";
 
             return updateAuthCode.rtn;
+        }
+
+        /// <summary>
+        /// 依帳號取得權限
+        /// </summary>
+        /// <param name="Id">編號</param>
+        public AuthModel GetAuth(string Id)
+        {
+            AuthModel auth = new AuthModel();
+            string keyAuth = $"GetAuth{Id}";
+            var cacheAuth = CacheHelper.GetCacheObject(keyAuth); //由快取取得選單資訊
+
+            if (cacheAuth.Iskey)
+            {
+                auth = (AuthModel)cacheAuth.value;
+                auth.IsSuccess = true;
+            }
+            else
+            {
+                var result = AuthRep.GetAuthById(Id, (int)DataStatus.Enable);
+                if (result.rtn.IsSuccess)
+                {
+                    auth = new AuthModel()
+                    {
+                        AuthenticId = result.auth.AuthenticId,
+                        Account = result.auth.Account,
+                        Password = string.Empty,
+                    };
+                    auth.IsSuccess = result.rtn.IsSuccess;
+                    CacheHelper.AddCache(keyAuth, auth, CacheStatus.Absolute, 0, 1); //權限加入快取
+                }
+                else
+                {
+                    auth.IsSuccess = result.rtn.IsSuccess;
+                    auth.ErrorMsg = result.rtn.ErrorMsg;
+                }
+            }
+            return auth;
+        }
+
+        /// <summary>
+        /// 更新權限
+        /// </summary>
+        /// <param name="auth">權限</param>
+        public Result UpdateAuth(AuthModel auth)
+        {
+            (Result rtn, int exeRows) updateAuth = (new Result(), 0);
+
+            updateAuth = AuthRep.UpdateAuth(auth.AuthenticId,auth.Account,auth.Password, (int)DataStatus.Enable);
+
+            if (updateAuth.rtn.IsSuccess) updateAuth.rtn.SuccessMsg = $"{auth.Account} 更新成功";
+
+            return updateAuth.rtn;
         }
     }
 }
