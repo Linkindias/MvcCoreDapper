@@ -4,6 +4,7 @@ using DAL.PageModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace WebApplication1.Controllers
@@ -33,10 +34,10 @@ namespace WebApplication1.Controllers
             if (result.rtn.IsSuccess)
             {
                 HttpContext.Session.SetString("Name", result.employee != null
-                                                        ? result.employee.FirstName + result.employee.LastName
-                                                        : result.customer.ContactName);
-                HttpContext.Session.SetString("Id", result.employee != null 
-                                                        ? result.employee.EmployeeID.ToString() 
+                                                    ? result.employee.FirstName + result.employee.LastName
+                                                    : result.customer.CompanyName);
+                HttpContext.Session.SetString("Id", result.employee != null
+                                                        ? result.employee.EmployeeID.ToString()
                                                         : result.customer.CustomerID);
                 return Ok();
             }
