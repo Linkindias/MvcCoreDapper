@@ -3,6 +3,7 @@ using BLL.Commons;
 using BLL.InterFace;
 using DAL.DTOModel;
 using DAL.Repository;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,13 @@ namespace BLL.Model
     {
         MenuRepository MenuRep;
         RoleRepository RoleRep;
+        IMemoryCache cache;
 
-        public MenuService(MenuRepository menuRepository, RoleRepository roleRepository)
+        public MenuService(MenuRepository menuRepository, RoleRepository roleRepository, IMemoryCache memoryCache)
         {
             this.MenuRep = menuRepository;
             this.RoleRep = roleRepository;
+            this.cache = memoryCache;
         }
 
         /// <summary>
@@ -34,11 +37,9 @@ namespace BLL.Model
 
             string keyMenu = $"GetMenus{Id}";
             string keyRole = $"GetRoles{Id}";
-            var cacheMenu = CacheHelper.GetCacheObject(keyMenu); //由快取取得選單資訊
-            var cacheRole = CacheHelper.GetCacheObject(keyRole); //由快取取得角色資訊
 
-            if (cacheMenu.Iskey) menus = (IEnumerable<MenuDTO>)cacheMenu.value;
-            if (cacheRole.Iskey) roles = (List<RoleOfMenuDTO>)cacheRole.value;
+            cache.TryGetValue<IEnumerable<MenuDTO>>(keyMenu, out menus);
+            cache.TryGetValue<List<RoleOfMenuDTO>>(keyRole, out roles);
 
             //當無選單或角色，則從後端取得，否則從快取取得
             if (menus == null && roles == null){
@@ -55,11 +56,11 @@ namespace BLL.Model
                     foreach (MenuDTO menu in menus)
                         FunGetSubMenus(menu, menuResult.menus);
 
-                    CacheHelper.AddCacheCollection(keyMenu, menus.ToList(), CacheStatus.Absolute, 0, 1); //選單加入快取
-                    CacheHelper.AddCacheCollection(keyRole, roleResult.roles, CacheStatus.Absolute, 0, 1); //角色加入快取
+                    TimeSpan ts = DateTime.Today.AddDays(1) - DateTime.Now; //1天
+                    cache.Set<IEnumerable<MenuDTO>>(keyMenu, menus.ToList(),ts); //選單加入快取
+                    cache.Set<List<RoleOfMenuDTO>>(keyRole, roleResult.roles,ts); //角色加入快取
                     return (new Result() { IsSuccess = true }, menus.ToList(), roleResult.roles);
                 }
-
                 return (!roleResult.rtn.IsSuccess ? roleResult.rtn : menuResult.rtn, new List<MenuDTO>(), new List<RoleOfMenuDTO>());
             }
             else

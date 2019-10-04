@@ -1,11 +1,9 @@
 ﻿using Base;
-using BLL.Commons;
 using BLL.InterFace;
 using DAL.DBModel;
-using DAL.DTOModel;
 using DAL.PageModel;
 using DAL.Repository;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.IO;
 using System.Security.Cryptography;
@@ -19,15 +17,19 @@ namespace BLL.Model
         AuthenticationRepository AuthRep;
         EmployeeRepository EmployeeRep;
         CustomerRepository CustomerRep;
+        IMemoryCache cache;
+
         static string keyCode = "abcd1234EFGH0987";
         static string ivCode = "ABCD7890efgh4321";
 
         public AuthService(AuthenticationRepository authenticationRepository,
-                EmployeeRepository employeeRepository, CustomerRepository customerRepository)
+                EmployeeRepository employeeRepository, CustomerRepository customerRepository,
+                IMemoryCache memoryCache)
         {
             this.AuthRep = authenticationRepository;
             this.EmployeeRep = employeeRepository;
             this.CustomerRep = customerRepository;
+            this.cache = memoryCache;
         }
 
         /// <summary>
@@ -115,7 +117,12 @@ namespace BLL.Model
             else
                 updateAuthCode = AuthRep.UpdateAuthCode(EmployeeId, Id, null, (int)DataStatus.Enable);
 
-            if (updateAuthCode.rtn.IsSuccess) updateAuthCode.rtn.SuccessMsg = $"{Id} 登出成功";
+            if (updateAuthCode.rtn.IsSuccess)
+            {
+                updateAuthCode.rtn.SuccessMsg = $"{Id} 登出成功";
+                cache.Remove($"GetMenus{Id}"); //選單
+                cache.Remove($"GetRoles{Id}"); //角色
+            }
 
             return updateAuthCode.rtn;
         }

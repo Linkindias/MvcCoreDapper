@@ -27,6 +27,8 @@ namespace WebApplication1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache();
+
             string strCon = Configuration.GetValue<string>("NorthwindConnection");
             int cmdTimeOut = Configuration.GetValue<int>("CommandTimeout");
 
@@ -40,8 +42,8 @@ namespace WebApplication1
             });
 
             //Service
-            services.AddSingleton<IAuthService,AuthService>(); //權限服務
-            services.AddSingleton<IMenuService, MenuService>(); //選單服務
+            services.AddScoped<IAuthService,AuthService>(); //權限服務
+            services.AddScoped<IMenuService, MenuService>(); //選單服務
             services.AddSingleton<IMemberService, MemberService>(); //會員服務
 
             //Repository
@@ -59,7 +61,7 @@ namespace WebApplication1
                 options.Filters.Add(new AuthorizeActionFilter());
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            CacheHelper.CreateCache(); //建立快取
+            //CacheHelper.CreateCache(); //建立快取
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
