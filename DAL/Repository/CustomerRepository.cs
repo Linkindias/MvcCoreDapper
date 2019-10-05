@@ -18,7 +18,7 @@ namespace DAL.Repository
         /// 依帳號取得客戶
         /// </summary>
         /// <param name="Account">帳號</param>
-        public (Result rtn, Customers custom) GetCustomerByAccount(string Account, int Status)
+        public virtual (Result rtn, Customers custom) GetCustomerByAccount(string Account, int Status)
         {
             string sqlCmd = "SELECT * FROM Customers Where Account = @Account And Status = @Status ";
             DynamicParameters parameters = new DynamicParameters();

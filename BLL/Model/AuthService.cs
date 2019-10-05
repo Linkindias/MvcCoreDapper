@@ -170,7 +170,7 @@ namespace BLL.Model
             return updateAuth.rtn;
         }
 
-        private string DecryptAES(string Value)
+        protected virtual string DecryptAES(string Value)
         {
             var keybytes = Encoding.UTF8.GetBytes(keyCode);
             var iv = Encoding.UTF8.GetBytes(ivCode);
@@ -181,7 +181,7 @@ namespace BLL.Model
             return decriptedFromJavascript;
         }
 
-        private string DecryptFromBytes(byte[] cipherText, byte[] key, byte[] iv)
+        protected virtual string DecryptFromBytes(byte[] cipherText, byte[] key, byte[] iv)
         {
             string value = null;
 
@@ -206,7 +206,7 @@ namespace BLL.Model
             return value;
         }
 
-        private string Encrypt(string value)
+        protected virtual string Encrypt(string value)
         {
             byte[] strText = new System.Text.UTF8Encoding().GetBytes(value);
             RijndaelManaged myRijndael = new RijndaelManaged();
@@ -232,7 +232,7 @@ namespace BLL.Model
             return r;
         }
 
-        private byte[] GenerateKey(string strPassword, byte[] salt, int iterations)
+        protected virtual byte[] GenerateKey(string strPassword, byte[] salt, int iterations)
         {
             Rfc2898DeriveBytes rfc2898 = new Rfc2898DeriveBytes(Encoding.UTF8.GetBytes(strPassword), salt, iterations);
             return rfc2898.GetBytes(128 / 8);

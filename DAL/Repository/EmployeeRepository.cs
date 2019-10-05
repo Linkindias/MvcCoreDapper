@@ -18,7 +18,7 @@ namespace DAL.Repository
         /// 依帳號取得人員
         /// </summary>
         /// <param name="Account">帳號</param>
-        public (Result rtn ,Employees employee) GetEmployeeByAccount(string Account, int Status)
+        public virtual (Result rtn ,Employees employee) GetEmployeeByAccount(string Account, int Status)
         {
             string sqlCmd = "SELECT * FROM Employees Where Account = @Account And Status = @Status ";
             DynamicParameters parameters = new DynamicParameters();

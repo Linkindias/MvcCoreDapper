@@ -23,7 +23,7 @@ namespace DAL.Repository
         /// <param name="EmployeeId">員工編號</param>
         /// <param name="CostomerId">客戶編號</param>
         /// <param name="PassWord">密碼</param>
-        public (Result rtn, Authentication auth) GetAuthenticationByParams(int EmployeeId, string CostomerId, string PassWord, int Status)
+        public virtual (Result rtn, Authentication auth) GetAuthenticationByParams(int EmployeeId, string CostomerId, string PassWord, int Status)
         {
             string sqlCmd = "SELECT * FROM Authentication ";
             DynamicParameters parameters = new DynamicParameters();
