@@ -34,7 +34,7 @@ namespace DAL.Repository
         /// 依會員編號取得人員
         /// </summary>
         /// <param name="EmployeeId">會員編號</param>
-        public (Result rtn, Employees employee) GetEmployeeById(int EmployeeId, int Status)
+        public virtual (Result rtn, Employees employee) GetEmployeeById(int EmployeeId, int Status)
         {
             string sqlCmd = "SELECT * FROM Employees Where EmployeeID = @Id And Status = @Status ";
             DynamicParameters parameters = new DynamicParameters();

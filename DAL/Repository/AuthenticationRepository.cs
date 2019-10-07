@@ -60,7 +60,7 @@ namespace DAL.Repository
         /// </summary>
         /// <param name="Id">員工編號</param>
         /// <param name="VerifyCode">認證碼</param>
-        public (Result rtn, int exeRows) UpdateAuthCode(int EmpId, string CusId, Guid? VerifyCode, int Statue)
+        public virtual (Result rtn, int exeRows) UpdateAuthCode(int EmpId, string CusId, Guid? VerifyCode, int Statue)
         {
             string sqlCmd = "Update Authentication Set VerifyCode = @Code Where (EmployeesId = @EmpId or CustomersId = @CusId) and State = @State";
 
@@ -79,7 +79,7 @@ namespace DAL.Repository
         /// 依帳號取得權限
         /// </summary>
         /// <param name="Id">編號</param>
-        public (Result rtn, AuthenticationDTO auth) GetAuthById(string Id, int Statue)
+        public virtual (Result rtn, AuthenticationDTO auth) GetAuthById(string Id, int Statue)
         {
             int EmployeeId = 0;
             int.TryParse(Id, out EmployeeId);
@@ -108,7 +108,7 @@ where (Authentication.EmployeesId = @EmployeeId or Authentication.CustomersId = 
         /// <param name="AuthId">權限編號</param>
         /// <param name="Account">帳號</param>
         /// <param name="Password">密碼</param>
-        public (Result rtn, int exeRows) UpdateAuth(int AuthId, string Account, string Password, int Statue)
+        public virtual (Result rtn, int exeRows) UpdateAuth(int AuthId, string Account, string Password, int Statue)
         {
             string sqlCmd = @"
 Update Authentication Set PasswordSha512 = @Password Where AuthenticId = @AuthId and State = @State
