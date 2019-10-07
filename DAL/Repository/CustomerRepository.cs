@@ -51,7 +51,7 @@ namespace DAL.Repository
         /// 更新客戶
         /// </summary>
         /// <param name="customer">客戶</param>
-        public (Result rtn, int exeRows) UpdateCustomer(Customers customer)
+        public virtual (Result rtn, int exeRows) UpdateCustomer(Customers customer)
         {
             string sqlCmd = @"Update Customers Set CompanyName = @CompanyName, ContactName = @ContactName, ContactTitle = @ContactTitle, Phone = @Phone, Address = @Address
                                 Where CustomerId = @CusId";

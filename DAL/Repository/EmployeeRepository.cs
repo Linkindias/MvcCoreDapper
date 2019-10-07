@@ -50,7 +50,7 @@ namespace DAL.Repository
         /// 更新員工
         /// </summary>
         /// <param name="employee">員工</param>
-        public (Result rtn, int exeRows) UpdateEmployee(Employees employee)
+        public virtual (Result rtn, int exeRows) UpdateEmployee(Employees employee)
         {
             string sqlCmd = @"Update Employees Set FirstName = @FirstName, LastName = @LastName, BirthDate = @BirthDate, HomePhone = @HomePhone, Address = @Address
                                 Where EmployeeId = @EmpId";
