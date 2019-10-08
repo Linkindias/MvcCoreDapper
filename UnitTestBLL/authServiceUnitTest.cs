@@ -229,7 +229,7 @@ namespace UnitTestBLL
             mockAuth.Setup(p => p.UpdateAuth(It.IsAny<Int32>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Int32>()))
                     .Returns(() => (new Result() { IsSuccess = true }, 0));
 
-            var result = AuthService.UpdateAuth(new DAL.PageModel.AuthModel() {
+            var result = AuthService.UpdateAuth(new BLL.PageModel.AuthModel() {
                 AuthenticId = 1 ,Account ="Test", Password = "1234"
             });
 
@@ -246,7 +246,7 @@ namespace UnitTestBLL
             mockAuth.Setup(p => p.UpdateAuth(It.IsAny<Int32>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Int32>()))
                     .Returns(() => (new Result() { IsSuccess = false ,ErrorMsg = "error"}, 0));
 
-            var result = AuthService.UpdateAuth(new DAL.PageModel.AuthModel()
+            var result = AuthService.UpdateAuth(new BLL.PageModel.AuthModel()
             {
                 AuthenticId = 1,
                 Account = "Test",

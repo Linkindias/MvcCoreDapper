@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Base;
+﻿using Base;
 using BLL.InterFace;
-using DAL.DBModel;
-using DAL.DTOModel;
-using DAL.PageModel;
+using BLL.PageModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

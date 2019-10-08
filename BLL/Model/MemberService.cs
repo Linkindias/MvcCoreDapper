@@ -1,11 +1,7 @@
 ﻿using Base;
 using BLL.InterFace;
-using DAL.DTOModel;
-using DAL.PageModel;
+using BLL.PageModel;
 using DAL.Repository;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using static Base.Enums;
 
 namespace BLL.Model

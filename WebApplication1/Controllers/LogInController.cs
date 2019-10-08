@@ -1,10 +1,8 @@
 ﻿using BLL.InterFace;
 using DAL.DTOModel;
-using DAL.PageModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace WebApplication1.Controllers

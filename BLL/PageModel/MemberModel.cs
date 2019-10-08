@@ -1,10 +1,7 @@
 ﻿using Base;
 using DAL.DBModel;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace DAL.PageModel
+namespace BLL.PageModel
 {
     public class MemberModel: Result
     {

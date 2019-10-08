@@ -1,7 +1,6 @@
 ﻿using Base;
+using BLL.PageModel;
 using DAL.DBModel;
-using DAL.DTOModel;
-using DAL.PageModel;
 using System;
 
 

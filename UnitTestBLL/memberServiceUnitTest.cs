@@ -92,7 +92,7 @@ namespace UnitTestBLL
         {
             mockCus.Setup(p => p.UpdateCustomer(It.IsAny<Customers>())).Returns(() => (new Result() { IsSuccess = true }, 1));
 
-            var result = MemberService.UpdateMember(new DAL.PageModel.MemberModel()
+            var result = MemberService.UpdateMember(new BLL.PageModel.MemberModel()
             {
                 customer = new DAL.DBModel.Customers() { CustomerID = "1" }
             });
@@ -106,7 +106,7 @@ namespace UnitTestBLL
         {
             mockEmp.Setup(p => p.UpdateEmployee(It.IsAny<Employees>())).Returns(() => (new Result() { IsSuccess = true }, 1));
 
-            var result = MemberService.UpdateMember(new DAL.PageModel.MemberModel()
+            var result = MemberService.UpdateMember(new BLL.PageModel.MemberModel()
             {
                 customer = new DAL.DBModel.Customers() { CustomerID = null }
             });

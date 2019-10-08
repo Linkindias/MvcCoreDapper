@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DAL.PageModel
+namespace BLL.PageModel
 {
     public class MenuModel
     {

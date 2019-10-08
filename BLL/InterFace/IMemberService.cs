@@ -1,9 +1,5 @@
 ﻿using Base;
-using DAL.DBModel;
-using DAL.DTOModel;
-using DAL.PageModel;
-using System;
-using System.Collections.Generic;
+using BLL.PageModel;
 
 namespace BLL.InterFace
 {
