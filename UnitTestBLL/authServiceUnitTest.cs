@@ -260,6 +260,10 @@ namespace UnitTestBLL
         [ClassCleanup]
         public static void ClassCleanup()
         {
+            mockEmp = null;
+            mockCus = null;
+            mockAuth = null;
+            mockCache = null;
             AuthService = null;
         }
     }

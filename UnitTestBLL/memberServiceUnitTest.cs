@@ -16,7 +16,6 @@ namespace UnitTestBLL
         static MemberService MemberService = null;
         static Mock<EmployeeRepository> mockEmp = null;
         static Mock<CustomerRepository> mockCus = null;
-
         static string connect = string.Empty;
         static int timeout = 0;
 
@@ -119,6 +118,8 @@ namespace UnitTestBLL
         [ClassCleanup]
         public static void ClassCleanup()
         {
+            mockEmp = null;
+            mockCus = null;
             MemberService = null;
         }
     }

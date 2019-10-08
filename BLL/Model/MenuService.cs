@@ -54,7 +54,7 @@ namespace BLL.Model
                     if (roleResult.roles.Any(o => o.RoleName.ToLower() != "admin")) menus = menus.Where(o => o.MenuCode.ToLower() != "auth");
 
                     foreach (MenuDTO menu in menus)
-                        FunGetSubMenus(menu, menuResult.menus);
+                        this.FunGetSubMenus(menu, menuResult.menus);
 
                     TimeSpan ts = DateTime.Today.AddDays(1) - DateTime.Now; //1天
                     cache.Set<IEnumerable<MenuDTO>>(keyMenu, menus.ToList(),ts); //選單加入快取
@@ -75,7 +75,7 @@ namespace BLL.Model
         /// </summary>
         /// <param name="MasterMenu">父選單 </param>
         /// <param name="SubMenus">子選單清單 </param>
-        private void FunGetSubMenus(MenuDTO MasterMenu, List<MenuDTO> SubMenus)
+        protected virtual void FunGetSubMenus(MenuDTO MasterMenu, List<MenuDTO> SubMenus)
         {
             MasterMenu.SubMenus = SubMenus.Where(o => o.ParentID == MasterMenu.MenuId).ToList(); //依父層編號取得子選單
 

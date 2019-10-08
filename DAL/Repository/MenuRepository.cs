@@ -19,7 +19,7 @@ namespace DAL.Repository
         /// 依帳號取得選單資訊
         /// </summary>
         /// <param name="Id">帳號</param>
-        public (Result rtn, List<MenuDTO> menus) GetMenusByAccount(string Id)
+        public virtual (Result rtn, List<MenuDTO> menus) GetMenusByAccount(string Id)
         {
             int EmployeeId = 0;
             int.TryParse(Id, out EmployeeId);

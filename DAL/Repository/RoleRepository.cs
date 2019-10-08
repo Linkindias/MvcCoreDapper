@@ -19,7 +19,7 @@ namespace DAL.Repository
         /// 依帳號取得角色資訊
         /// </summary>
         /// <param name="EmployeeId">帳號</param>
-        public (Result rtn, List<RoleOfMenuDTO> roles) GetRolesByAccount(string Id)
+        public virtual (Result rtn, List<RoleOfMenuDTO> roles) GetRolesByAccount(string Id)
         {
             int EmployeeId = 0;
             int.TryParse(Id, out EmployeeId);
