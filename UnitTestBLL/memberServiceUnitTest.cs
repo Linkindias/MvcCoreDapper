@@ -43,6 +43,7 @@ namespace UnitTestBLL
             Assert.AreEqual(true, result.IsSuccess);
             Assert.AreEqual("Test", result.employee.Account);
             Assert.AreEqual(1, result.employee.EmployeeID);
+            Assert.AreEqual(Enums.MemberStatus.Employee, result.membertype);
         }
 
         [TestMethod()]
@@ -60,6 +61,7 @@ namespace UnitTestBLL
             Assert.AreEqual(true, result.IsSuccess);
             Assert.AreEqual("Test", result.customer.Account);
             Assert.AreEqual("1", result.customer.CustomerID);
+            Assert.AreEqual(Enums.MemberStatus.Customer, result.membertype);
         }
 
         [TestMethod()]
@@ -73,6 +75,7 @@ namespace UnitTestBLL
 
             Assert.AreEqual(false, result.IsSuccess);
             Assert.AreEqual("error", result.ErrorMsg);
+            Assert.AreEqual(Enums.MemberStatus.Employee, result.membertype);
         }
 
         [TestMethod()]
@@ -85,6 +88,7 @@ namespace UnitTestBLL
 
             Assert.AreEqual(false, result.IsSuccess);
             Assert.AreEqual("error", result.ErrorMsg);
+            Assert.AreEqual(Enums.MemberStatus.Customer, result.membertype);
         }
 
         [TestMethod()]
@@ -94,6 +98,7 @@ namespace UnitTestBLL
 
             var result = MemberService.UpdateMember(new BLL.PageModel.MemberModel()
             {
+                membertype = Enums.MemberStatus.Customer,
                 customer = new DAL.DBModel.Customers() { CustomerID = "1" }
             });
 
@@ -108,6 +113,7 @@ namespace UnitTestBLL
 
             var result = MemberService.UpdateMember(new BLL.PageModel.MemberModel()
             {
+                membertype = Enums.MemberStatus.Employee,
                 customer = new DAL.DBModel.Customers() { CustomerID = null }
             });
 

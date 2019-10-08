@@ -33,6 +33,7 @@ namespace BLL.Model
             //當有員工且無會員，則回傳員工資訊
             if (empResult.employee != null && cusResult.customer == null)
             {
+                member.membertype = MemberStatus.Employee;
                 member.employee = empResult.employee;
                 member.IsSuccess = true;
                 return member;
@@ -41,6 +42,7 @@ namespace BLL.Model
             //當有會員且無員工，則回傳會員資訊
             if (cusResult.customer != null && empResult.employee == null)
             {
+                member.membertype = MemberStatus.Customer;
                 member.customer = cusResult.customer;
                 member.IsSuccess = true;
                 return member;
@@ -49,6 +51,7 @@ namespace BLL.Model
             //當有取得員工有錯誤，則回傳取得員工錯誤訊息
             if (!empResult.rtn.IsSuccess)
             {
+                member.membertype = MemberStatus.Employee;
                 member.IsSuccess = empResult.rtn.IsSuccess;
                 member.ErrorMsg = empResult.rtn.ErrorMsg;
                 return member;
@@ -57,6 +60,7 @@ namespace BLL.Model
             //當有取得會員有錯誤，則回傳取得會員錯誤訊息
             if (!cusResult.rtn.IsSuccess)
             {
+                member.membertype = MemberStatus.Customer;
                 member.IsSuccess = cusResult.rtn.IsSuccess;
                 member.ErrorMsg = cusResult.rtn.ErrorMsg;
                 return member;
@@ -72,7 +76,7 @@ namespace BLL.Model
         {
             (Result rtn, int exeRows) updateMember = (new Result(), 0);
 
-            if (member.customer.CustomerID != null)
+            if (member.membertype == MemberStatus.Customer)
                 updateMember = CustomerRep.UpdateCustomer(member.customer); 
             else
                 updateMember = EmployeeRep.UpdateEmployee(member.employee);

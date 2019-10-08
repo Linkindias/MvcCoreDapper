@@ -20,7 +20,7 @@
     <div class="row">
         <div class="col-12">
             @{
-                if (Model.customer != null)
+                if (Model.membertype == Base.Enums.MemberStatus.Customer)
                 {
                     using (Html.BeginForm("Save", "Person", FormMethod.Post, new { id = "CustomerForm" }))
                     {
@@ -62,7 +62,7 @@
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     }
                 }
-                else if (Model.employee != null)
+                else if (Model.membertype == Base.Enums.MemberStatus.Employee)
                 {
                     using (Html.BeginForm("Save", "Person", FormMethod.Post, new { id = "EmployeeForm" }))
                     {
@@ -143,6 +143,7 @@
 
             if (isValid) {
                 var data = {
+                    membertype : null,
                     employee: {
                         EmployeeID: null,
                         FirstName: null,
@@ -163,6 +164,7 @@
                     }
                 };
                 if ($("#EmployeeForm").is(":visible")) {
+                    data.membertype = '@Base.Enums.MemberStatus.Employee';
                     data.employee.EmployeeID = $("#employee_EmployeeID").val();
                     data.employee.FirstName = $("#employee_FirstName").val();
                     data.employee.LastName = $("#employee_LastName").val();
@@ -171,7 +173,8 @@
                     data.employee.Address = $("#employee_Address").val();
                     data.employee.Account = $("#employee_Account").val();
                 }
-                else{
+                else {
+                    data.membertype = '@Base.Enums.MemberStatus.Customer';
                     data.customer.CustomerID = $("#customer_CustomerID").val();
                     data.customer.CompanyName = $("#customer_CompanyName").val();
                     data.customer.ContactTitle = $("#customer_ContactTitle").val();
@@ -180,6 +183,7 @@
                     data.customer.Address = $("#customer_Address").val();
                     data.customer.Account = $("#customer_Account").val();
                 }
+                console.log(data);
                 $.ajax({
                     type: 'POST',
                     url: '@Url.Action("UpdateMember", "Person")',
