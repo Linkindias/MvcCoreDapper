@@ -6,15 +6,17 @@ using static Base.Enums;
 
 namespace BLL.Model
 {
-    public class MemberService : IMemberService
+    public class MemberService
     {
         EmployeeRepository EmployeeRep;
         CustomerRepository CustomerRep;
+        MemberModel member;
 
-        public MemberService(EmployeeRepository employeeRepository, CustomerRepository customerRepository)
+        public MemberService(EmployeeRepository employeeRepository, CustomerRepository customerRepository, MemberModel memberModel)
         {
             this.EmployeeRep = employeeRepository;
             this.CustomerRep = customerRepository;
+            this.member = memberModel;
         }
 
         /// <summary>
@@ -26,46 +28,45 @@ namespace BLL.Model
             int EmployeeId = 0;
             int.TryParse(Id, out EmployeeId);
 
-            MemberModel member = new MemberModel();
             var empResult = EmployeeRep.GetEmployeeById(EmployeeId, (int)DataStatus.Enable);
             var cusResult = CustomerRep.GetCustomerById(Id, (int)DataStatus.Enable);
 
             //當有員工且無會員，則回傳員工資訊
             if (empResult.employee != null && cusResult.customer == null)
             {
-                member.membertype = MemberStatus.Employee;
-                member.employee = empResult.employee;
-                member.IsSuccess = true;
-                return member;
+                this.member.membertype = MemberStatus.Employee;
+                this.member.employee = empResult.employee;
+                this.member.IsSuccess = true;
+                return this.member;
             }
 
             //當有會員且無員工，則回傳會員資訊
             if (cusResult.customer != null && empResult.employee == null)
             {
-                member.membertype = MemberStatus.Customer;
-                member.customer = cusResult.customer;
-                member.IsSuccess = true;
-                return member;
+                this.member.membertype = MemberStatus.Customer;
+                this.member.customer = cusResult.customer;
+                this.member.IsSuccess = true;
+                return this.member;
             }
 
             //當有取得員工有錯誤，則回傳取得員工錯誤訊息
             if (!empResult.rtn.IsSuccess)
             {
-                member.membertype = MemberStatus.Employee;
-                member.IsSuccess = empResult.rtn.IsSuccess;
-                member.ErrorMsg = empResult.rtn.ErrorMsg;
-                return member;
+                this.member.membertype = MemberStatus.Employee;
+                this.member.IsSuccess = empResult.rtn.IsSuccess;
+                this.member.ErrorMsg = empResult.rtn.ErrorMsg;
+                return this.member;
             }
 
             //當有取得會員有錯誤，則回傳取得會員錯誤訊息
             if (!cusResult.rtn.IsSuccess)
             {
-                member.membertype = MemberStatus.Customer;
-                member.IsSuccess = cusResult.rtn.IsSuccess;
-                member.ErrorMsg = cusResult.rtn.ErrorMsg;
-                return member;
+                this.member.membertype = MemberStatus.Customer;
+                this.member.IsSuccess = cusResult.rtn.IsSuccess;
+                this.member.ErrorMsg = cusResult.rtn.ErrorMsg;
+                return this.member;
             }
-            return member;
+            return this.member;
         }
 
         /// <summary>

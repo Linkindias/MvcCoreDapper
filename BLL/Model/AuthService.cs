@@ -12,7 +12,7 @@ using static Base.Enums;
 
 namespace BLL.Model
 {
-    public class AuthService : IAuthService
+    public class AuthService
     {
         AuthenticationRepository AuthRep;
         EmployeeRepository EmployeeRep;

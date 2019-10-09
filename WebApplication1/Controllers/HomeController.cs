@@ -8,11 +8,8 @@ namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
-        IMenuService MenuService;
-
-        public HomeController(IMenuService menuService)
+        public HomeController()
         {
-            this.MenuService = menuService;
         }
 
         public IActionResult Index()

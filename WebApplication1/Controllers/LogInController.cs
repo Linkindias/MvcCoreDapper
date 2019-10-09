@@ -1,4 +1,5 @@
 ﻿using BLL.InterFace;
+using BLL.Model;
 using DAL.DTOModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -9,10 +10,10 @@ namespace WebApplication1.Controllers
 {
     public class LogInController : Controller
     {
-        IAuthService AuthService;
-        IMenuService MenuService;
+        AuthService AuthService;
+        MenuService MenuService;
 
-        public LogInController(IAuthService authService, IMenuService menuService)
+        public LogInController(AuthService authService, MenuService menuService)
         {
             this.AuthService = authService;
             this.MenuService = menuService;

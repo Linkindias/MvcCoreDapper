@@ -12,7 +12,7 @@ using static Base.Enums;
 
 namespace BLL.Model
 {
-    public class MenuService : IMenuService
+    public class MenuService
     {
         MenuRepository MenuRep;
         RoleRepository RoleRep;

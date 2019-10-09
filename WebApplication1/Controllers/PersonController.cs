@@ -1,5 +1,6 @@
 ﻿using Base;
 using BLL.InterFace;
+using BLL.Model;
 using BLL.PageModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -9,10 +10,10 @@ namespace WebApplication1.Controllers
 {
     public class PersonController : Controller
     {
-        IMemberService MemberService;
-        IAuthService AuthService;
+        MemberService MemberService;
+        AuthService AuthService;
 
-        public PersonController(IMemberService memberService, IAuthService authService)
+        public PersonController(MemberService memberService, AuthService authService)
         {
             this.MemberService = memberService;
             this.AuthService = authService;
