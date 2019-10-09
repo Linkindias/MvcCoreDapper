@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <Folder Include="Commons\" />
+    <Folder Include="InterFace\" />
   </ItemGroup>
 
 </Project>

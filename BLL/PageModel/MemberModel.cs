@@ -1,13 +1,31 @@
-﻿using Base;
-using DAL.DBModel;
-using static Base.Enums;
+﻿using DAL.DBModel;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BLL.PageModel
 {
-    public class MemberModel: Result
+    public abstract class MemberModel
     {
-        public MemberStatus membertype { get; set; }
-        public Employees employee { get; set; }
-        public Customers customer { get; set; }
+        [StringLength(60)]
+        public string Address { get; set; }
+
+        [StringLength(15)]
+        public string City { get; set; }
+
+        [StringLength(15)]
+        public string Region { get; set; }
+
+        [StringLength(10)]
+        public string PostalCode { get; set; }
+
+        [StringLength(15)]
+        public string Country { get; set; }
+
+        [StringLength(20)]
+        public string Account { get; set; }
+
+        public int Status { get; set; }
+
+        public abstract decimal CalculateAmounts(IEnumerable<Products> products);
     }
 }
