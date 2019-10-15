@@ -1,7 +1,6 @@
 ﻿using Base;
-using BLL.InterFace;
-using DAL.DBModel;
 using BLL.PageModel;
+using DAL.DBModel;
 using DAL.Repository;
 using Microsoft.Extensions.Caching.Memory;
 using System;

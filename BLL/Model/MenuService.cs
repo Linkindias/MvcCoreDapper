@@ -1,14 +1,10 @@
 ﻿using Base;
-using BLL.Commons;
-using BLL.InterFace;
 using DAL.DTOModel;
 using DAL.Repository;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using static Base.Enums;
 
 namespace BLL.Model
 {

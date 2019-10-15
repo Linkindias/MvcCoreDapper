@@ -1,10 +1,11 @@
-﻿using DAL.DBModel;
+﻿using Base;
+using DAL.DBModel;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BLL.PageModel
 {
-    public abstract class MemberModel
+    public abstract class MemberModel : Result
     {
         [StringLength(60)]
         public string Address { get; set; }

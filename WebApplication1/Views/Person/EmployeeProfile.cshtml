@@ -1,0 +1,129 @@
+﻿@model BLL.PageModel.EmployeeModel
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+<style type="text/css">
+    .row {
+        width: 800px !important;
+        margin-top: 10%;
+        margin-left: 20%;
+    }
+
+    .name {
+        display: flex;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            @{
+                if (!Model.IsSuccess)
+                {
+                    <script type="text/javascript">
+                        $('#msgModalbody').text('@Model.ErrorMsg').css({ 'color': 'blue'});;
+                        $('#msgModal').modal('show');
+                    </script>
+                }
+                else
+                {
+                    using (Html.BeginForm("Save", "Person", FormMethod.Post, new { id = "EmployeeForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group" style="display:none;">
+                            @Html.TextBoxFor(m => m.EmployeeID)
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("name", "姓名")
+                            <div class="name">
+                                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @width = "50%" })
+                                <span asp-validation-for='FirstName' class="message"></span>
+                                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @width = "50%" })
+                                <span asp-validation-for='LastName' class="message"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.BirthDate)
+                            @Html.TextBoxFor(m => m.BirthDate, new { @class = "form-control" })
+                            <span asp-validation-for='BirthDate' class="message"></span>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.HomePhone)
+                            @Html.TextBoxFor(m => m.HomePhone, new { @class = "form-control" })
+                            <span asp-validation-for='HomePhone' class="message"></span>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Address)
+                            @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+                            <span asp-validation-for='Address' class="message"></span>
+                        </div>
+                        <input type="button" class="btn btn-primary btn-block" id="submit" value="Save" />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    }
+                }
+            }
+        </div>
+    </div>
+    @Html.Partial("BootstrapModal")
+</div>
+
+<script type="text/javascript">
+    //關閉Alert
+    function closeModal() {
+        $('#msgModal').modal('hide');
+    }
+
+    $(function () {
+
+        $("#submit").click(function () {
+
+            if ($("#EmployeeForm").valid()) {
+                var emp = {
+                    EmployeeID: null,
+                    FirstName: null,
+                    LastName: null,
+                    BirthDate: null,
+                    HomePhone: null,
+                    Address: null,
+                    Account: null,
+                };
+                emp.EmployeeID = $("#EmployeeID").val();
+                emp.FirstName = $("#FirstName").val();
+                emp.LastName = $("#LastName").val();
+                emp.BirthDate = $("#BirthDate").val();
+                emp.HomePhone = $("#HomePhone").val();
+                emp.Address = $("#Address").val();
+                emp.Account = $("#Account").val();
+                
+                console.log(emp);
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("UpdateEmployee", "Person")',
+                    data: {
+                        __RequestVerificationToken: '@GetAntiXsrfRequestToken()',
+                        employee: emp,
+                    },
+                    async: true,
+                    success: function (data) {
+                        if (data != null) {
+                            $('#msgModalbody').text(data).css({ 'color': 'blue'});;
+                            $('#msgModal').modal('show');
+                        }
+                    },
+                    error: function (error) {
+                        if (error != null && error.responseText != '') {
+                            $('#msgModalbody').text(error.responseText).css({ 'color': 'red'});
+                            $('#msgModal').modal('show');
+                            $("#account").val('');
+                            $("#password").val('');
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+

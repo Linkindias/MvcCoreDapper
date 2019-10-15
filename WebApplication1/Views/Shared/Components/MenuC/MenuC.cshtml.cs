@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BLL.InterFace;
+using BLL.Model;
 using DAL.DTOModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,9 +11,9 @@ namespace WebApplication1.Component
 {
     public class MenuCViewComponent : ViewComponent
     {
-        IMenuService MenuService;
+        MenuService MenuService;
 
-        public MenuCViewComponent(IMenuService menuService)
+        public MenuCViewComponent(MenuService menuService)
         {
             this.MenuService = menuService;
         }

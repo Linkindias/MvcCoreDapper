@@ -26,9 +26,15 @@ namespace WebApplication1.Controllers
                 ViewBag.Name = HttpContext.Session.GetString("Name");
                 ViewBag.Id = HttpContext.Session.GetString("Id");
 
-                MemberModel memberModel = MemberService.GetMember(Id);
+                var memberModel = MemberService.GetMember(Id);
 
-                if (memberModel != null) return View(memberModel);
+                if (memberModel != null)
+                {
+                    if (memberModel is CustomerModel)
+                        return View("CustomerProfile", memberModel);
+
+                    return View("EmployeeProfile", memberModel);
+                }
             }
             return View();
         }
@@ -51,9 +57,21 @@ namespace WebApplication1.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult UpdateMember(MemberModel member)
+        public ActionResult UpdateCustomer(CustomerModel customer)
         {
-            Result result = MemberService.UpdateMember(member);
+            Result result = MemberService.UpdateMember(customer, null);
+
+            if (result.IsSuccess) return Ok(result.SuccessMsg);
+
+            return BadRequest(result.ErrorMsg);
+        }
+
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult UpdateEmployee(EmployeeModel employee)
+        {
+            Result result = MemberService.UpdateMember(null, employee);
 
             if (result.IsSuccess) return Ok(result.SuccessMsg);
 

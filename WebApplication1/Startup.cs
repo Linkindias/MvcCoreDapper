@@ -1,10 +1,6 @@
-﻿using BLL.Commons;
-using BLL.InterFace;
-using BLL.Model;
+﻿using BLL.Model;
 using BLL.PageModel;
 using DAL.Repository;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -47,7 +43,8 @@ namespace WebApplication1
             services.AddScoped<MenuService>(); //選單服務
             services.AddSingleton<MemberService>(); //會員服務
 
-            services.AddTransient<MemberModel>();
+            services.AddTransient<CustomerModel>(); //客戶
+            services.AddTransient<EmployeeModel>(); //員工
 
             //Repository
             services.AddSingleton<AuthenticationRepository>(x => new AuthenticationRepository(strCon, cmdTimeOut)); //權限倉

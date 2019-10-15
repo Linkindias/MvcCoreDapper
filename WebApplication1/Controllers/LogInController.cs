@@ -1,5 +1,4 @@
-﻿using BLL.InterFace;
-using BLL.Model;
+﻿using BLL.Model;
 using DAL.DTOModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
