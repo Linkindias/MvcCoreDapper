@@ -42,6 +42,7 @@ namespace WebApplication1
             services.AddScoped<AuthService>(); //權限服務
             services.AddScoped<MenuService>(); //選單服務
             services.AddSingleton<MemberService>(); //會員服務
+            services.AddSingleton<ProductService>(); //產品服務
 
             services.AddTransient<CustomerModel>(); //客戶
             services.AddTransient<EmployeeModel>(); //員工
