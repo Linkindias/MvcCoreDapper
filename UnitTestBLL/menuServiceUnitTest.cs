@@ -32,50 +32,75 @@ namespace UnitTestBLL
         }
 
         [TestMethod()]
-        public void GetMenusByAccount_當依帳號查選單_則回傳查選單訊息()
+        public void GetMenusByAccount_當依帳號查選單有選單和角色_則回傳查選單和角色訊息()
         {
+            object menus = null;
+            mockCache.Setup(p => p.TryGetValue("GetMenusTest", out menus)).Returns(true);
+            object roles = null;
+            mockCache.Setup(p => p.TryGetValue("GetRolesTest", out roles)).Returns(true);
             var mockmenu = new Mock<MenuService>(mockMenu.Object, mockRole.Object, mockCache.Object);
-            mockmenu.Protected().Setup<string>("FunGetSubMenus", new object[] { new MenuDTO(), new List<MenuDTO>()}).Returns("Test");
+            mockmenu.Protected().Setup("FunGetSubMenus", new object[] { new MenuDTO(), new List<MenuDTO>()}).Verifiable();
             MenuService = mockmenu.Object;
 
-            //mockEmp.Setup(p => p.GetEmployeeByAccount(It.IsAny<string>(), 10)).Returns(() => (new Result(), null));
-            //mockCus.Setup(p => p.GetCustomerByAccount(It.IsAny<string>(), 10)).Returns(() => (new Result(), null));
+            mockRole.Setup(p => p.GetRolesByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = true }, new List<RoleOfMenuDTO>() {
+                new RoleOfMenuDTO() {
+                    RoleId = 1,
+                    RoleName = "general"
+                }}));
+            mockMenu.Setup(p => p.GetMenusByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = true }, new List<MenuDTO>() {
+                new MenuDTO() {
+                    ParentID = 0,
+                    MenuId = 2,
+                    MenuCode = "Person"
+                }}));
+            List<MenuDTO> menusSet = new List<MenuDTO>() { new MenuDTO() {
+                MenuId = 1
+            }};
+            var entryMock = new Mock<ICacheEntry>();
+            mockCache.Setup(m => m.CreateEntry(It.IsAny<object>())).Returns(entryMock.Object);
+            
+            var result = MenuService.GetMenusByAccount("Test");
 
-            //var result = AuthService.LogIn("Test", "1234");
-            //Assert.AreEqual("查無此帳號 Test，請確認", result.rtn.ErrorMsg);
+            Assert.AreEqual(true, result.rtn.IsSuccess);
+            Assert.AreEqual(2, result.menus[0].MenuId);
+            Assert.AreEqual(1, result.roles[0].RoleId);
+        }
+
+        [TestMethod()]
+        public void GetMenusByAccount_當依帳號查選單無選單和角色_則回傳查選單和角色訊息()
+        {
+            object menus = null;
+            mockCache.Setup(p => p.TryGetValue("GetMenusTest", out menus)).Returns(true);
+            object roles = null;
+            mockCache.Setup(p => p.TryGetValue("GetRolesTest", out roles)).Returns(true);
+
+            mockRole.Setup(p => p.GetRolesByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = false }, new List<RoleOfMenuDTO>()));
+            mockMenu.Setup(p => p.GetMenusByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = true }, new List<MenuDTO>()));
+
+            var result = MenuService.GetMenusByAccount("Test");
+
+            Assert.AreEqual(false, result.rtn.IsSuccess);
+            Assert.AreEqual(0, result.menus.Count);
+            Assert.AreEqual(0, result.roles.Count);
         }
 
         [TestMethod()]
         public void GetMenusByAccount_當依帳號查選單查無_則回傳查無訊息()
         {
-            IEnumerable<MenuDTO> menus = new List<MenuDTO>() { new MenuDTO() {
+            object menus = new List<MenuDTO>() { new MenuDTO() {
                 MenuId = 1
             }};
-            mockCache.Setup(p => p.TryGetValue<IEnumerable<MenuDTO>>(It.IsAny<object>(), out menus)).Verifiable();
-            List<RoleOfMenuDTO> roles = new List<RoleOfMenuDTO>() { new RoleOfMenuDTO() {
+            mockCache.Setup(p => p.TryGetValue("GetMenusTest", out menus)).Returns(true);
+            object roles = new List<RoleOfMenuDTO>() { new RoleOfMenuDTO() {
                 RoleId = 1
             }};
-            mockCache.Setup(p => p.TryGetValue<List<RoleOfMenuDTO>>(It.IsAny<bool>(), out roles)).Returns(true);
-            var mockmenu = new Mock<MenuService>(mockMenu.Object, mockRole.Object, mockCache.Object);
-            mockmenu.Protected().Setup("FunGetSubMenus", new object[] { new MenuDTO(), new List<MenuDTO>() }).Verifiable();
-            MenuService = mockmenu.Object;
-
-            mockRole.Setup(p => p.GetRolesByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = true }, new List<RoleOfMenuDTO>() {
-                new RoleOfMenuDTO() {
-                    RoleName = "general"
-                }
-            }));
-            mockMenu.Setup(p => p.GetMenusByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = true }, new List<MenuDTO>() {
-                new MenuDTO() {
-                    ParentID = 0,
-                    MenuCode = "Person"
-                }
-            }));
-            mockCache.Setup(p => p.Set(It.IsAny<bool>(), It.IsAny<IEnumerable<MenuDTO>>(), It.IsAny<TimeSpan>())).Verifiable();
+            mockCache.Setup(p => p.TryGetValue("GetRolesTest", out roles)).Returns(true);
 
             var result = MenuService.GetMenusByAccount("Test");
+
             Assert.AreEqual(true, result.rtn.IsSuccess);
-            Assert.AreEqual(true, result.rtn.IsSuccess);
+            Assert.AreEqual(1, result.menus[0].MenuId);
+            Assert.AreEqual(1, result.roles[0].RoleId);
         }
 
         [ClassCleanup]
