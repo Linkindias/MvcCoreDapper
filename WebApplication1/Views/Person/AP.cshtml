@@ -67,7 +67,7 @@
     }
 
     $(function () {
-        $("#Account").val(Decrypt('@Model.Account')); //帳號解碼
+        $("#Account").val(Decrypt('@Html.Raw(Model.Account)')); //帳號解碼
 
         $("#submit").click(function () {
             if ($("#APForm").valid()) {
