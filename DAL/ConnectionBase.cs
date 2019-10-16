@@ -66,6 +66,26 @@ namespace DAL
             return (rtn, result);
         }
 
+        public (Result rtn, IEnumerable<T> result) GetList<T>(string sqlCmd, object Params)
+        {
+            Result rtn = new Result();
+            List<T> result = null;
+            using (var connection = new SqlConnection(this.ConnectionString))
+            {
+                try
+                {
+                    result = connection.Query<T>(sqlCmd, Params).ToList();
+                    rtn.IsSuccess = true;
+                }
+                catch (Exception ex)
+                {
+                    rtn.IsSuccess = false;
+                    rtn.ErrorMsg = ex.Message.ToString();
+                }
+            }
+            return (rtn, result);
+        }
+
         public (Result rtn, int Rows) GetStoredProcedureOfRow(string sqlCmd, DynamicParameters Params)
         {
             Result rtn = new Result();

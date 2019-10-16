@@ -46,6 +46,7 @@ namespace WebApplication1
 
             services.AddTransient<CustomerModel>(); //客戶
             services.AddTransient<EmployeeModel>(); //員工
+            services.AddTransient<ProductModel>(); //產品
 
             //Repository
             services.AddSingleton<AuthenticationRepository>(x => new AuthenticationRepository(strCon, cmdTimeOut)); //權限倉
@@ -54,6 +55,9 @@ namespace WebApplication1
             services.AddSingleton<OrderRepository>(x => new OrderRepository(strCon, cmdTimeOut)); //訂單倉
             services.AddSingleton<MenuRepository>(x => new MenuRepository(strCon, cmdTimeOut)); //選單倉
             services.AddSingleton<RoleRepository>(x => new RoleRepository(strCon, cmdTimeOut)); //角色倉
+            services.AddSingleton<ProductRepository>(x => new ProductRepository(strCon, cmdTimeOut)); //產品倉
+            services.AddSingleton<CategorieRepository>(x => new CategorieRepository(strCon, cmdTimeOut)); //產品類別倉
+            services.AddSingleton<OrderDetailRepository>(x => new OrderDetailRepository(strCon, cmdTimeOut)); //訂單細部倉
 
             services.AddSession();
             services.AddMvc(options =>

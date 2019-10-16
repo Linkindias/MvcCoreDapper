@@ -1,6 +1,7 @@
 ﻿using Base;
 using DAL.DTOModel;
 using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,14 +16,14 @@ namespace DAL.Repository
         /// <summary>
         /// 取得訂單產品數量
         /// </summary>
-        public virtual (Result rtn, List<ProductCountDTO> productCounts) GetOrderProductQuantitys(int ProductId)
+        public virtual (Result rtn, List<ProductCountDTO> productCounts) GetOrderProductQuantitys(int[] ProductId)
         {
-            string sqlCmd = "SELECT ProductId, sum(Quantity) as Sales FROM Order_Details ";
-            DynamicParameters parameters = new DynamicParameters();
+            string sqlCmd = "SELECT ProductId, sum(Quantity) as Sales FROM [dbo].[Order Details] ";
+            object parameters = null;
 
-            if (ProductId > 0) {
-                sqlCmd += " Where ProductID == @ProductId";
-                parameters.Add("@ProductId", ProductId);
+            if (ProductId.Count() > 0) {
+                sqlCmd += " Where ProductID in @ID";
+                parameters = new { ID = ProductId };
             }
             sqlCmd += " GROUP BY ProductId";
 

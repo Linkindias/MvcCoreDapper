@@ -16,11 +16,22 @@ namespace DAL.Repository
         /// <summary>
         /// 取得商品
         /// </summary>
-        public virtual (Result rtn, IEnumerable<Products> products) GetProductsByDiscontinued(bool IsDiscontinue)
+        public virtual (Result rtn, IEnumerable<Products> products) GetProductsByParam(int CategoryId, string ProductName, bool IsDiscontinue)
         {
             string sqlCmd = "SELECT * FROM Products Where Discontinued = @Discontinued ";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@Discontinued", IsDiscontinue);
+
+            if (CategoryId > 0) {
+                sqlCmd += "and CategoryID = @CategoryID";
+                parameters.Add("@CategoryID", CategoryId);
+            }
+
+            if (!string.IsNullOrEmpty(ProductName))
+            {
+                sqlCmd += "and ProductName like @ProductName";
+                parameters.Add("@ProductName", $"%{ProductName}%");
+            }
 
             var result = this.GetList<Products>(sqlCmd, parameters);
 
