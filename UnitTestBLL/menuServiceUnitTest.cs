@@ -41,7 +41,6 @@ namespace UnitTestBLL
             var mockmenu = new Mock<MenuService>(mockMenu.Object, mockRole.Object, mockCache.Object);
             mockmenu.Protected().Setup("FunGetSubMenus", new object[] { new MenuDTO(), new List<MenuDTO>()}).Verifiable();
             MenuService = mockmenu.Object;
-
             mockRole.Setup(p => p.GetRolesByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = true }, new List<RoleOfMenuDTO>() {
                 new RoleOfMenuDTO() {
                     RoleId = 1,
@@ -58,7 +57,6 @@ namespace UnitTestBLL
             }};
             var entryMock = new Mock<ICacheEntry>();
             mockCache.Setup(m => m.CreateEntry(It.IsAny<object>())).Returns(entryMock.Object);
-            
             var result = MenuService.GetMenusByAccount("Test");
 
             Assert.AreEqual(true, result.rtn.IsSuccess);

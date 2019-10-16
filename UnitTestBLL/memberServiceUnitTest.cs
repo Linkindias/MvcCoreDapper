@@ -1,5 +1,6 @@
 ﻿using Base;
 using BLL.Model;
+using BLL.PageModel;
 using DAL.DBModel;
 using DAL.Repository;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -16,6 +17,8 @@ namespace UnitTestBLL
         static MemberService MemberService = null;
         static Mock<EmployeeRepository> mockEmp = null;
         static Mock<CustomerRepository> mockCus = null;
+        static Mock<CustomerModel> mockCusM = null;
+        static Mock<EmployeeModel> mockEmpM = null;
         static string connect = string.Empty;
         static int timeout = 0;
 
@@ -24,42 +27,9 @@ namespace UnitTestBLL
         {
             mockEmp = new Mock<EmployeeRepository>(new object[] { connect, timeout });
             mockCus = new Mock<CustomerRepository>(new object[] { connect, timeout });
-            MemberService = new MemberService(mockEmp.Object, mockCus.Object);
-        }
-
-        [TestMethod()]
-        public void GetMember_當查依會員編號查詢會員有員工_則回傳員工訊息()
-        {
-            mockEmp.Setup(p => p.GetEmployeeById(It.IsAny<Int32>(), It.IsAny<Int32>()))
-                        .Returns(() => (new Result() { IsSuccess = false }, new Employees()
-                        {
-                            Account = "Test",
-                            EmployeeID = 1,
-                        }));
-            mockCus.Setup(p => p.GetCustomerById(It.IsAny<string>(), It.IsAny<Int32>())).Returns(() => (new Result(), null));
-
-            var result = MemberService.GetMember("Test");
-
-            Assert.AreEqual(true, result.IsSuccess);
-            Assert.AreEqual("Test", result.employee.Account);
-            Assert.AreEqual(1, result.employee.EmployeeID);
-        }
-
-        [TestMethod()]
-        public void GetMember_當查依會員編號查詢會員有客戶_則回傳客戶訊息()
-        {
-            mockEmp.Setup(p => p.GetEmployeeById(It.IsAny<Int32>(), It.IsAny<Int32>())).Returns(() => (new Result(), null));
-            mockCus.Setup(p => p.GetCustomerById(It.IsAny<string>(), It.IsAny<Int32>())).Returns(() => (new Result() { IsSuccess = false }, new Customers()
-            {
-                Account = "Test",
-                CustomerID = "1",
-            }));
-
-            var result = MemberService.GetMember("Test");
-
-            Assert.AreEqual(true, result.IsSuccess);
-            Assert.AreEqual("Test", result.customer.Account);
-            Assert.AreEqual("1", result.customer.CustomerID);
+            mockCusM = new Mock<CustomerModel>();
+            mockEmpM = new Mock<EmployeeModel>();
+            MemberService = new MemberService(mockEmp.Object, mockCus.Object, mockEmpM.Object, mockCusM.Object);
         }
 
         [TestMethod()]
@@ -88,14 +58,48 @@ namespace UnitTestBLL
         }
 
         [TestMethod()]
+        public void GetMember_當查依會員編號查詢會員有員工_則回傳員工訊息()
+        {
+            mockEmp.Setup(p => p.GetEmployeeById(It.IsAny<Int32>(), It.IsAny<Int32>()))
+                        .Returns(() => (new Result() { IsSuccess = true }, new Employees()
+                        {
+                            Account = "Test",
+                            EmployeeID = 1,
+                        }));
+            mockCus.Setup(p => p.GetCustomerById(It.IsAny<string>(), It.IsAny<Int32>())).Returns(() => (new Result() { IsSuccess = true }, null));
+
+            var result = MemberService.GetMember("Test");
+
+            Assert.AreEqual(true, result.IsSuccess);
+            Assert.AreEqual("Test", result.Account);
+            Assert.AreEqual(1, result.EmployeeID);
+        }
+
+        [TestMethod()]
+        public void GetMember_當查依會員編號查詢會員有客戶_則回傳客戶訊息()
+        {
+            mockEmp.Setup(p => p.GetEmployeeById(It.IsAny<Int32>(), It.IsAny<Int32>())).Returns(() => (new Result() { IsSuccess = true }, null));
+            mockCus.Setup(p => p.GetCustomerById(It.IsAny<string>(), It.IsAny<Int32>())).Returns(() => (new Result() { IsSuccess = true }, new Customers()
+            {
+                Account = "Test",
+                CustomerID = "1",
+            }));
+
+            var result = MemberService.GetMember("Test");
+
+            Assert.AreEqual(true, result.IsSuccess);
+            Assert.AreEqual("Test", result.Account);
+            Assert.AreEqual("1", result.CustomerID);
+        }
+
+        [TestMethod()]
         public void UpdateMember_當查依會員更新客戶成功_則回傳更新客戶成功訊息()
         {
             mockCus.Setup(p => p.UpdateCustomer(It.IsAny<Customers>())).Returns(() => (new Result() { IsSuccess = true }, 1));
 
-            var result = MemberService.UpdateMember(new DAL.PageModel.MemberModel()
-            {
-                customer = new DAL.DBModel.Customers() { CustomerID = "1" }
-            });
+            var result = MemberService.UpdateMember(new CustomerModel() { 
+                Account = "Test"
+            }, null);
 
             Assert.AreEqual(true, result.IsSuccess);
             Assert.AreEqual("會員更新成功", result.SuccessMsg);
@@ -106,9 +110,8 @@ namespace UnitTestBLL
         {
             mockEmp.Setup(p => p.UpdateEmployee(It.IsAny<Employees>())).Returns(() => (new Result() { IsSuccess = true }, 1));
 
-            var result = MemberService.UpdateMember(new DAL.PageModel.MemberModel()
-            {
-                customer = new DAL.DBModel.Customers() { CustomerID = null }
+            var result = MemberService.UpdateMember(null, new EmployeeModel() { 
+                Account = "Test"
             });
 
             Assert.AreEqual(true, result.IsSuccess);

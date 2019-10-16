@@ -1,20 +1,18 @@
-﻿using BLL.InterFace;
+﻿using BLL.Model;
 using DAL.DTOModel;
-using DAL.PageModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace WebApplication1.Controllers
 {
     public class LogInController : Controller
     {
-        IAuthService AuthService;
-        IMenuService MenuService;
+        AuthService AuthService;
+        MenuService MenuService;
 
-        public LogInController(IAuthService authService, IMenuService menuService)
+        public LogInController(AuthService authService, MenuService menuService)
         {
             this.AuthService = authService;
             this.MenuService = menuService;

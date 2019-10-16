@@ -16,5 +16,11 @@ namespace Base
             Sliding, //滑動
             Absolute, //絕對
         }
+
+        public enum MemberStatus //會員狀態
+        {
+            Employee, //員工
+            Customer, //客戶
+        }
     }
 }

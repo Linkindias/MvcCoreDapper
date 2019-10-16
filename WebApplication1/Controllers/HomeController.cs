@@ -1,25 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Base;
-using BLL.InterFace;
-using DAL.DTOModel;
-using DAL.PageModel;
-using DAL.Repository;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
-        IMenuService MenuService;
-
-        public HomeController(IMenuService menuService)
+        public HomeController()
         {
-            this.MenuService = menuService;
         }
 
         public IActionResult Index()

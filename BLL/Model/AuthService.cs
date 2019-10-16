@@ -1,7 +1,6 @@
 ﻿using Base;
-using BLL.InterFace;
+using BLL.PageModel;
 using DAL.DBModel;
-using DAL.PageModel;
 using DAL.Repository;
 using Microsoft.Extensions.Caching.Memory;
 using System;
@@ -12,7 +11,7 @@ using static Base.Enums;
 
 namespace BLL.Model
 {
-    public class AuthService : IAuthService
+    public class AuthService
     {
         AuthenticationRepository AuthRep;
         EmployeeRepository EmployeeRep;

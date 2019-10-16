@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BLL.InterFace;
+﻿using BLL.Model;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace WebApplication1.Controllers
 {
     public class MenuController : Controller
     {
-        IMenuService MenuService;
+        MenuService MenuService;
 
-        public MenuController(IMenuService menuService)
+        public MenuController(MenuService menuService)
         {
             this.MenuService = menuService;
         }

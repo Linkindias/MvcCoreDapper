@@ -1,0 +1,135 @@
+﻿@model BLL.PageModel.CustomerModel
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+<style type="text/css">
+    .row {
+        width: 800px !important;
+        margin-top: 10%;
+        margin-left: 20%;
+    }
+
+    .name {
+        display: flex;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            @{
+                if (!Model.IsSuccess)
+                {
+                    <script type="text/javascript">
+                        $('#msgModalbody').text('@Model.ErrorMsg').css({ 'color': 'blue'});;
+                        $('#msgModal').modal('show');
+                    </script>
+                }
+                else
+                {
+                    using (Html.BeginForm("Save", "Person", FormMethod.Post, new { id = "CustomerForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group" style="display:none;">
+                            @Html.TextBoxFor(m => m.CustomerID)
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CompanyName)
+                            @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control" })
+                            <span asp-validation-for='CompanyName' class="message"></span>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ContactName)
+                            @Html.TextBoxFor(m => m.ContactName, new { @class = "form-control" })
+                            <span asp-validation-for='ContactName' class="message"></span>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ContactTitle)
+                            @Html.TextBoxFor(m => m.ContactTitle, new { @class = "form-control" })
+                            <span asp-validation-for='ContactTitle' class="message"></span>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Phone)
+                            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+                            <span asp-validation-for='Phone' class="message"></span>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Fax)
+                            @Html.TextBoxFor(m => m.Fax, new { @class = "form-control" })
+                            <span asp-validation-for='Fax' class="message"></span>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Address)
+                            @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+                            <span asp-validation-for='Address' class="message"></span>
+                        </div>
+                        <input type="button" class="btn btn-primary btn-block" id="submit" value="Save" />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    }
+                }
+            }
+        </div>
+    </div>
+    @Html.Partial("BootstrapModal")
+</div>
+
+<script type="text/javascript">
+    //關閉Alert
+    function closeModal() {
+        $('#msgModal').modal('hide');
+    }
+
+    $(function () {
+
+        $("#submit").click(function () {
+
+            if ($("#CustomerForm").valid()) {
+                var cus = {
+                    CustomerID: null,
+                    CompanyName: null,
+                    ContactTitle: null,
+                    Phone: null,
+                    Fax: null,
+                    Address: null,
+                    Account: null,
+                };
+                
+                cus.CustomerID = $("#CustomerID").val();
+                cus.CompanyName = $("#CompanyName").val();
+                cus.ContactTitle = $("#ContactTitle").val();
+                cus.Phone = $("#Phone").val();
+                cus.Fax = $("#Fax").val();
+                cus.Address = $("#Address").val();
+                cus.Account = $("#Account").val();
+                
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("UpdateCustomer", "Person")',
+                    data: {
+                        __RequestVerificationToken: '@GetAntiXsrfRequestToken()',
+                        customer: cus,
+                    },
+                    async: true,
+                    success: function (data) {
+                        if (data != null) {
+                            $('#msgModalbody').text(data).css({ 'color': 'blue'});;
+                            $('#msgModal').modal('show');
+                        }
+                    },
+                    error: function (error) {
+                        if (error != null && error.responseText != '') {
+                            $('#msgModalbody').text(error.responseText).css({ 'color': 'red'});
+                            $('#msgModal').modal('show');
+                            $("#account").val('');
+                            $("#password").val('');
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+
