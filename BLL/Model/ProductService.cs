@@ -8,80 +8,114 @@ using Omu.ValueInjecter;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BLL.Model
 {
     public class ProductService
     {
-        IConfiguration Configuration;
+        IConfiguration configuration;
+        IMemoryCache cache;
         ProductRepository ProductRep;
         CategorieRepository CategorieRep;
         OrderDetailRepository OrderDetailRep;
         ProductModel Product;
 
-        public ProductService(IConfiguration configuration, 
+        public ProductService(IConfiguration configuration, IMemoryCache memoryCache,
             ProductRepository productRepository, CategorieRepository categorieRepository, OrderDetailRepository orderDetailRepository,
             ProductModel productModel)
         {
+            this.configuration = configuration;
+            this.cache = memoryCache;
             this.ProductRep = productRepository;
             this.CategorieRep = categorieRepository;
             this.OrderDetailRep = orderDetailRepository;
-            this.Configuration = configuration;
             this.Product = productModel;
         }
 
         /// <summary>
         /// 取得產品類別、 產品資訊
         /// </summary>
-        public (Result rtn, ProductModel product)  GetCategoriesAndProducts(string CategoryId = "", string ProductName = "")
+        public (Result rtn, ProductModel product) GetCategoriesAndProducts(string CategoryId = "", string ProductName = "")
         {
-            var resultCategroy = CategorieRep.GetCategorys();
-            var resultProduct = ProductRep.GetProductsByParam(string.IsNullOrEmpty(CategoryId) ? 0 : int.Parse(CategoryId), ProductName, false);
+            IEnumerable<Categories> categories = null;
+            IEnumerable<Products> products = null;
 
-            if (resultCategroy.rtn.IsSuccess && resultProduct.rtn.IsSuccess)
+            string keyCategory = $"GetCategory{CategoryId}";
+            string keyProduct = $"GetProduct{CategoryId}{ProductName}";
+
+            cache.TryGetValue<IEnumerable<Categories>>(keyCategory, out categories);
+            cache.TryGetValue<IEnumerable<Products>>(keyProduct, out products);
+
+            if (categories == null && products == null)
             {
-                var resultOrder = OrderDetailRep.GetOrderProductQuantitys(resultProduct.products.Select(o => o.ProductID).ToArray());
+                var resultCategroy = CategorieRep.GetCategorys();
+                var resultProduct = ProductRep.GetProductsByParam(string.IsNullOrEmpty(CategoryId) ? 0 : int.Parse(CategoryId), ProductName, false);
 
-                if (!resultOrder.rtn.IsSuccess)
+                if (resultCategroy.rtn.IsSuccess && resultProduct.rtn.IsSuccess)
                 {
-                    resultOrder.rtn.ErrorMsg = "查無產品數量";
-                    return (resultOrder.rtn, Product);
+                    categories = resultCategroy.Categorys;
+                    products = resultProduct.products;
                 }
 
-                List<ProductCountDTO> productCounts = new List<ProductCountDTO>();
-                List<ProductCountDTO> orderProductCounts = resultOrder.productCounts;
-                resultProduct.products.ToList().ForEach(o => 
-                    productCounts.Add((ProductCountDTO)new ProductCountDTO().InjectFrom(o)));
-
-                productCounts.ForEach(o =>
+                if (!resultCategroy.rtn.IsSuccess)
                 {
-                    o.Sales = orderProductCounts.Where(p => p.ProductID == o.ProductID).FirstOrDefault().Sales; //銷售
-                    o.Quantity = o.UnitsInStock.Value - o.Sales; //庫存 - 銷售 = 剩餘
-                });
+                    resultCategroy.rtn.ErrorMsg = "查無產品類別";
+                    return (resultCategroy.rtn, Product);
+                }
 
-                //過濾最小產品範圍
-                int SaleCount = int.Parse(Configuration["ProductSaleCount"]);
-                productCounts = productCounts.Where(o => o.Quantity > SaleCount).OrderBy(o => o.ProductID).ToList();
-
-                Product.Categories = resultCategroy.Categorys.Select(o => new SelectListItem() { 
-                                            Value = o.CategoryID.ToString(),
-                                            Text = o.CategoryName,
-                                        });
-                Product.Products = productCounts;
-                return (resultCategroy.rtn, Product);
+                if (!resultProduct.rtn.IsSuccess)
+                {
+                    resultProduct.rtn.ErrorMsg = "查無產品資訊";
+                    return (resultProduct.rtn, Product);
+                }
             }
 
-            if (!resultCategroy.rtn.IsSuccess) {
-                resultCategroy.rtn.ErrorMsg = "查無產品類別";
-                return (resultCategroy.rtn, Product);
-            }
+            var resultOrder = OrderDetailRep.GetOrderProductQuantitys(products.Select(o => o.ProductID).ToArray());
 
-            if (!resultProduct.rtn.IsSuccess)
+            if (!resultOrder.rtn.IsSuccess)
             {
-                resultProduct.rtn.ErrorMsg = "查無產品資訊";
-                return (resultProduct.rtn, Product);
+                resultOrder.rtn.ErrorMsg = "查無產品數量";
+                return (resultOrder.rtn, Product);
             }
-            return (new Result(), Product);
+
+            List<ProductCountDTO> productCounts = new List<ProductCountDTO>();
+            List<ProductCountDTO> orderProductCounts = resultOrder.productCounts;
+            products.ToList().ForEach(o =>
+                productCounts.Add((ProductCountDTO)new ProductCountDTO().InjectFrom(o))
+            );
+
+            //過濾最小產品範圍
+            int SaleCount = int.Parse(configuration["ProductSaleCount"]);
+
+            productCounts.ForEach(o =>
+            {
+                o.Sales = orderProductCounts.Where(p => p.ProductID == o.ProductID).FirstOrDefault().Sales; //銷售
+                o.Quantity = o.UnitsInStock.Value - o.Sales; //庫存 - 銷售 = 剩餘
+                o.QuantityOptions = this.GetOptions(SaleCount, o.Quantity);
+            });
+
+            productCounts = productCounts.Where(o => o.Quantity > SaleCount).OrderBy(o => o.ProductID).ToList();
+
+            //產品類別
+            Product.Categories = categories.Select(o => new SelectListItem()
+            {
+                Value = o.CategoryID.ToString(),
+                Text = o.CategoryName,
+            });
+            Product.Products = productCounts;
+
+            return (new Result() { IsSuccess = true }, Product);
+        }
+
+        private IEnumerable<int> GetOptions(int mix, int max)
+        {
+            List<int> options = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            for (int i = mix; i < max; i += 5)
+            {
+                options.Add(i);
+            }
+            return options.Distinct();
         }
     }
 }

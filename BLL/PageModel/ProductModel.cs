@@ -14,5 +14,7 @@ namespace BLL.PageModel
         public List<ProductCountDTO> Products { get; set; }
 
         public string ProductName { get; set; }
+
+        public string CategoryId { get; set; }
     }
 }

@@ -11,5 +11,7 @@ namespace DAL.DTOModel
         public int Sales { get; set; } //銷售
 
         public int Quantity { get; set; } //數量
+
+        public IEnumerable<int> QuantityOptions { get; set; } //數量選項
     }
 }

@@ -21,12 +21,15 @@ namespace WebApplication1.Controllers
         /// 取得產品類別及產品資訊數量
         /// </summary>
         [HttpGet]
-        public ActionResult Product(string Categories = "", string ProductName = "")
+        public ActionResult Product(string CategoryId = "", string ProductName = "")
         {
             ViewBag.Name = HttpContext.Session.GetString("Name");
             ViewBag.Id = HttpContext.Session.GetString("Id");
-            var result = ProductService.GetCategoriesAndProducts(Categories, ProductName);
-            
+            var result = ProductService.GetCategoriesAndProducts(CategoryId, ProductName);
+
+            if (!string.IsNullOrEmpty(CategoryId)) result.product.CategoryId = CategoryId;
+            if (!string.IsNullOrEmpty(ProductName)) result.product.ProductName = ProductName;
+
             if (result.rtn.IsSuccess) return View(result.product);
 
             return View();
