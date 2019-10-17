@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
+using System;
 
 namespace BLL.Model
 {
@@ -56,6 +57,10 @@ namespace BLL.Model
                 {
                     categories = resultCategroy.Categorys;
                     products = resultProduct.products;
+
+                    TimeSpan ts = DateTime.Today.AddDays(1) - DateTime.Now; //1天
+                    cache.Set<IEnumerable<Categories>>(keyCategory, categories, ts); //產品類別加入快取
+                    cache.Set<IEnumerable<Products>>(keyProduct, products, ts); //產品資訊加入快取
                 }
 
                 if (!resultCategroy.rtn.IsSuccess)
@@ -108,7 +113,7 @@ namespace BLL.Model
             return (new Result() { IsSuccess = true }, Product);
         }
 
-        private IEnumerable<int> GetOptions(int mix, int max)
+        protected virtual IEnumerable<int> GetOptions(int mix, int max)
         {
             List<int> options = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             for (int i = mix; i < max; i += 5)

@@ -39,7 +39,7 @@ namespace UnitTestBLL
             object roles = null;
             mockCache.Setup(p => p.TryGetValue("GetRolesTest", out roles)).Returns(true);
             var mockmenu = new Mock<MenuService>(mockMenu.Object, mockRole.Object, mockCache.Object);
-            mockmenu.Protected().Setup("FunGetSubMenus", new object[] { new MenuDTO(), new List<MenuDTO>()}).Verifiable();
+            mockmenu.Protected().Setup("GetSubMenus", new object[] { new MenuDTO(), new List<MenuDTO>()}).Verifiable();
             MenuService = mockmenu.Object;
             mockRole.Setup(p => p.GetRolesByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = true }, new List<RoleOfMenuDTO>() {
                 new RoleOfMenuDTO() {
