@@ -146,9 +146,12 @@
                                 <span class="sr-only">Next</span>
                             </a>
                         </div>
+                        <div >
+                            <input type="submit" class="btn btn-primary btn-block" id="shopCar" value="購物車" onclick=""/>
+                        </div>
                     }
                 }
-                
+
             }
         </div>
     </div>
@@ -186,36 +189,33 @@
         });
     }
 
-    $(function () {
+    function goShopCar() {
 
-        @*$("#submit").click(function () {
 
-            if ($("#ShopForm").valid()) {
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("UpdateCustomer", "Person")',
-                    data: {
-                        __RequestVerificationToken: '@GetAntiXsrfRequestToken()',
-                        customer: cus,
-                    },
-                    async: true,
-                    success: function (data) {
-                        if (data != null) {
-                            $('#msgModalbody').text(data).css({ 'color': 'blue'});;
-                            $('#msgModal').modal('show');
-                        }
-                    },
-                    error: function (error) {
-                        if (error != null && error.responseText != '') {
-                            $('#msgModalbody').text(error.responseText).css({ 'color': 'red'});
-                            $('#msgModal').modal('show');
-                            $("#account").val('');
-                            $("#password").val('');
-                        }
-                    }
-                });
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("ShopCar", "Shop")',
+            data: {
+                __RequestVerificationToken: '@GetAntiXsrfRequestToken()',
+                customer: cus,
+            },
+            async: true,
+            success: function (data) {
+                if (data != null) {
+                    $('#msgModalbody').text(data).css({ 'color': 'blue'});;
+                    $('#msgModal').modal('show');
+                }
+            },
+            error: function (error) {
+                if (error != null && error.responseText != '') {
+                    $('#msgModalbody').text(error.responseText).css({ 'color': 'red'});
+                    $('#msgModal').modal('show');
+                    $("#account").val('');
+                    $("#password").val('');
+                }
             }
-        });*@
-    });
+        });
+    }
+
 </script>
 

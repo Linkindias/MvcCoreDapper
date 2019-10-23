@@ -1,9 +1,11 @@
 ﻿using Base;
 using BLL.PageModel;
 using DAL.DBModel;
+using DAL.DTOModel;
 using DAL.Repository;
 using Microsoft.Extensions.Caching.Memory;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -16,18 +18,20 @@ namespace BLL.Model
         AuthenticationRepository AuthRep;
         EmployeeRepository EmployeeRep;
         CustomerRepository CustomerRep;
+        RoleRepository RoleRep;
         IMemoryCache cache;
 
         static string keyCode = "abcd1234EFGH0987";
         static string ivCode = "ABCD7890efgh4321";
 
         public AuthService(AuthenticationRepository authenticationRepository,
-                EmployeeRepository employeeRepository, CustomerRepository customerRepository,
+                EmployeeRepository employeeRepository, CustomerRepository customerRepository,RoleRepository roleRepository,
                 IMemoryCache memoryCache)
         {
             this.AuthRep = authenticationRepository;
             this.EmployeeRep = employeeRepository;
             this.CustomerRep = customerRepository;
+            this.RoleRep = roleRepository;
             this.cache = memoryCache;
         }
 
@@ -36,9 +40,10 @@ namespace BLL.Model
         /// </summary>
         /// <param name="Account">帳號</param>
         /// <param name="Password">密碼</param>
-        public (Result rtn, Employees employee, Customers customer, Guid guid) LogIn(string Account, string Password)
+        public (Result rtn, Employees employee, Customers customer, Guid guid, List<RoleOfMenuDTO> roles) LogIn(string Account, string Password)
         {
             Result rtn = new Result();
+            List<RoleOfMenuDTO> roles = null;
             string account = this.DecryptAES(Account);
             var myEmployee = EmployeeRep.GetEmployeeByAccount(account, (int)DataStatus.Enable); //員工
             var myCustomer = CustomerRep.GetCustomerByAccount(account, (int)DataStatus.Enable); //客戶
@@ -60,6 +65,26 @@ namespace BLL.Model
             {
                 int EmployeeID = myEmployee.employee != null ? myEmployee.employee.EmployeeID : -1; //員工
                 string CustomerID = myCustomer.custom != null ? myCustomer.custom.CustomerID : string.Empty; //客戶
+
+                string Id = EmployeeID != -1 ? EmployeeID.ToString() : CustomerID;
+                string keyRole = $"GetRoles{Id}";
+                cache.TryGetValue<List<RoleOfMenuDTO>>(keyRole, out roles);
+
+                if (roles == null) {
+                    var myRole = RoleRep.GetRolesByAccount(Id);
+
+                    if (!myRole.rtn.IsSuccess)
+                    {
+                        rtn.IsSuccess = false;
+                        rtn.ErrorMsg = $"帳號 {account}查無角色，請確認";
+                    }
+                    else
+                    {
+                        roles = myRole.roles;
+                        cache.Set<List<RoleOfMenuDTO>>(keyRole, roles, DateTime.Today.AddDays(1) - DateTime.Now); //角色加入快取
+                    }
+                }
+                
                 var myAuth = AuthRep.GetAuthenticationByParams(EmployeeID, CustomerID, Password, (int)DataStatus.Enable);
 
                 //當權限不正確，則顯示訊息，否則檢查有效期
@@ -92,7 +117,7 @@ namespace BLL.Model
                     }
                 }
             }
-            return (rtn, myEmployee.employee, myCustomer.custom, guid);
+            return (rtn, myEmployee.employee, myCustomer.custom, guid, roles);
         }
 
         /// <summary>

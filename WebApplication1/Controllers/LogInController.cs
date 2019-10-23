@@ -37,6 +37,8 @@ namespace WebApplication1.Controllers
                 HttpContext.Session.SetString("Id", result.employee != null
                                                         ? result.employee.EmployeeID.ToString()
                                                         : result.customer.CustomerID);
+                HttpContext.Session.SetString("Role", result.roles[0].RoleName);
+
                 return Ok();
             }
             return BadRequest(result.rtn.ErrorMsg);

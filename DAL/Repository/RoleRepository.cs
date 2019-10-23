@@ -32,7 +32,8 @@ where RoleId in (
     select distinct RoleId from RoleEmployee
     where EmployeeId = @EmployeeId or CustomerId = @Id and Status = 10
 	)
-and Status = 10";
+and Status = 10
+order by RoleName";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@EmployeeId", EmployeeId);
             parameters.Add("@Id", Id);

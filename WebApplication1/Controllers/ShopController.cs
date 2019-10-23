@@ -1,5 +1,6 @@
 ﻿using Base;
 using BLL.Model;
+using BLL.PageModel;
 using DAL.DBModel;
 using DAL.DTOModel;
 using Microsoft.AspNetCore.Http;
@@ -20,7 +21,6 @@ namespace WebApplication1.Controllers
         /// <summary>
         /// 取得產品類別及產品資訊數量
         /// </summary>
-        [HttpGet]
         public ActionResult Product(string CategoryId = "", string ProductName = "")
         {
             ViewBag.Name = HttpContext.Session.GetString("Name");
@@ -32,6 +32,16 @@ namespace WebApplication1.Controllers
 
             if (result.rtn.IsSuccess) return View(result.product);
 
+            return View();
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult ShopCar(List<ShopCarModel> Shopcars)
+        {
+            ViewBag.Name = HttpContext.Session.GetString("Name");
+            ViewBag.Id = HttpContext.Session.GetString("Id");
+            ViewBag.Role = HttpContext.Session.GetString("Role");
             return View();
         }
     }
