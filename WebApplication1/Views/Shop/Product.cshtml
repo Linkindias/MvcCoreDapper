@@ -93,9 +93,6 @@
                                     var Product = Products[j];
                                     <div class="@(j == 0 ? "item active" : "item")" style="width:100%;">
                                         <form>
-                                            <div class="form-group" style="display:none;">
-                                                @Html.TextBox("productId", Product.ProductID)
-                                            </div>
                                             <div class="form-group">
                                                 <label for="productname" class="col-sm-2 col-form-label">產品名稱</label>
                                                 <div class="col-sm-10">
@@ -117,19 +114,15 @@
                                             <div class="form-group">
                                                 <label for="buycount" class="col-sm-2 col-form-label">購買數量</label>
                                                 <div class="col-sm-10 ">
-                                                    <select class="form-control" id="shopcount_@Product.ProductID" style="width:10%">
-                                                        @foreach (int count in Product.QuantityOptions)
-                                                        {
-                                                            <option>@count</option>
-                                                        }
-                                                    </select>
+                                                    @Html.DropDownList($"shopcount_{@Product.ProductID}", Product.QuantityOptions, "請選擇數量", new { @class = "form-control" })
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-sm-5 ">
                                                 </div>
                                                 <div class="col-sm-2 ">
-                                                    <input type="submit" class="btn btn-primary btn-block" id="car" value="購物車" />
+                                                    <input type="submit" class="btn btn-primary btn-block" id="car" value="購物"
+                                                           onclick="setShopCar(@Product.ProductID); return false;" />
                                                 </div>
                                             </div>
                                         </form>
@@ -146,44 +139,34 @@
                                 <span class="sr-only">Next</span>
                             </a>
                         </div>
+                        <input type="submit" class="btn btn-primary btn-block" id="car" value="購物" onclick="setShopCar(@Product.ProductID); return false;" />
                     }
                 }
-                
+
             }
         </div>
     </div>
     @Html.Partial("BootstrapModal")
 </div>
 <script type="text/javascript">
-    //關閉Alert
+    
     function closeModal() {
         $('#msgModal').modal('hide');
     }
-
-    function submitQuery() {
-        $.ajax({
-            type: 'Get',
-            url: '@Url.Action("Product", "Shop")',
-            data: {
-                CategoryId: $("#Category").val(),
-                ProductName: $("#ProductName").val()
-            },
-            async: true,
-            success: function (data) {
-                if (data != null) {
-                    $('#msgModalbody').text(data).css({ 'color': 'blue'});;
-                    $('#msgModal').modal('show');
-                }
-            },
-            error: function (error) {
-                if (error != null && error.responseText != '') {
-                    $('#msgModalbody').text(error.responseText).css({ 'color': 'red'});
-                    $('#msgModal').modal('show');
-                    $("#account").val('');
-                    $("#password").val('');
-                }
-            }
-        });
+    
+    function setShopCar(productId) {
+        var shopCar = window.localStorage.getItem('shopcar');
+        var data = [{ Id: productId, Count: parseInt($('select[name=shopcount_' + productId + ']').val(), 10) }];
+        
+        if (shopCar == null) {
+            window.localStorage.setItem("shopcar", JSON.stringify(data));
+        }
+        else {
+            var car = JSON.parse(shopCar);
+            car.push({ Id: productId, Count: parseInt($('select[name=shopcount_' + productId + ']').val(), 10) });
+            window.localStorage.setItem("shopcar", JSON.stringify(car));
+        }
+        return false;
     }
 
     $(function () {

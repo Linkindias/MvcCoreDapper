@@ -113,14 +113,18 @@ namespace BLL.Model
             return (new Result() { IsSuccess = true }, Product);
         }
 
-        protected virtual IEnumerable<int> GetOptions(int mix, int max)
+        protected virtual IEnumerable<SelectListItem> GetOptions(int mix, int max)
         {
-            List<int> options = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            List<int> options = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             for (int i = mix; i < max; i += 5)
             {
                 options.Add(i);
             }
-            return options.Distinct();
+            return options.Distinct().Select(o => new SelectListItem()
+            {
+                Value = o.ToString(),
+                Text = o.ToString(),
+            }); ;
         }
     }
 }

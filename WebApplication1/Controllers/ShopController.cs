@@ -34,5 +34,17 @@ namespace WebApplication1.Controllers
 
             return View();
         }
+
+        /// <summary>
+        /// 取得購物車
+        /// </summary>
+        [HttpGet]
+        public ActionResult ShopCar()
+        {
+            ViewBag.Name = HttpContext.Session.GetString("Name");
+            ViewBag.Id = HttpContext.Session.GetString("Id");
+
+            return View();
+        }
     }
 }
