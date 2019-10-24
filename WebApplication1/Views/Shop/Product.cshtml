@@ -39,6 +39,12 @@
     .carousel-indicators {
         bottom: -10px !important;
     }
+
+    .bt {
+        margin-left: -5%;
+        margin-top: 10px;
+        width:110%
+    }
 </style>
 <div class="container">
     <div class="row">
@@ -139,8 +145,11 @@
                                 <span class="sr-only">Next</span>
                             </a>
                         </div>
-                        <input type="submit" class="btn btn-primary btn-block" id="car" value="購物" onclick="setShopCar(@Product.ProductID); return false;" />
                     }
+                    <div>
+                        <input type="submit" class="btn btn-success btn-block bt" id="car" value="購物車" 
+                               onclick="goShopCar(); return false;" style="width:105%"/>
+                    </div>
                 }
 
             }
@@ -169,36 +178,45 @@
         return false;
     }
 
+    function goShopCar() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("ShopCar", "Shop")',
+            data: {
+                __RequestVerificationToken: '@GetAntiXsrfRequestToken()',
+                shopcars:JSON.parse(window.localStorage.getItem('shopcar')),
+            },
+            async: true,
+            success: function (data) {
+                if (data != null) {
+                    $('#msgModalbody').text(data).css({ 'color': 'blue'});;
+                    $('#msgModal').modal('show');
+                }
+            },
+            error: function (error) {
+                if (error != null && error.responseText != '') {
+                    $('#msgModalbody').text(error.responseText).css({ 'color': 'red'});
+                    $('#msgModal').modal('show');
+                    $("#account").val('');
+                    $("#password").val('');
+                }
+            }
+        });
+    }
+
     $(function () {
+        var products = JSON.parse(window.localStorage.getItem('shopcar'));
+        if (products != null) {
+            products.forEach(function (element) {
+                $('select[name=shopcount_' + element.Id + ']').children().each(function () {
 
-        @*$("#submit").click(function () {
-
-            if ($("#ShopForm").valid()) {
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("UpdateCustomer", "Person")',
-                    data: {
-                        __RequestVerificationToken: '@GetAntiXsrfRequestToken()',
-                        customer: cus,
-                    },
-                    async: true,
-                    success: function (data) {
-                        if (data != null) {
-                            $('#msgModalbody').text(data).css({ 'color': 'blue'});;
-                            $('#msgModal').modal('show');
-                        }
-                    },
-                    error: function (error) {
-                        if (error != null && error.responseText != '') {
-                            $('#msgModalbody').text(error.responseText).css({ 'color': 'red'});
-                            $('#msgModal').modal('show');
-                            $("#account").val('');
-                            $("#password").val('');
-                        }
+                    if ($(this).text() == element.Count){
+                        $(this).attr("selected", true);
                     }
                 });
-            }
-        });*@
-    });
+            });
+        }
+    })
+
 </script>
 

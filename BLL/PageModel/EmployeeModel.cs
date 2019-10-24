@@ -43,9 +43,10 @@ namespace BLL.PageModel
         [StringLength(255)]
         public string PhotoPath { get; set; }
 
-        public override decimal CalculateAmounts(IEnumerable<Products> products)
+        public override (int totalAmount, double discount) CalculateAmounts(int TotalAmount)
         {
-            throw new NotImplementedException();
+            double discount = 0.95;
+            return ((int)Math.Round(Convert.ToDouble(TotalAmount) * discount), discount);
         }
     }
 }

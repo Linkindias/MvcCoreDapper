@@ -1,5 +1,6 @@
 ﻿using Base;
 using BLL.Model;
+using BLL.PageModel;
 using DAL.DBModel;
 using DAL.DTOModel;
 using Microsoft.AspNetCore.Http;
@@ -38,11 +39,16 @@ namespace WebApplication1.Controllers
         /// <summary>
         /// 取得購物車
         /// </summary>
-        [HttpGet]
-        public ActionResult ShopCar()
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult ShopCar(List<ShopCarProductModel> shopcars)
         {
             ViewBag.Name = HttpContext.Session.GetString("Name");
             ViewBag.Id = HttpContext.Session.GetString("Id");
+            
+            var result = ProductService.GetShopCarProducts(ViewBag.Id, shopcars);
+
+            if (result.rtn.IsSuccess) return View("ShopCar", result.shopCar);
 
             return View();
         }

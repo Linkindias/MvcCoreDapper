@@ -10,12 +10,10 @@ namespace WebApplication1.Controllers
     public class LogInController : Controller
     {
         AuthService AuthService;
-        MenuService MenuService;
 
-        public LogInController(AuthService authService, MenuService menuService)
+        public LogInController(AuthService authService)
         {
             this.AuthService = authService;
-            this.MenuService = menuService;
         }
 
         public IActionResult Index()

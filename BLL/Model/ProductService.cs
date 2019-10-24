@@ -21,10 +21,12 @@ namespace BLL.Model
         CategorieRepository CategorieRep;
         OrderDetailRepository OrderDetailRep;
         ProductModel Product;
+        EmployeeModel Employee;
+        CustomerModel Customer;
 
         public ProductService(IConfiguration configuration, IMemoryCache memoryCache,
             ProductRepository productRepository, CategorieRepository categorieRepository, OrderDetailRepository orderDetailRepository,
-            ProductModel productModel)
+            ProductModel productModel, EmployeeModel employeeModel, CustomerModel customerModel)
         {
             this.configuration = configuration;
             this.cache = memoryCache;
@@ -32,6 +34,8 @@ namespace BLL.Model
             this.CategorieRep = categorieRepository;
             this.OrderDetailRep = orderDetailRepository;
             this.Product = productModel;
+            this.Employee = employeeModel;
+            this.Customer = customerModel;
         }
 
         /// <summary>
@@ -51,7 +55,7 @@ namespace BLL.Model
             if (categories == null && products == null)
             {
                 var resultCategroy = CategorieRep.GetCategorys();
-                var resultProduct = ProductRep.GetProductsByParam(string.IsNullOrEmpty(CategoryId) ? 0 : int.Parse(CategoryId), ProductName, false);
+                var resultProduct = ProductRep.GetProductsByParam(string.IsNullOrEmpty(CategoryId) ? 0 : int.Parse(CategoryId), ProductName,new int[0], false);
 
                 if (resultCategroy.rtn.IsSuccess && resultProduct.rtn.IsSuccess)
                 {
@@ -111,6 +115,44 @@ namespace BLL.Model
             Product.Products = productCounts;
 
             return (new Result() { IsSuccess = true }, Product);
+        }
+
+        /// <summary>
+        /// 取得購物車產品
+        /// </summary>
+        public (Result rtn, ShopCarModel shopCar) GetShopCarProducts(string Id, List<ShopCarProductModel> shopcars)
+        {
+            var result = ProductRep.GetProductsByParam(0, "", shopcars.Select(o => o.Id).Distinct().ToArray(), false);
+            if (result.rtn.IsSuccess)
+            {
+                int TotalAmount = 0;
+                shopcars.ForEach(o =>
+                {
+                    o.InjectFrom(result.products.Where(p => p.ProductID == o.Id).FirstOrDefault());
+                    o.Amount = o.Count * (int)o.UnitPrice; //數量 * 單價
+                    TotalAmount += o.Amount; //總價
+                });
+
+                int EmployeeId = 0;
+                int.TryParse(Id, out EmployeeId);
+                if (EmployeeId == 0)
+                {
+                    var resultCus = Customer.CalculateAmounts(TotalAmount);
+                    return (result.rtn, new ShopCarModel() { 
+                                            shopcarProducts = shopcars, 
+                                            TotalAmount = resultCus.totalAmount, 
+                                            Discount = resultCus.discount });
+                }
+                else
+                {
+                    var resultEmp = Employee.CalculateAmounts(TotalAmount);
+                    return (result.rtn, new ShopCarModel() {
+                                            shopcarProducts = shopcars,
+                                            TotalAmount = resultEmp.totalAmount,
+                                            Discount = resultEmp.discount });
+                }
+            }
+            return (new Result() { IsSuccess = true }, new ShopCarModel());
         }
 
         protected virtual IEnumerable<SelectListItem> GetOptions(int mix, int max)

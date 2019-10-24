@@ -27,6 +27,6 @@ namespace BLL.PageModel
 
         public int Status { get; set; }
 
-        public abstract decimal CalculateAmounts(IEnumerable<Products> products);
+        public abstract (int totalAmount, double discount) CalculateAmounts(int TotalAmount);
     }
 }
