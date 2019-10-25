@@ -25,6 +25,8 @@ namespace UnitTestBLL
         static Mock<CategorieRepository> mockCategory = null;
         static Mock<OrderDetailRepository> mockOrderDetail = null;
         static Mock<ProductModel> mockProductModel = null;
+        static Mock<EmployeeModel> mockEmployeeModel = null;
+        static Mock<CustomerModel> mockCustomerModel = null;
         static string connect = string.Empty;
         static int timeout = 0;
 
@@ -37,8 +39,11 @@ namespace UnitTestBLL
             mockCategory = new Mock<CategorieRepository>(new object[] { connect, timeout });
             mockOrderDetail = new Mock<OrderDetailRepository>(new object[] { connect, timeout });
             mockProductModel = new Mock<ProductModel>();
+            mockEmployeeModel = new Mock<EmployeeModel>();
+            mockCustomerModel = new Mock<CustomerModel>();
             ProductService = new ProductService(mockConfig.Object, mockCache.Object,
-                                    mockProduct.Object, mockCategory.Object, mockOrderDetail.Object, mockProductModel.Object);
+                                    mockProduct.Object, mockCategory.Object, mockOrderDetail.Object, 
+                                    mockProductModel.Object, mockEmployeeModel.Object, mockCustomerModel.Object);
         }
 
         [TestMethod()]
@@ -49,14 +54,15 @@ namespace UnitTestBLL
             object products = null;
             mockCache.Setup(p => p.TryGetValue("GetProduct", out products)).Returns(true);
             var mockproduct = new Mock<ProductService>(mockConfig.Object, mockCache.Object,
-                                    mockProduct.Object, mockCategory.Object, mockOrderDetail.Object, mockProductModel.Object);
+                                    mockProduct.Object, mockCategory.Object, mockOrderDetail.Object, 
+                                    mockProductModel.Object, mockEmployeeModel.Object, mockCustomerModel.Object);
             mockproduct.Protected().Setup("GetOptions", new object[] { 0, 10 }).Verifiable();
             ProductService = mockproduct.Object;
             mockCategory.Setup(p => p.GetCategorys()).Returns(() => (new Result() { IsSuccess = true }, new List<Categories>() { 
                 new Categories() { 
                     CategoryID = 1, CategoryName = "test"
                 }}));
-            mockProduct.Setup(p => p.GetProductsByParam(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool>())).Returns(() => (new Result() { IsSuccess = true }, new List<Products>() {
+            mockProduct.Setup(p => p.GetProductsByParam(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<bool>())).Returns(() => (new Result() { IsSuccess = true }, new List<Products>() {
                 new Products() {
                     CategoryID = 1, ProductID = 2, ProductName = "producttest",UnitsInStock = 10
                 }}));
@@ -86,7 +92,8 @@ namespace UnitTestBLL
             object products = null;
             mockCache.Setup(p => p.TryGetValue("GetProduct", out products)).Returns(true);
             var mockproduct = new Mock<ProductService>(mockConfig.Object, mockCache.Object,
-                                    mockProduct.Object, mockCategory.Object, mockOrderDetail.Object, mockProductModel.Object);
+                                    mockProduct.Object, mockCategory.Object, mockOrderDetail.Object,
+                                    mockProductModel.Object, mockEmployeeModel.Object, mockCustomerModel.Object);
             mockproduct.Protected().Setup("GetOptions", new object[] { 0, 10 }).Verifiable();
             ProductService = mockproduct.Object;
 
@@ -94,7 +101,7 @@ namespace UnitTestBLL
                 new Categories() {
                     CategoryID = 1, CategoryName = "test"
                 }}));
-            mockProduct.Setup(p => p.GetProductsByParam(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool>())).Returns(() => (new Result() { IsSuccess = true }, new List<Products>() {
+            mockProduct.Setup(p => p.GetProductsByParam(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<bool>())).Returns(() => (new Result() { IsSuccess = true }, new List<Products>() {
                 new Products() {
                     CategoryID = 1, ProductID = 2, ProductName = "producttest",UnitsInStock = 10
                 }}));
@@ -113,7 +120,8 @@ namespace UnitTestBLL
             object products = null;
             mockCache.Setup(p => p.TryGetValue("GetProduct", out products)).Returns(true);
             var mockproduct = new Mock<ProductService>(mockConfig.Object, mockCache.Object,
-                                    mockProduct.Object, mockCategory.Object, mockOrderDetail.Object, mockProductModel.Object);
+                                    mockProduct.Object, mockCategory.Object, mockOrderDetail.Object,
+                                    mockProductModel.Object, mockEmployeeModel.Object, mockCustomerModel.Object);
             mockproduct.Protected().Setup("GetOptions", new object[] { 0, 10 }).Verifiable();
             ProductService = mockproduct.Object;
 
@@ -121,7 +129,7 @@ namespace UnitTestBLL
                 new Categories() {
                     CategoryID = 1, CategoryName = "test"
                 }}));
-            mockProduct.Setup(p => p.GetProductsByParam(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool>())).Returns(() => (
+            mockProduct.Setup(p => p.GetProductsByParam(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<bool>())).Returns(() => (
                 new Result() { IsSuccess = false }, 
                 new List<Products>() {
                     new Products() {
@@ -142,14 +150,15 @@ namespace UnitTestBLL
             object products = null;
             mockCache.Setup(p => p.TryGetValue("GetProduct", out products)).Returns(true);
             var mockproduct = new Mock<ProductService>(mockConfig.Object, mockCache.Object,
-                                    mockProduct.Object, mockCategory.Object, mockOrderDetail.Object, mockProductModel.Object);
+                                    mockProduct.Object, mockCategory.Object, mockOrderDetail.Object,
+                                    mockProductModel.Object, mockEmployeeModel.Object, mockCustomerModel.Object);
             mockproduct.Protected().Setup("GetOptions", new object[] { 0, 10 }).Verifiable();
             ProductService = mockproduct.Object;
             mockCategory.Setup(p => p.GetCategorys()).Returns(() => (new Result() { IsSuccess = true }, new List<Categories>() {
                 new Categories() {
                     CategoryID = 1, CategoryName = "test"
                 }}));
-            mockProduct.Setup(p => p.GetProductsByParam(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<bool>())).Returns(() => (new Result() { IsSuccess = true }, new List<Products>() {
+            mockProduct.Setup(p => p.GetProductsByParam(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<bool>())).Returns(() => (new Result() { IsSuccess = true }, new List<Products>() {
                 new Products() {
                     CategoryID = 1, ProductID = 2, ProductName = "producttest",UnitsInStock = 10
                 }}));
