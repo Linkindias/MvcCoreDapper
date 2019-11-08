@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Server.IISIntegration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebApplication1.Filters;
+using BLL.InterFace;
 
 namespace WebApplication1
 {
@@ -40,6 +41,7 @@ namespace WebApplication1
 
             //Service
             services.AddScoped<AuthService>(); //權限服務
+            services.AddTransient<IMemberOfAuth, MemberService>(); //會員服務(是否有會員)
             services.AddScoped<MenuService>(); //選單服務
             services.AddSingleton<MemberService>(); //會員服務
             services.AddSingleton<ProductService>(); //產品服務

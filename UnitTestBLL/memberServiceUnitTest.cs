@@ -118,6 +118,152 @@ namespace UnitTestBLL
             Assert.AreEqual("會員更新成功", result.SuccessMsg);
         }
 
+        [TestMethod()]
+        public void IsExistMemberByAccount_當是否有會員的員工及會員不存在_則回傳無帳號訊息()
+        {
+            mockEmp.Setup(p => p.GetEmployeeByAccount(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (new Result(), null));
+            mockCus.Setup(p => p.GetCustomerByAccount(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (new Result(), null));
+
+            var result = MemberService.IsExistMemberByAccount("A");
+
+            Assert.AreEqual(false, result.rtn.IsSuccess);
+            Assert.AreEqual("查無此帳號 A，請確認", result.rtn.ErrorMsg);
+        }
+
+        [TestMethod()]
+        public void IsExistMemberByAccount_當是否有會員的員工錯誤_則回傳錯誤訊息()
+        {
+            mockEmp.Setup(p => p.GetEmployeeByAccount(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (new Result() { IsSuccess = false, ErrorMsg = "Error" }, null));
+            mockCus.Setup(p => p.GetCustomerByAccount(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (new Result(), new Customers()));
+
+            var result = MemberService.IsExistMemberByAccount("A");
+
+            Assert.AreEqual(false, result.rtn.IsSuccess);
+            Assert.AreEqual("Error", result.rtn.ErrorMsg);
+        }
+
+        [TestMethod()]
+        public void IsExistMemberByAccount_當是否有會員的客戶錯誤_則回傳錯誤訊息()
+        {
+            mockEmp.Setup(p => p.GetEmployeeByAccount(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (new Result() { IsSuccess = true}, new Employees()));
+            mockCus.Setup(p => p.GetCustomerByAccount(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (new Result() { IsSuccess = false, ErrorMsg = "Error" },null));
+
+            var result = MemberService.IsExistMemberByAccount("A");
+
+            Assert.AreEqual(false, result.rtn.IsSuccess);
+            Assert.AreEqual("Error", result.rtn.ErrorMsg);
+        }
+
+        [TestMethod()]
+        public void IsExistMemberByAccount_當是否有會員的員工正確_則回傳員工訊息()
+        {
+            mockEmp.Setup(p => p.GetEmployeeByAccount(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (new Result() { IsSuccess = true }, 
+            new Employees() { 
+                EmployeeID = 1,
+                FirstName = "T",
+                LastName = "est"
+            }));
+            mockCus.Setup(p => p.GetCustomerByAccount(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (new Result() { IsSuccess = true } , null));
+
+            var result = MemberService.IsExistMemberByAccount("A");
+
+            Assert.AreEqual(true, result.rtn.IsSuccess);
+            Assert.AreEqual(1, result.EmpId);
+            Assert.AreEqual("1", result.Id);
+            Assert.AreEqual("Test", result.Name);
+        }
+
+        [TestMethod()]
+        public void IsExistMemberByAccount_當是否有會員的客戶正確_則回傳客戶訊息()
+        {
+            mockEmp.Setup(p => p.GetEmployeeByAccount(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (new Result() { IsSuccess = true }, null));
+            mockCus.Setup(p => p.GetCustomerByAccount(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (new Result() { IsSuccess = true }, 
+            new Customers() { 
+                CustomerID = "1",
+                CompanyName = "Test"
+            }));
+
+            var result = MemberService.IsExistMemberByAccount("A");
+
+            Assert.AreEqual(true, result.rtn.IsSuccess);
+            Assert.AreEqual("1", result.CusId);
+            Assert.AreEqual("1", result.Id);
+            Assert.AreEqual("Test", result.Name);
+        }
+
+        [TestMethod()]
+        public void IsExistMemberById_當是否有會員的員工及會員不存在_則回傳無帳號訊息()
+        {
+            mockEmp.Setup(p => p.GetEmployeeById(It.IsAny<int>(), It.IsAny<int>())).Returns(() => (new Result(), null));
+            mockCus.Setup(p => p.GetCustomerById(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (new Result(), null));
+
+            var result = MemberService.IsExistMemberById("A");
+
+            Assert.AreEqual(false, result.rtn.IsSuccess);
+            Assert.AreEqual("查無此帳號 A，請確認", result.rtn.ErrorMsg);
+        }
+
+        [TestMethod()]
+        public void IsExistMemberById_當是否有會員的員工錯誤_則回傳錯誤訊息()
+        {
+            mockEmp.Setup(p => p.GetEmployeeById(It.IsAny<int>(), It.IsAny<int>())).Returns(() => (new Result() { IsSuccess = false, ErrorMsg = "Error" }, null));
+            mockCus.Setup(p => p.GetCustomerById(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (new Result(), new Customers()));
+
+            var result = MemberService.IsExistMemberById("A");
+
+            Assert.AreEqual(false, result.rtn.IsSuccess);
+            Assert.AreEqual("Error", result.rtn.ErrorMsg);
+        }
+
+        [TestMethod()]
+        public void IsExistMemberById_當是否有會員的客戶錯誤_則回傳錯誤訊息()
+        {
+            mockEmp.Setup(p => p.GetEmployeeById(It.IsAny<int>(), It.IsAny<int>())).Returns(() => (new Result() { IsSuccess = true }, new Employees()));
+            mockCus.Setup(p => p.GetCustomerById(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (new Result() { IsSuccess = false, ErrorMsg = "Error" }, null));
+
+            var result = MemberService.IsExistMemberById("A");
+
+            Assert.AreEqual(false, result.rtn.IsSuccess);
+            Assert.AreEqual("Error", result.rtn.ErrorMsg);
+        }
+
+        [TestMethod()]
+        public void IsExistMemberById_當是否有會員的員工正確_則回傳員工訊息()
+        {
+            mockEmp.Setup(p => p.GetEmployeeById(It.IsAny<int>(), It.IsAny<int>())).Returns(() => (new Result() { IsSuccess = true },
+            new Employees()
+            {
+                EmployeeID = 1,
+                FirstName = "T",
+                LastName = "est"
+            }));
+            mockCus.Setup(p => p.GetCustomerById(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (new Result() { IsSuccess = true }, null));
+
+            var result = MemberService.IsExistMemberById("A");
+
+            Assert.AreEqual(true, result.rtn.IsSuccess);
+            Assert.AreEqual(1, result.EmpId);
+            Assert.AreEqual(string.Empty, result.CusId);
+        }
+
+        [TestMethod()]
+        public void IsExistMemberById_當是否有會員的客戶正確_則回傳客戶訊息()
+        {
+            mockEmp.Setup(p => p.GetEmployeeById(It.IsAny<int>(), It.IsAny<int>())).Returns(() => (new Result() { IsSuccess = true }, null));
+            mockCus.Setup(p => p.GetCustomerById(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (new Result() { IsSuccess = true },
+            new Customers()
+            {
+                CustomerID = "1",
+                CompanyName = "Test"
+            }));
+
+            var result = MemberService.IsExistMemberById("A");
+
+            Assert.AreEqual(true, result.rtn.IsSuccess);
+            Assert.AreEqual(-1, result.EmpId);
+            Assert.AreEqual("1", result.CusId);
+        }
+
         [ClassCleanup]
         public static void ClassCleanup()
         {

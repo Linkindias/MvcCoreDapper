@@ -1,4 +1,5 @@
 ﻿using Base;
+using BLL.InterFace;
 using BLL.PageModel;
 using DAL.DBModel;
 using DAL.Repository;
@@ -7,7 +8,7 @@ using static Base.Enums;
 
 namespace BLL.Model
 {
-    public class MemberService
+    public class MemberService : IMemberOfAuth
     {
         EmployeeRepository EmployeeRep;
         CustomerRepository CustomerRep;
@@ -91,6 +92,82 @@ namespace BLL.Model
             if (updateMember.rtn.IsSuccess) updateMember.rtn.SuccessMsg = "會員更新成功";
 
             return updateMember.rtn;
+        }
+
+        /// <summary>
+        /// 取得是否有會員
+        /// </summary>
+        /// <param name="account">帳號</param>
+        public (Result rtn, int EmpId, string CusId, string Id, string Name) IsExistMemberByAccount(string account)
+        {
+            Result rtn = new Result();
+            var myEmployee = EmployeeRep.GetEmployeeByAccount(account, (int)DataStatus.Enable); //員工
+            var myCustomer = CustomerRep.GetCustomerByAccount(account, (int)DataStatus.Enable); //客戶
+
+            //當人員不正確，則顯示訊息
+            if (myEmployee.employee == null && myCustomer.custom == null)
+            {
+                rtn.IsSuccess = false;
+                rtn.ErrorMsg = $"查無此帳號 {account}，請確認";
+            }
+
+            else if (!myEmployee.rtn.IsSuccess) //當員工錯誤，則回傳錯誤訊息
+                rtn = myEmployee.rtn;
+
+            else if (!myCustomer.rtn.IsSuccess) //當會員錯誤，則回傳錯誤訊息
+                rtn = myCustomer.rtn;
+            else
+            {
+                rtn.IsSuccess = true;
+                int EmployeeID = -1;
+                string CustomerID = string.Empty, Name = string.Empty, Id = string.Empty;
+
+                if (myEmployee.employee != null)
+                {
+                    EmployeeID = myEmployee.employee.EmployeeID;
+                    Name = myEmployee.employee.FirstName + myEmployee.employee.LastName;
+                    Id = EmployeeID.ToString();
+                }
+                else
+                {
+                    CustomerID = Id = myCustomer.custom.CustomerID;
+                    Name = myCustomer.custom.CompanyName;
+                }
+                return (rtn, EmployeeID, CustomerID, Id, Name);
+            }
+            return (rtn, 0, string.Empty, string.Empty, string.Empty);
+        }
+
+        /// <summary>
+        /// 取得是否有會員
+        /// </summary>
+        /// <param name="Id">會員編號 </param>
+        public (Result rtn, int EmpId, string CusId) IsExistMemberById(string Id)
+        {
+            Result rtn = new Result();
+            int EmployeeId = 0;
+            int.TryParse(Id, out EmployeeId);
+            var myEmployee = EmployeeRep.GetEmployeeById(EmployeeId, (int)DataStatus.Enable); //員工
+            var myCustomer = CustomerRep.GetCustomerById(Id, (int)DataStatus.Enable); //客戶
+
+            //當人員不正確，則顯示訊息，否則檢查權限
+            if (myEmployee.employee == null && myCustomer.customer == null)
+            {
+                rtn.IsSuccess = false;
+                rtn.ErrorMsg = $"查無此帳號 {Id}，請確認";
+            }
+            else if (!myEmployee.rtn.IsSuccess) //當員工錯誤，則回傳錯誤訊息
+                rtn = myEmployee.rtn;
+
+            else if (!myCustomer.rtn.IsSuccess) //當會員錯誤，則回傳錯誤訊息
+                rtn = myCustomer.rtn;
+            else
+                rtn.IsSuccess = true;
+
+            int EmployeeID = myEmployee.employee != null ? myEmployee.employee.EmployeeID : -1; //員工
+            string CustomerID = myCustomer.customer != null ? myCustomer.customer.CustomerID : string.Empty; //客戶
+
+            return (rtn, EmployeeID, CustomerID);
         }
     }
 }

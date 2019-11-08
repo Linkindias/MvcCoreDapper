@@ -1,4 +1,5 @@
 ﻿using Base;
+using BLL.InterFace;
 using BLL.PageModel;
 using DAL.DBModel;
 using DAL.Repository;
@@ -14,20 +15,17 @@ namespace BLL.Model
     public class AuthService
     {
         AuthenticationRepository AuthRep;
-        EmployeeRepository EmployeeRep;
-        CustomerRepository CustomerRep;
+        IMemberOfAuth memberService;
         IMemoryCache cache;
 
         static string keyCode = "abcd1234EFGH0987";
         static string ivCode = "ABCD7890efgh4321";
 
         public AuthService(AuthenticationRepository authenticationRepository,
-                EmployeeRepository employeeRepository, CustomerRepository customerRepository,
-                IMemoryCache memoryCache)
+            IMemberOfAuth memberOfAuth, IMemoryCache memoryCache)
         {
             this.AuthRep = authenticationRepository;
-            this.EmployeeRep = employeeRepository;
-            this.CustomerRep = customerRepository;
+            this.memberService = memberOfAuth;
             this.cache = memoryCache;
         }
 
@@ -36,31 +34,20 @@ namespace BLL.Model
         /// </summary>
         /// <param name="Account">帳號</param>
         /// <param name="Password">密碼</param>
-        public (Result rtn, Employees employee, Customers customer, Guid guid) LogIn(string Account, string Password)
+        public (Result rtn, string Id, string Name,  Guid guid) LogIn(string Account, string Password)
         {
             Result rtn = new Result();
             string account = this.DecryptAES(Account);
-            var myEmployee = EmployeeRep.GetEmployeeByAccount(account, (int)DataStatus.Enable); //員工
-            var myCustomer = CustomerRep.GetCustomerByAccount(account, (int)DataStatus.Enable); //客戶
             Guid guid = Guid.Empty;
 
-            //當人員不正確，則顯示訊息，否則檢查權限
-            if (myEmployee.employee == null && myCustomer.custom == null)
-            {
-                rtn.IsSuccess = false;
-                rtn.ErrorMsg = $"查無此帳號 {account}，請確認";
-            }
-            //當員工錯誤，則回傳錯誤訊息
-            else if (!myEmployee.rtn.IsSuccess && myEmployee.employee != null)
-                rtn = myEmployee.rtn;
-            //當會員錯誤，則回傳錯誤訊息
-            else if (!myCustomer.rtn.IsSuccess && myCustomer.custom != null)
-                rtn = myCustomer.rtn;
+            var result = memberService.IsExistMemberByAccount(account);
+
+            //當取得無會員，則回傳訊息
+            if (!result.rtn.IsSuccess)
+                rtn = result.rtn;
             else
             {
-                int EmployeeID = myEmployee.employee != null ? myEmployee.employee.EmployeeID : -1; //員工
-                string CustomerID = myCustomer.custom != null ? myCustomer.custom.CustomerID : string.Empty; //客戶
-                var myAuth = AuthRep.GetAuthenticationByParams(EmployeeID, CustomerID, Password, (int)DataStatus.Enable);
+                var myAuth = AuthRep.GetAuthenticationByParams(result.EmpId, result.CusId, Password, (int)DataStatus.Enable);
 
                 //當權限不正確，則顯示訊息，否則檢查有效期
                 if (myAuth.auth == null)
@@ -88,11 +75,11 @@ namespace BLL.Model
                     {
                         rtn.IsSuccess = true;
                         guid = Guid.NewGuid();
-                        AuthRep.UpdateAuthCode(EmployeeID, CustomerID, guid, (int)DataStatus.Enable);
+                        AuthRep.UpdateAuthCode(result.EmpId, result.CusId, guid, (int)DataStatus.Enable);
                     }
                 }
             }
-            return (rtn, myEmployee.employee, myCustomer.custom, guid);
+            return (rtn, result.Id, result.Name, guid);
         }
 
         /// <summary>
@@ -101,29 +88,27 @@ namespace BLL.Model
         /// <param name="Id">帳號</param>
         public Result LogOut(string Id)
         {
-            (Result rtn, int exeRows) updateAuthCode = (new Result(), 0);
-            int EmployeeId = 0;
-            int.TryParse(Id, out EmployeeId);
-            var myEmployee = EmployeeRep.GetEmployeeById(EmployeeId, (int)DataStatus.Enable); //員工
-            var myCustomer = CustomerRep.GetCustomerById(Id, (int)DataStatus.Enable); //客戶
+            Result rtn = new Result();
 
-            //當人員不正確，則顯示訊息，否則檢查權限
-            if (myEmployee.employee == null && myCustomer.customer == null)
-            {
-                updateAuthCode.rtn.IsSuccess = false;
-                updateAuthCode.rtn.ErrorMsg = $"查無此帳號 {Id}，請確認";
-            }
+            var rtnMember = memberService.IsExistMemberById(Id);
+
+            //當取得無會員，則回傳訊息
+            if (!rtnMember.rtn.IsSuccess)
+                rtn = rtnMember.rtn;
             else
-                updateAuthCode = AuthRep.UpdateAuthCode(EmployeeId, Id, null, (int)DataStatus.Enable);
-
-            if (updateAuthCode.rtn.IsSuccess)
             {
-                updateAuthCode.rtn.SuccessMsg = $"{Id} 登出成功";
-                cache.Remove($"GetMenus{Id}"); //選單
-                cache.Remove($"GetRoles{Id}"); //角色
+                var rtnAuth = AuthRep.UpdateAuthCode(rtnMember.EmpId, rtnMember.CusId, null, (int)DataStatus.Enable);
+                rtn = rtnAuth.rtn;
+
+                if (rtn.IsSuccess)
+                {
+                    rtn.SuccessMsg = $"{Id} 登出成功";
+                    cache.Remove($"GetMenus{Id}"); //選單
+                    cache.Remove($"GetRoles{Id}"); //角色
+                }
             }
 
-            return updateAuthCode.rtn;
+            return rtn;
         }
 
         /// <summary>

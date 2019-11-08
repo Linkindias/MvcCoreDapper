@@ -29,12 +29,8 @@ namespace WebApplication1.Controllers
             var result = AuthService.LogIn(LogIn.account, LogIn.password);
             if (result.rtn.IsSuccess)
             {
-                HttpContext.Session.SetString("Name", result.employee != null
-                                                    ? result.employee.FirstName + result.employee.LastName
-                                                    : result.customer.CompanyName);
-                HttpContext.Session.SetString("Id", result.employee != null
-                                                        ? result.employee.EmployeeID.ToString()
-                                                        : result.customer.CustomerID);
+                HttpContext.Session.SetString("Name", result.Name);
+                HttpContext.Session.SetString("Id", result.Id);
                 return Ok();
             }
             return BadRequest(result.rtn.ErrorMsg);
