@@ -41,16 +41,29 @@ namespace WebApplication1.Controllers
         /// </summary>
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult ShopCar(List<ShopCarProductModel> shopcars)
+        public ActionResult GetProducts(List<ShopCarProductModel> shopcars)
         {
             ViewBag.Name = HttpContext.Session.GetString("Name");
             ViewBag.Id = HttpContext.Session.GetString("Id");
             
             var result = ProductService.GetShopCarProducts(ViewBag.Id, shopcars);
 
-            if (result.rtn.IsSuccess) return View("ShopCar", result.shopCar);
+            if (result.Item1.IsSuccess) return Ok(result.Item2);
 
-            return View();
+            return BadRequest(result.Item1.ErrorMsg);
+        }
+
+        /// <summary>
+        /// 取得產品類別及產品資訊數量
+        /// </summary>
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult ShopCar(ShopCarModel shopcars)
+        {
+            ViewBag.Name = HttpContext.Session.GetString("Name");
+            ViewBag.Id = HttpContext.Session.GetString("Id");
+
+            return View("ShopCar", shopcars);
         }
     }
 }

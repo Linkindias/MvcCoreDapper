@@ -147,26 +147,31 @@
                         </div>
                     }
                     <div>
-                        <input type="submit" class="btn btn-success btn-block bt" id="car" value="購物車" 
-                               onclick="goShopCar(); return false;" style="width:105%"/>
+                        <input type="submit" class="btn btn-success btn-block bt" id="car" value="購物車"
+                               onclick="goShopCar(); return false;" style="width:105%" />
                     </div>
                 }
-
+                using (Html.BeginForm("ShopCar", "Shop", FormMethod.Post, new { id = "ShopCarForm" })) //,@style="display:none;"
+                {
+                    <div >
+                    </div>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                }
             }
         </div>
     </div>
     @Html.Partial("BootstrapModal")
 </div>
 <script type="text/javascript">
-    
+
     function closeModal() {
         $('#msgModal').modal('hide');
     }
-    
+
     function setShopCar(productId) {
         var shopCar = window.localStorage.getItem('shopcar');
         var data = [{ Id: productId, Count: parseInt($('select[name=shopcount_' + productId + ']').val(), 10) }];
-        
+
         if (shopCar == null) {
             window.localStorage.setItem("shopcar", JSON.stringify(data));
         }
@@ -181,7 +186,7 @@
     function goShopCar() {
         $.ajax({
             type: 'POST',
-            url: '@Url.Action("ShopCar", "Shop")',
+            url: '@Url.Action("GetProducts", "Shop")',
             data: {
                 __RequestVerificationToken: '@GetAntiXsrfRequestToken()',
                 shopcars:JSON.parse(window.localStorage.getItem('shopcar')),
@@ -189,8 +194,21 @@
             async: true,
             success: function (data) {
                 if (data != null) {
-                    $('#msgModalbody').text(data).css({ 'color': 'blue'});;
-                    $('#msgModal').modal('show');
+
+                    console.log(data);
+
+                    $("#ShopCarForm").submit(function () {
+                        $.each(params, function(i,param){
+                            $('<input />').attr('type', 'hidden')
+                                .attr('name', 'shopcars')
+                                .attr('value', data)
+                                .appendTo('#ShopCarForm');
+                        });
+                        return true;
+                    });
+
+                    @*console.log(data);
+                    window.location.href = '@Url.Action("ShopCar", "Shop")?shopcars = ' + data;*@
                 }
             },
             error: function (error) {

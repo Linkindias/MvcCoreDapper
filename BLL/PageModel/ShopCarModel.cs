@@ -9,8 +9,8 @@ namespace BLL.PageModel
     {
         public List<ShopCarProductModel> shopcarProducts { get; set; }
 
-        public int TotalAmount { get; set; }
+        public int totalAmount { get; set; }
 
-        public double Discount { get; set; }
+        public double discount { get; set; }
     }
 }

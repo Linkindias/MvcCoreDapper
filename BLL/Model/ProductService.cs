@@ -137,8 +137,8 @@ namespace BLL.Model
                 var rtnAmount = MemberService.GetCalculateAmounts(Id, TotalAmount);
 
                 ShopCar.shopcarProducts = shopcars;
-                ShopCar.TotalAmount = rtnAmount.TotalAmount;
-                ShopCar.Discount = rtnAmount.Discount;
+                ShopCar.totalAmount = rtnAmount.TotalAmount;
+                ShopCar.discount = rtnAmount.Discount;
 
                 return (result.rtn, ShopCar);
             }
