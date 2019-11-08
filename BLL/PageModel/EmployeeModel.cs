@@ -45,7 +45,7 @@ namespace BLL.PageModel
 
         public override (int totalAmount, double discount) CalculateAmounts(int TotalAmount)
         {
-            double discount = 0.95;
+            double discount = 0.8;
             return ((int)Math.Round(Convert.ToDouble(TotalAmount) * discount), discount);
         }
     }

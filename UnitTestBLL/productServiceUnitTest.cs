@@ -1,4 +1,5 @@
 ﻿using Base;
+using BLL.InterFace;
 using BLL.Model;
 using BLL.PageModel;
 using DAL.DBModel;
@@ -20,13 +21,13 @@ namespace UnitTestBLL
     {
         static Mock<IConfiguration> mockConfig = null;
         static Mock<IMemoryCache> mockCache = null;
+        static Mock<IMemberOfProduct> mockMember = null;
         static ProductService ProductService = null;
         static Mock<ProductRepository> mockProduct = null;
         static Mock<CategorieRepository> mockCategory = null;
         static Mock<OrderDetailRepository> mockOrderDetail = null;
         static Mock<ProductModel> mockProductModel = null;
-        static Mock<EmployeeModel> mockEmployeeModel = null;
-        static Mock<CustomerModel> mockCustomerModel = null;
+        static Mock<ShopCarModel> mockShopCarModel = null;
         static string connect = string.Empty;
         static int timeout = 0;
 
@@ -35,15 +36,15 @@ namespace UnitTestBLL
         {
             mockConfig = new Mock<IConfiguration>();
             mockCache = new Mock<IMemoryCache>();
+            mockMember = new Mock<IMemberOfProduct>();
             mockProduct = new Mock<ProductRepository>(new object[] { connect, timeout });
             mockCategory = new Mock<CategorieRepository>(new object[] { connect, timeout });
             mockOrderDetail = new Mock<OrderDetailRepository>(new object[] { connect, timeout });
             mockProductModel = new Mock<ProductModel>();
-            mockEmployeeModel = new Mock<EmployeeModel>();
-            mockCustomerModel = new Mock<CustomerModel>();
-            ProductService = new ProductService(mockConfig.Object, mockCache.Object,
+            mockShopCarModel = new Mock<ShopCarModel>();
+            ProductService = new ProductService(mockConfig.Object, mockCache.Object, mockMember.Object,
                                     mockProduct.Object, mockCategory.Object, mockOrderDetail.Object, 
-                                    mockProductModel.Object, mockEmployeeModel.Object, mockCustomerModel.Object);
+                                    mockProductModel.Object, mockShopCarModel.Object);
         }
 
         [TestMethod()]
@@ -53,9 +54,9 @@ namespace UnitTestBLL
             mockCache.Setup(p => p.TryGetValue("GetCategory", out categorys)).Returns(true);
             object products = null;
             mockCache.Setup(p => p.TryGetValue("GetProduct", out products)).Returns(true);
-            var mockproduct = new Mock<ProductService>(mockConfig.Object, mockCache.Object,
+            var mockproduct = new Mock<ProductService>(mockConfig.Object, mockCache.Object, mockMember.Object,
                                     mockProduct.Object, mockCategory.Object, mockOrderDetail.Object, 
-                                    mockProductModel.Object, mockEmployeeModel.Object, mockCustomerModel.Object);
+                                    mockProductModel.Object, mockShopCarModel.Object);
             mockproduct.Protected().Setup("GetOptions", new object[] { 0, 10 }).Verifiable();
             ProductService = mockproduct.Object;
             mockCategory.Setup(p => p.GetCategorys()).Returns(() => (new Result() { IsSuccess = true }, new List<Categories>() { 
@@ -91,9 +92,9 @@ namespace UnitTestBLL
             mockCache.Setup(p => p.TryGetValue("GetCategory", out categorys)).Returns(true);
             object products = null;
             mockCache.Setup(p => p.TryGetValue("GetProduct", out products)).Returns(true);
-            var mockproduct = new Mock<ProductService>(mockConfig.Object, mockCache.Object,
+            var mockproduct = new Mock<ProductService>(mockConfig.Object, mockCache.Object, mockMember.Object,
                                     mockProduct.Object, mockCategory.Object, mockOrderDetail.Object,
-                                    mockProductModel.Object, mockEmployeeModel.Object, mockCustomerModel.Object);
+                                    mockProductModel.Object, mockShopCarModel.Object);
             mockproduct.Protected().Setup("GetOptions", new object[] { 0, 10 }).Verifiable();
             ProductService = mockproduct.Object;
 
@@ -119,9 +120,9 @@ namespace UnitTestBLL
             mockCache.Setup(p => p.TryGetValue("GetCategory", out categorys)).Returns(true);
             object products = null;
             mockCache.Setup(p => p.TryGetValue("GetProduct", out products)).Returns(true);
-            var mockproduct = new Mock<ProductService>(mockConfig.Object, mockCache.Object,
+            var mockproduct = new Mock<ProductService>(mockConfig.Object, mockCache.Object, mockMember.Object,
                                     mockProduct.Object, mockCategory.Object, mockOrderDetail.Object,
-                                    mockProductModel.Object, mockEmployeeModel.Object, mockCustomerModel.Object);
+                                    mockProductModel.Object, mockShopCarModel.Object);
             mockproduct.Protected().Setup("GetOptions", new object[] { 0, 10 }).Verifiable();
             ProductService = mockproduct.Object;
 
@@ -149,9 +150,9 @@ namespace UnitTestBLL
             mockCache.Setup(p => p.TryGetValue("GetCategory", out categorys)).Returns(true);
             object products = null;
             mockCache.Setup(p => p.TryGetValue("GetProduct", out products)).Returns(true);
-            var mockproduct = new Mock<ProductService>(mockConfig.Object, mockCache.Object,
+            var mockproduct = new Mock<ProductService>(mockConfig.Object, mockCache.Object, mockMember.Object,
                                     mockProduct.Object, mockCategory.Object, mockOrderDetail.Object,
-                                    mockProductModel.Object, mockEmployeeModel.Object, mockCustomerModel.Object);
+                                    mockProductModel.Object, mockShopCarModel.Object);
             mockproduct.Protected().Setup("GetOptions", new object[] { 0, 10 }).Verifiable();
             ProductService = mockproduct.Object;
             mockCategory.Setup(p => p.GetCategorys()).Returns(() => (new Result() { IsSuccess = true }, new List<Categories>() {
@@ -175,15 +176,53 @@ namespace UnitTestBLL
             Assert.AreEqual("查無產品數量", result.rtn.ErrorMsg);
         }
 
+        [TestMethod()]
+        public void GetShopCarProducts_當取得購物車產品資訊正確_則回傳購物車產品資訊()
+        {
+            mockProduct.Setup(p => p.GetProductsByParam(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<bool>())).Returns(() => (new Result() { IsSuccess = true }, new List<Products>() {
+                new Products() {
+                    CategoryID = 1, ProductID = 1, ProductName = "test1",UnitsInStock = 10, UnitPrice = 100m,
+                },
+                new Products() {
+                    CategoryID = 1, ProductID = 2, ProductName = "test2",UnitsInStock = 10, UnitPrice = 900m,
+                }}));
+            mockMember.Setup(p => p.GetCalculateAmounts(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (1100, 0.0));
+
+            var result = ProductService.GetShopCarProducts("1", new List<ShopCarProductModel>() { 
+                new ShopCarProductModel()
+                {
+                    Id = 2,
+                    Count = 2,
+                    UnitPrice = 0m,
+                    Amount = 0,
+                },
+                new ShopCarProductModel()
+                {
+                    Id = 1,
+                    Count = 1,
+                    UnitPrice = 0m,
+                    Amount = 0,
+                }
+            });
+
+            Assert.AreEqual(true, result.rtn.IsSuccess);
+            Assert.AreEqual(1800, result.shopCar.shopcarProducts[0].Amount);
+            Assert.AreEqual(100, result.shopCar.shopcarProducts[1].Amount);
+            Assert.AreEqual(1100, result.shopCar.TotalAmount);
+            Assert.AreEqual(0, result.shopCar.Discount);
+        }
+
         [ClassCleanup]
         public static void ClassCleanup()
         {
             mockConfig = null;
             mockCache = null;
+            mockMember = null;
             mockProduct = null;
             mockCategory = null;
             mockOrderDetail = null;
             mockProductModel = null;
+            mockShopCarModel = null;
             ProductService = null;
         }
     }

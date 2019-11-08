@@ -43,12 +43,15 @@ namespace WebApplication1
             services.AddScoped<AuthService>(); //權限服務
             services.AddTransient<IMemberOfAuth, MemberService>(); //會員服務(是否有會員)
             services.AddScoped<MenuService>(); //選單服務
-            services.AddSingleton<MemberService>(); //會員服務
+            services.AddTransient<IMemberOfMenu, MemberService>(); //會員服務(帳號取得角色資訊)
             services.AddSingleton<ProductService>(); //產品服務
+            services.AddTransient<IMemberOfProduct, MemberService>(); //會員服務(帳號計算金額及折扣)
+            services.AddSingleton<MemberService>(); //會員服務
 
             services.AddTransient<CustomerModel>(); //客戶
             services.AddTransient<EmployeeModel>(); //員工
             services.AddTransient<ProductModel>(); //產品
+            services.AddTransient<ShopCarModel>(); //購物車
 
             //Repository
             services.AddSingleton<AuthenticationRepository>(x => new AuthenticationRepository(strCon, cmdTimeOut)); //權限倉

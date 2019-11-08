@@ -276,6 +276,27 @@ namespace UnitTestBLL
             Assert.AreEqual(true, result.rtn.IsSuccess);
         }
 
+        [TestMethod()]
+        public void GetCalculateAmounts_當依帳號為員工_則回傳員工金額及折扣()
+        {
+            mockEmpM.Setup(p => p.CalculateAmounts(It.IsAny<int>())).Returns(() => (800,0.8));
+
+            var result = MemberService.GetCalculateAmounts("1",1000);
+
+            Assert.AreEqual(800, result.TotalAmount);
+            Assert.AreEqual(0.8, result.Discount);
+        }
+
+        [TestMethod()]
+        public void GetCalculateAmounts_當依帳號為客戶_則回傳客戶金額及折扣()
+        {
+            mockCusM.Setup(p => p.CalculateAmounts(It.IsAny<int>())).Returns(() => (950, 0.95));
+            var result = MemberService.GetCalculateAmounts("A", 1000);
+
+            Assert.AreEqual(950, result.TotalAmount);
+            Assert.AreEqual(0.95, result.Discount);
+        }
+
         [ClassCleanup]
         public static void ClassCleanup()
         {

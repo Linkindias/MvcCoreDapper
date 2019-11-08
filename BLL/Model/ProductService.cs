@@ -10,6 +10,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
 using System;
+using BLL.InterFace;
 
 namespace BLL.Model
 {
@@ -17,25 +18,25 @@ namespace BLL.Model
     {
         IConfiguration configuration;
         IMemoryCache cache;
+        IMemberOfProduct MemberService;
         ProductRepository ProductRep;
         CategorieRepository CategorieRep;
         OrderDetailRepository OrderDetailRep;
         ProductModel Product;
-        EmployeeModel Employee;
-        CustomerModel Customer;
+        ShopCarModel ShopCar;
 
-        public ProductService(IConfiguration configuration, IMemoryCache memoryCache,
+        public ProductService(IConfiguration configuration, IMemoryCache memoryCache, IMemberOfProduct memberOfProduct,
             ProductRepository productRepository, CategorieRepository categorieRepository, OrderDetailRepository orderDetailRepository,
-            ProductModel productModel, EmployeeModel employeeModel, CustomerModel customerModel)
+            ProductModel productModel, ShopCarModel shopCarModel)
         {
             this.configuration = configuration;
             this.cache = memoryCache;
+            this.MemberService = memberOfProduct;
             this.ProductRep = productRepository;
             this.CategorieRep = categorieRepository;
             this.OrderDetailRep = orderDetailRepository;
             this.Product = productModel;
-            this.Employee = employeeModel;
-            this.Customer = customerModel;
+            this.ShopCar = shopCarModel;
         }
 
         /// <summary>
@@ -118,7 +119,7 @@ namespace BLL.Model
         }
 
         /// <summary>
-        /// 取得購物車產品
+        /// 取得購物車產品資訊
         /// </summary>
         public (Result rtn, ShopCarModel shopCar) GetShopCarProducts(string Id, List<ShopCarProductModel> shopcars)
         {
@@ -133,26 +134,15 @@ namespace BLL.Model
                     TotalAmount += o.Amount; //總價
                 });
 
-                int EmployeeId = 0;
-                int.TryParse(Id, out EmployeeId);
-                if (EmployeeId == 0)
-                {
-                    var resultCus = Customer.CalculateAmounts(TotalAmount);
-                    return (result.rtn, new ShopCarModel() { 
-                                            shopcarProducts = shopcars, 
-                                            TotalAmount = resultCus.totalAmount, 
-                                            Discount = resultCus.discount });
-                }
-                else
-                {
-                    var resultEmp = Employee.CalculateAmounts(TotalAmount);
-                    return (result.rtn, new ShopCarModel() {
-                                            shopcarProducts = shopcars,
-                                            TotalAmount = resultEmp.totalAmount,
-                                            Discount = resultEmp.discount });
-                }
+                var rtnAmount = MemberService.GetCalculateAmounts(Id, TotalAmount);
+
+                ShopCar.shopcarProducts = shopcars;
+                ShopCar.TotalAmount = rtnAmount.TotalAmount;
+                ShopCar.Discount = rtnAmount.Discount;
+
+                return (result.rtn, ShopCar);
             }
-            return (new Result() { IsSuccess = true }, new ShopCarModel());
+            return (result.rtn, new ShopCarModel());
         }
 
         protected virtual IEnumerable<SelectListItem> GetOptions(int mix, int max)

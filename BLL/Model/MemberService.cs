@@ -10,7 +10,7 @@ using static Base.Enums;
 
 namespace BLL.Model
 {
-    public class MemberService : IMemberOfAuth, IMemberOfMenu
+    public class MemberService : IMemberOfAuth, IMemberOfMenu, IMemberOfProduct
     {
         EmployeeRepository EmployeeRep;
         CustomerRepository CustomerRep;
@@ -182,6 +182,27 @@ namespace BLL.Model
         public (Result rtn, List<RoleOfMenuDTO> roles) GetRolesByAccount(string Id)
         {
             return RoleRep.GetRolesByAccount(Id);
+        }
+
+        /// <summary>
+        /// 依帳號計算金額及折扣
+        /// </summary>
+        /// <param name="Id">帳號</param>
+        /// <param name="TotalAmount">總金額</param>
+        public (int TotalAmount, double Discount) GetCalculateAmounts(string Id, int TotalAmount)
+        {
+            int EmployeeId = 0;
+            int.TryParse(Id, out EmployeeId);
+            if (EmployeeId == 0)
+            {
+                var resultCus = Customer.CalculateAmounts(TotalAmount);
+                return (resultCus.totalAmount, resultCus.discount);
+            }
+            else
+            {
+                var resultEmp = Employee.CalculateAmounts(TotalAmount);
+                return (resultEmp.totalAmount,resultEmp.discount);
+            }
         }
     }
 }
