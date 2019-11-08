@@ -1,4 +1,5 @@
 ﻿using Base;
+using BLL.InterFace;
 using DAL.DTOModel;
 using DAL.Repository;
 using Microsoft.Extensions.Caching.Memory;
@@ -11,13 +12,13 @@ namespace BLL.Model
     public class MenuService
     {
         MenuRepository MenuRep;
-        RoleRepository RoleRep;
+        IMemberOfMenu memberService;
         IMemoryCache cache;
 
-        public MenuService(MenuRepository menuRepository, RoleRepository roleRepository, IMemoryCache memoryCache)
+        public MenuService(MenuRepository menuRepository, IMemberOfMenu memberOfMenu,IMemoryCache memoryCache)
         {
             this.MenuRep = menuRepository;
-            this.RoleRep = roleRepository;
+            this.memberService = memberOfMenu;
             this.cache = memoryCache;
         }
 
@@ -39,7 +40,7 @@ namespace BLL.Model
 
             //當無選單或角色，則從後端取得，否則從快取取得
             if (menus == null && roles == null){
-                var roleResult = RoleRep.GetRolesByAccount(Id);
+                var roleResult = memberService.GetRolesByAccount(Id);
                 var menuResult = MenuRep.GetMenusByAccount(Id);
 
                 if (roleResult.rtn.IsSuccess && menuResult.rtn.IsSuccess)

@@ -1,24 +1,29 @@
-﻿using Base;
+﻿using System.Collections.Generic;
+using Base;
 using BLL.InterFace;
 using BLL.PageModel;
 using DAL.DBModel;
+using DAL.DTOModel;
 using DAL.Repository;
 using Omu.ValueInjecter;
 using static Base.Enums;
 
 namespace BLL.Model
 {
-    public class MemberService : IMemberOfAuth
+    public class MemberService : IMemberOfAuth, IMemberOfMenu
     {
         EmployeeRepository EmployeeRep;
         CustomerRepository CustomerRep;
+        RoleRepository RoleRep;
         EmployeeModel Employee;
         CustomerModel Customer;
 
-        public MemberService(EmployeeRepository employeeRepository, CustomerRepository customerRepository, EmployeeModel employee, CustomerModel customer)
+        public MemberService(EmployeeRepository employeeRepository, CustomerRepository customerRepository, RoleRepository roleRepository,
+            EmployeeModel employee, CustomerModel customer)
         {
             this.EmployeeRep = employeeRepository;
             this.CustomerRep = customerRepository;
+            this.RoleRep = roleRepository;
             this.Employee = employee;
             this.Customer = customer;
         }
@@ -168,6 +173,15 @@ namespace BLL.Model
             string CustomerID = myCustomer.customer != null ? myCustomer.customer.CustomerID : string.Empty; //客戶
 
             return (rtn, EmployeeID, CustomerID);
+        }
+
+        /// <summary>
+        /// 依帳號取得角色資訊
+        /// </summary>
+        /// <param name="EmployeeId">帳號</param>
+        public (Result rtn, List<RoleOfMenuDTO> roles) GetRolesByAccount(string Id)
+        {
+            return RoleRep.GetRolesByAccount(Id);
         }
     }
 }

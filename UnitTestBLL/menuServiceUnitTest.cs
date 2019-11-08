@@ -1,4 +1,5 @@
 ﻿using Base;
+using BLL.InterFace;
 using BLL.Model;
 using DAL.DTOModel;
 using DAL.Repository;
@@ -17,7 +18,7 @@ namespace UnitTestBLL
     {
         static MenuService MenuService = null;
         static Mock<MenuRepository> mockMenu = null;
-        static Mock<RoleRepository> mockRole = null;
+        static Mock<IMemberOfMenu> mockMember = null;
         static Mock<IMemoryCache> mockCache = null;
         static string connect = string.Empty;
         static int timeout = 0;
@@ -27,8 +28,8 @@ namespace UnitTestBLL
         {
             mockCache = new Mock<IMemoryCache>();
             mockMenu = new Mock<MenuRepository>(new object[] { connect, timeout });
-            mockRole = new Mock<RoleRepository>(new object[] { connect, timeout });
-            MenuService = new MenuService(mockMenu.Object, mockRole.Object, mockCache.Object);
+            mockMember = new Mock<IMemberOfMenu>();
+            MenuService = new MenuService(mockMenu.Object, mockMember.Object, mockCache.Object);
         }
 
         [TestMethod()]
@@ -38,10 +39,10 @@ namespace UnitTestBLL
             mockCache.Setup(p => p.TryGetValue("GetMenusTest", out menus)).Returns(true);
             object roles = null;
             mockCache.Setup(p => p.TryGetValue("GetRolesTest", out roles)).Returns(true);
-            var mockmenu = new Mock<MenuService>(mockMenu.Object, mockRole.Object, mockCache.Object);
+            var mockmenu = new Mock<MenuService>(mockMenu.Object, mockMember.Object, mockCache.Object);
             mockmenu.Protected().Setup("GetSubMenus", new object[] { new MenuDTO(), new List<MenuDTO>()}).Verifiable();
             MenuService = mockmenu.Object;
-            mockRole.Setup(p => p.GetRolesByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = true }, new List<RoleOfMenuDTO>() {
+            mockMember.Setup(p => p.GetRolesByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = true }, new List<RoleOfMenuDTO>() {
                 new RoleOfMenuDTO() {
                     RoleId = 1,
                     RoleName = "general"
@@ -72,7 +73,7 @@ namespace UnitTestBLL
             object roles = null;
             mockCache.Setup(p => p.TryGetValue("GetRolesTest", out roles)).Returns(true);
 
-            mockRole.Setup(p => p.GetRolesByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = false }, new List<RoleOfMenuDTO>()));
+            mockMember.Setup(p => p.GetRolesByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = false }, new List<RoleOfMenuDTO>()));
             mockMenu.Setup(p => p.GetMenusByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = true }, new List<MenuDTO>()));
 
             var result = MenuService.GetMenusByAccount("Test");
@@ -105,7 +106,7 @@ namespace UnitTestBLL
         public static void ClassCleanup()
         {
             mockMenu = null;
-            mockRole = null;
+            mockMember = null;
             mockCache = null;
             MenuService = null;
         }

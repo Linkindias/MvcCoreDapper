@@ -17,6 +17,7 @@ namespace UnitTestBLL
         static MemberService MemberService = null;
         static Mock<EmployeeRepository> mockEmp = null;
         static Mock<CustomerRepository> mockCus = null;
+        static Mock<RoleRepository> mockRole = null;
         static Mock<CustomerModel> mockCusM = null;
         static Mock<EmployeeModel> mockEmpM = null;
         static string connect = string.Empty;
@@ -27,9 +28,10 @@ namespace UnitTestBLL
         {
             mockEmp = new Mock<EmployeeRepository>(new object[] { connect, timeout });
             mockCus = new Mock<CustomerRepository>(new object[] { connect, timeout });
+            mockRole = new Mock<RoleRepository>(new object[] { connect, timeout });
             mockCusM = new Mock<CustomerModel>();
             mockEmpM = new Mock<EmployeeModel>();
-            MemberService = new MemberService(mockEmp.Object, mockCus.Object, mockEmpM.Object, mockCusM.Object);
+            MemberService = new MemberService(mockEmp.Object, mockCus.Object, mockRole.Object, mockEmpM.Object, mockCusM.Object);
         }
 
         [TestMethod()]
@@ -262,6 +264,16 @@ namespace UnitTestBLL
             Assert.AreEqual(true, result.rtn.IsSuccess);
             Assert.AreEqual(-1, result.EmpId);
             Assert.AreEqual("1", result.CusId);
+        }
+
+        [TestMethod()]
+        public void GetRolesByAccount_當依帳號取得角色資訊正確_則回傳角色訊息()
+        {
+            mockRole.Setup(p => p.GetRolesByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = true }, null));
+
+            var result = MemberService.GetRolesByAccount("A");
+
+            Assert.AreEqual(true, result.rtn.IsSuccess);
         }
 
         [ClassCleanup]
