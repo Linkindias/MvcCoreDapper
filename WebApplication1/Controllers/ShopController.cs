@@ -48,7 +48,11 @@ namespace WebApplication1.Controllers
             
             var result = ProductService.GetShopCarProducts(ViewBag.Id, shopcars);
 
-            if (result.Item1.IsSuccess) return Ok(result.Item2);
+            if (result.Item1.IsSuccess)
+            {
+                ViewBag.ShopCars = result.Item2;
+                return Ok(result.Item2);
+            }
 
             return BadRequest(result.Item1.ErrorMsg);
         }

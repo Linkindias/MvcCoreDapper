@@ -2,6 +2,9 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v2.1": {
+      "Bootstrap.Datepicker/1.8.0.1": {
+        "type": "package"
+      },
       "Dapper/1.60.6": {
         "type": "package",
         "dependencies": {
@@ -14,6 +17,15 @@
         },
         "runtime": {
           "lib/netstandard2.0/Dapper.dll": {}
+        }
+      },
+      "jQuery/1.12.4": {
+        "type": "package"
+      },
+      "jQuery.UI/1.12.1.1": {
+        "type": "package",
+        "dependencies": {
+          "jQuery": "1.12.4"
         }
       },
       "Microsoft.AspNet.WebApi.Client/5.2.6": {
@@ -1167,6 +1179,24 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.Razor.Runtime.dll": {}
         }
       },
+      "Microsoft.AspNetCore.Razor.Tools/1.1.0-preview4-final": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Razor.Design": "1.1.0-preview4-final",
+          "Microsoft.DotNet.Cli.Utils": "1.0.0-preview2-003121",
+          "Microsoft.DotNet.ProjectModel.Loader": "1.0.0-preview2-003121",
+          "Microsoft.Extensions.PlatformAbstractions": "1.0.0",
+          "Microsoft.NETCore.App": "1.1.0",
+          "System.Runtime.InteropServices.RuntimeInformation": "4.3.0",
+          "System.Runtime.Serialization.Primitives": "4.1.1"
+        },
+        "compile": {
+          "lib/netcoreapp1.0/dotnet-razor-tooling.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp1.0/dotnet-razor-tooling.dll": {}
+        }
+      },
       "Microsoft.AspNetCore.ResponseCaching/2.1.1": {
         "type": "package",
         "dependencies": {
@@ -1636,6 +1666,23 @@
           "lib/netcoreapp2.0/_._": {}
         }
       },
+      "Microsoft.DotNet.Cli.Utils/1.0.0-preview2-003121": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.DotNet.ProjectModel": "1.0.0-rc3-003121",
+          "NuGet.Frameworks": "3.5.0-beta2-1484",
+          "NuGet.Packaging": "3.5.0-beta2-1484",
+          "NuGet.ProjectModel": "3.5.0-beta2-1484",
+          "NuGet.Versioning": "3.5.0-beta2-1484",
+          "System.Diagnostics.Process": "4.1.0"
+        },
+        "compile": {
+          "lib/netstandard1.6/Microsoft.DotNet.Cli.Utils.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.6/Microsoft.DotNet.Cli.Utils.dll": {}
+        }
+      },
       "Microsoft.DotNet.PlatformAbstractions/2.1.0": {
         "type": "package",
         "dependencies": {
@@ -1653,6 +1700,42 @@
         },
         "runtime": {
           "lib/netstandard1.3/Microsoft.DotNet.PlatformAbstractions.dll": {}
+        }
+      },
+      "Microsoft.DotNet.ProjectModel/1.0.0-rc3-003121": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.CSharp": "4.0.1",
+          "Microsoft.Extensions.DependencyModel": "1.0.0",
+          "Newtonsoft.Json": "9.0.1",
+          "NuGet.Packaging": "3.5.0-beta2-1484",
+          "NuGet.RuntimeModel": "3.5.0-beta2-1484",
+          "System.Dynamic.Runtime": "4.0.11",
+          "System.Reflection.Metadata": "1.3.0",
+          "System.Runtime.Loader": "4.0.0",
+          "System.Runtime.Serialization.Primitives": "4.1.1",
+          "System.Security.Cryptography.Algorithms": "4.2.0",
+          "System.Threading.Thread": "4.0.0",
+          "System.Xml.XDocument": "4.0.11"
+        },
+        "compile": {
+          "lib/netstandard1.6/Microsoft.DotNet.ProjectModel.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.6/Microsoft.DotNet.ProjectModel.dll": {}
+        }
+      },
+      "Microsoft.DotNet.ProjectModel.Loader/1.0.0-preview2-003121": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.DotNet.ProjectModel": "1.0.0-rc3-003121",
+          "System.Runtime.Loader": "4.0.0"
+        },
+        "compile": {
+          "lib/netstandard1.6/Microsoft.DotNet.ProjectModel.Loader.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.6/Microsoft.DotNet.ProjectModel.Loader.dll": {}
         }
       },
       "Microsoft.EntityFrameworkCore/2.1.1": {
@@ -2274,6 +2357,23 @@
           "lib/netstandard2.0/Microsoft.Extensions.Options.ConfigurationExtensions.dll": {}
         }
       },
+      "Microsoft.Extensions.PlatformAbstractions/1.0.0": {
+        "type": "package",
+        "dependencies": {
+          "System.AppContext": "4.1.0",
+          "System.Reflection": "4.1.0",
+          "System.Reflection.Extensions": "4.0.1",
+          "System.Reflection.TypeExtensions": "4.1.0",
+          "System.Resources.ResourceManager": "4.0.1",
+          "System.Runtime.Extensions": "4.1.0"
+        },
+        "compile": {
+          "lib/netstandard1.3/Microsoft.Extensions.PlatformAbstractions.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.Extensions.PlatformAbstractions.dll": {}
+        }
+      },
       "Microsoft.Extensions.Primitives/2.1.1": {
         "type": "package",
         "dependencies": {
@@ -2623,11 +2723,11 @@
           "lib/netstandard1.0/_._": {}
         }
       },
-      "Microsoft.VisualStudio.Web.CodeGeneration/2.1.9": {
+      "Microsoft.VisualStudio.Web.CodeGeneration/2.1.10": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection": "2.1.1",
-          "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore": "2.1.9"
+          "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore": "2.1.10"
         },
         "compile": {
           "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.dll": {}
@@ -2636,7 +2736,7 @@
           "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.dll": {}
         }
       },
-      "Microsoft.VisualStudio.Web.CodeGeneration.Contracts/2.1.9": {
+      "Microsoft.VisualStudio.Web.CodeGeneration.Contracts/2.1.10": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "11.0.2"
@@ -2648,11 +2748,11 @@
           "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Contracts.dll": {}
         }
       },
-      "Microsoft.VisualStudio.Web.CodeGeneration.Core/2.1.9": {
+      "Microsoft.VisualStudio.Web.CodeGeneration.Core/2.1.10": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection": "2.1.1",
-          "Microsoft.VisualStudio.Web.CodeGeneration.Templating": "2.1.9",
+          "Microsoft.VisualStudio.Web.CodeGeneration.Templating": "2.1.10",
           "Newtonsoft.Json": "11.0.2"
         },
         "compile": {
@@ -2662,10 +2762,10 @@
           "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Core.dll": {}
         }
       },
-      "Microsoft.VisualStudio.Web.CodeGeneration.Design/2.1.9": {
+      "Microsoft.VisualStudio.Web.CodeGeneration.Design/2.1.10": {
         "type": "package",
         "dependencies": {
-          "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": "2.1.9"
+          "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": "2.1.10"
         },
         "compile": {
           "lib/netstandard2.0/dotnet-aspnet-codegenerator-design.dll": {}
@@ -2674,10 +2774,10 @@
           "lib/netstandard2.0/dotnet-aspnet-codegenerator-design.dll": {}
         }
       },
-      "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore/2.1.9": {
+      "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore/2.1.10": {
         "type": "package",
         "dependencies": {
-          "Microsoft.VisualStudio.Web.CodeGeneration.Core": "2.1.9"
+          "Microsoft.VisualStudio.Web.CodeGeneration.Core": "2.1.10"
         },
         "compile": {
           "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore.dll": {}
@@ -2686,12 +2786,12 @@
           "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore.dll": {}
         }
       },
-      "Microsoft.VisualStudio.Web.CodeGeneration.Templating/2.1.9": {
+      "Microsoft.VisualStudio.Web.CodeGeneration.Templating/2.1.10": {
         "type": "package",
         "dependencies": {
           "Microsoft.AspNetCore.Razor.Language": "2.1.1",
           "Microsoft.CodeAnalysis.CSharp": "2.8.0",
-          "Microsoft.VisualStudio.Web.CodeGeneration.Utils": "2.1.9"
+          "Microsoft.VisualStudio.Web.CodeGeneration.Utils": "2.1.10"
         },
         "compile": {
           "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Templating.dll": {}
@@ -2700,11 +2800,11 @@
           "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Templating.dll": {}
         }
       },
-      "Microsoft.VisualStudio.Web.CodeGeneration.Utils/2.1.9": {
+      "Microsoft.VisualStudio.Web.CodeGeneration.Utils/2.1.10": {
         "type": "package",
         "dependencies": {
           "Microsoft.CodeAnalysis.CSharp.Workspaces": "2.8.0",
-          "Microsoft.VisualStudio.Web.CodeGeneration.Contracts": "2.1.9",
+          "Microsoft.VisualStudio.Web.CodeGeneration.Contracts": "2.1.10",
           "Newtonsoft.Json": "11.0.2",
           "NuGet.Frameworks": "4.7.0"
         },
@@ -2715,16 +2815,27 @@
           "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll": {}
         }
       },
-      "Microsoft.VisualStudio.Web.CodeGenerators.Mvc/2.1.9": {
+      "Microsoft.VisualStudio.Web.CodeGenerators.Mvc/2.1.10": {
         "type": "package",
         "dependencies": {
-          "Microsoft.VisualStudio.Web.CodeGeneration": "2.1.9"
+          "Microsoft.VisualStudio.Web.CodeGeneration": "2.1.10"
         },
         "compile": {
           "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll": {}
         },
         "runtime": {
           "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll": {}
+        }
+      },
+      "Microsoft.Win32.Primitives/4.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.0.1",
+          "Microsoft.NETCore.Targets": "1.0.1",
+          "System.Runtime": "4.1.0"
+        },
+        "compile": {
+          "ref/netstandard1.3/_._": {}
         }
       },
       "Microsoft.Win32.Registry/4.5.0": {
@@ -2787,6 +2898,52 @@
           "lib/netstandard1.3/Newtonsoft.Json.Bson.dll": {}
         }
       },
+      "NuGet.Common/3.5.0-beta2-1484": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0",
+          "System.Diagnostics.Process": "4.1.0",
+          "System.Security.Cryptography.Algorithms": "4.2.0",
+          "System.Threading.Thread": "4.0.0"
+        },
+        "compile": {
+          "lib/netstandard1.3/NuGet.Common.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/NuGet.Common.dll": {}
+        }
+      },
+      "NuGet.Configuration/3.5.0-beta2-1484": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0",
+          "NuGet.Common": "3.5.0-beta2-1484",
+          "System.Xml.XDocument": "4.0.11"
+        },
+        "compile": {
+          "lib/netstandard1.3/NuGet.Configuration.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/NuGet.Configuration.dll": {}
+        }
+      },
+      "NuGet.DependencyResolver.Core/3.5.0-beta2-1484": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0",
+          "NuGet.Frameworks": "3.5.0-beta2-1484",
+          "NuGet.LibraryModel": "3.5.0-beta2-1484",
+          "NuGet.Protocol.Core.v3": "3.5.0-beta2-1484",
+          "NuGet.Repositories": "3.5.0-beta2-1484",
+          "NuGet.RuntimeModel": "3.5.0-beta2-1484"
+        },
+        "compile": {
+          "lib/netstandard1.3/NuGet.DependencyResolver.Core.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/NuGet.DependencyResolver.Core.dll": {}
+        }
+      },
       "NuGet.Frameworks/4.7.0": {
         "type": "package",
         "dependencies": {
@@ -2797,6 +2954,155 @@
         },
         "runtime": {
           "lib/netstandard1.6/NuGet.Frameworks.dll": {}
+        }
+      },
+      "NuGet.LibraryModel/3.5.0-beta2-1484": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0",
+          "NuGet.Frameworks": "3.5.0-beta2-1484",
+          "NuGet.Versioning": "3.5.0-beta2-1484"
+        },
+        "compile": {
+          "lib/netstandard1.3/NuGet.LibraryModel.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/NuGet.LibraryModel.dll": {}
+        }
+      },
+      "NuGet.Packaging/3.5.0-beta2-1484": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0",
+          "NuGet.Common": "3.5.0-beta2-1484",
+          "NuGet.Packaging.Core": "3.5.0-beta2-1484",
+          "System.IO.Compression": "4.1.0"
+        },
+        "compile": {
+          "lib/netstandard1.3/NuGet.Packaging.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/NuGet.Packaging.dll": {}
+        }
+      },
+      "NuGet.Packaging.Core/3.5.0-beta2-1484": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0",
+          "NuGet.Common": "3.5.0-beta2-1484",
+          "NuGet.Packaging.Core.Types": "3.5.0-beta2-1484",
+          "System.Xml.XDocument": "4.0.11"
+        },
+        "compile": {
+          "lib/netstandard1.3/NuGet.Packaging.Core.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/NuGet.Packaging.Core.dll": {}
+        }
+      },
+      "NuGet.Packaging.Core.Types/3.5.0-beta2-1484": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0",
+          "NuGet.Frameworks": "3.5.0-beta2-1484",
+          "NuGet.Versioning": "3.5.0-beta2-1484"
+        },
+        "compile": {
+          "lib/netstandard1.3/NuGet.Packaging.Core.Types.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/NuGet.Packaging.Core.Types.dll": {}
+        }
+      },
+      "NuGet.ProjectModel/3.5.0-beta2-1484": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0",
+          "Newtonsoft.Json": "6.0.4",
+          "NuGet.DependencyResolver.Core": "3.5.0-beta2-1484",
+          "System.Dynamic.Runtime": "4.0.11",
+          "System.Threading.Thread": "4.0.0"
+        },
+        "compile": {
+          "lib/netstandard1.3/NuGet.ProjectModel.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/NuGet.ProjectModel.dll": {}
+        }
+      },
+      "NuGet.Protocol.Core.Types/3.5.0-beta2-1484": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0",
+          "NuGet.Common": "3.5.0-beta2-1484",
+          "NuGet.Configuration": "3.5.0-beta2-1484",
+          "NuGet.Packaging": "3.5.0-beta2-1484",
+          "System.Net.Http": "4.1.0"
+        },
+        "compile": {
+          "lib/netstandard1.3/NuGet.Protocol.Core.Types.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/NuGet.Protocol.Core.Types.dll": {}
+        }
+      },
+      "NuGet.Protocol.Core.v3/3.5.0-beta2-1484": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0",
+          "Newtonsoft.Json": "6.0.4",
+          "NuGet.Common": "3.5.0-beta2-1484",
+          "NuGet.Packaging": "3.5.0-beta2-1484",
+          "NuGet.Protocol.Core.Types": "3.5.0-beta2-1484",
+          "System.Dynamic.Runtime": "4.0.11"
+        },
+        "compile": {
+          "lib/netstandard1.3/NuGet.Protocol.Core.v3.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/NuGet.Protocol.Core.v3.dll": {}
+        }
+      },
+      "NuGet.Repositories/3.5.0-beta2-1484": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0",
+          "NuGet.Packaging": "3.5.0-beta2-1484"
+        },
+        "compile": {
+          "lib/netstandard1.3/NuGet.Repositories.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/NuGet.Repositories.dll": {}
+        }
+      },
+      "NuGet.RuntimeModel/3.5.0-beta2-1484": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0",
+          "Newtonsoft.Json": "6.0.4",
+          "NuGet.Frameworks": "3.5.0-beta2-1484",
+          "NuGet.Versioning": "3.5.0-beta2-1484",
+          "System.Dynamic.Runtime": "4.0.11",
+          "System.ObjectModel": "4.0.12"
+        },
+        "compile": {
+          "lib/netstandard1.3/NuGet.RuntimeModel.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/NuGet.RuntimeModel.dll": {}
+        }
+      },
+      "NuGet.Versioning/3.5.0-beta2-1484": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0"
+        },
+        "compile": {
+          "lib/netstandard1.0/NuGet.Versioning.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.0/NuGet.Versioning.dll": {}
         }
       },
       "Remotion.Linq/2.2.0": {
@@ -3352,6 +3658,49 @@
             "rid": "unix"
           },
           "runtimes/win/lib/netstandard1.3/System.Diagnostics.FileVersionInfo.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
+      "System.Diagnostics.Process/4.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.0.1",
+          "Microsoft.Win32.Primitives": "4.0.1",
+          "Microsoft.Win32.Registry": "4.0.0",
+          "System.Collections": "4.0.11",
+          "System.Diagnostics.Debug": "4.0.11",
+          "System.Globalization": "4.0.11",
+          "System.IO": "4.1.0",
+          "System.IO.FileSystem": "4.0.1",
+          "System.IO.FileSystem.Primitives": "4.0.1",
+          "System.Resources.ResourceManager": "4.0.1",
+          "System.Runtime": "4.1.0",
+          "System.Runtime.Extensions": "4.1.0",
+          "System.Runtime.Handles": "4.0.1",
+          "System.Runtime.InteropServices": "4.1.0",
+          "System.Text.Encoding": "4.0.11",
+          "System.Text.Encoding.Extensions": "4.0.11",
+          "System.Threading": "4.0.11",
+          "System.Threading.Tasks": "4.0.11",
+          "System.Threading.Thread": "4.0.0",
+          "System.Threading.ThreadPool": "4.0.10",
+          "runtime.native.System": "4.0.0"
+        },
+        "compile": {
+          "ref/netstandard1.4/System.Diagnostics.Process.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/linux/lib/netstandard1.4/System.Diagnostics.Process.dll": {
+            "assetType": "runtime",
+            "rid": "linux"
+          },
+          "runtimes/osx/lib/netstandard1.4/System.Diagnostics.Process.dll": {
+            "assetType": "runtime",
+            "rid": "osx"
+          },
+          "runtimes/win/lib/netstandard1.4/System.Diagnostics.Process.dll": {
             "assetType": "runtime",
             "rid": "win"
           }
@@ -4012,6 +4361,20 @@
           }
         }
       },
+      "System.Runtime.Loader/4.0.0": {
+        "type": "package",
+        "dependencies": {
+          "System.IO": "4.1.0",
+          "System.Reflection": "4.1.0",
+          "System.Runtime": "4.1.0"
+        },
+        "compile": {
+          "ref/netstandard1.5/System.Runtime.Loader.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.5/System.Runtime.Loader.dll": {}
+        }
+      },
       "System.Runtime.Numerics/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -4519,10 +4882,23 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/System.Threading.Thread.dll": {}
         },
         "runtime": {
           "lib/netstandard1.3/System.Threading.Thread.dll": {}
+        }
+      },
+      "System.Threading.ThreadPool/4.0.10": {
+        "type": "package",
+        "dependencies": {
+          "System.Runtime": "4.1.0",
+          "System.Runtime.Handles": "4.0.1"
+        },
+        "compile": {
+          "ref/netstandard1.3/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/System.Threading.ThreadPool.dll": {}
         }
       },
       "System.ValueTuple/4.3.0": {
@@ -4677,6 +5053,15 @@
           "lib/netstandard1.3/System.Xml.XPath.XDocument.dll": {}
         }
       },
+      "ValueInjecter/3.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Omu.ValueInjecter.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Omu.ValueInjecter.dll": {}
+        }
+      },
       "Base/1.0.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
@@ -4693,7 +5078,11 @@
         "dependencies": {
           "Base": "1.0.0",
           "DAL": "1.0.0",
-          "System.Runtime.Caching": "4.5.0"
+          "Microsoft.AspNetCore.Mvc.ViewFeatures": "2.1.1",
+          "Microsoft.Extensions.Caching.Abstractions": "2.1.1",
+          "Microsoft.Extensions.Configuration": "2.1.1",
+          "System.Runtime.Caching": "4.5.0",
+          "ValueInjecter": "3.2.0"
         },
         "compile": {
           "bin/placeholder/BLL.dll": {}
@@ -4707,7 +5096,8 @@
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
           "Base": "1.0.0",
-          "Dapper": "1.60.6"
+          "Dapper": "1.60.6",
+          "Microsoft.AspNetCore.Mvc.ViewFeatures": "2.1.1"
         },
         "compile": {
           "bin/placeholder/DAL.dll": {}
@@ -4719,6 +5109,113 @@
     }
   },
   "libraries": {
+    "Bootstrap.Datepicker/1.8.0.1": {
+      "sha512": "/pKY2/KjIGQHmK2reK2iowG0Weu6w42VRjBT8vS5AMcsdKMMxQ4NBrvOxWHUpzf0idY+YaKGnjXyWb+Ba+/M3g==",
+      "type": "package",
+      "path": "bootstrap.datepicker/1.8.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "bootstrap.datepicker.1.8.0.1.nupkg.sha512",
+        "bootstrap.datepicker.nuspec",
+        "content/Content/bootstrap-datepicker.css",
+        "content/Content/bootstrap-datepicker.css.map",
+        "content/Content/bootstrap-datepicker.min.css",
+        "content/Content/bootstrap-datepicker.standalone.css",
+        "content/Content/bootstrap-datepicker.standalone.css.map",
+        "content/Content/bootstrap-datepicker.standalone.min.css",
+        "content/Content/bootstrap-datepicker3.css",
+        "content/Content/bootstrap-datepicker3.css.map",
+        "content/Content/bootstrap-datepicker3.min.css",
+        "content/Content/bootstrap-datepicker3.standalone.css",
+        "content/Content/bootstrap-datepicker3.standalone.css.map",
+        "content/Content/bootstrap-datepicker3.standalone.min.css",
+        "content/Scripts/bootstrap-datepicker.js",
+        "content/Scripts/bootstrap-datepicker.min.js",
+        "content/Scripts/locales/bootstrap-datepicker-en-CA.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.ar-tn.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.ar.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.az.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.bg.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.bn.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.br.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.bs.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.ca.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.cs.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.cy.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.da.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.de.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.el.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.en-AU.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.en-CA.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.en-GB.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.en-IE.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.en-NZ.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.en-ZA.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.eo.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.es.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.et.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.eu.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.fa.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.fi.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.fo.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.fr-CH.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.fr.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.gl.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.he.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.hi.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.hr.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.hu.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.hy.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.id.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.is.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.it-CH.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.it.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.ja.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.ka.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.kh.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.kk.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.km.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.ko.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.kr.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.lt.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.lv.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.me.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.mk.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.mn.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.ms.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.nl-BE.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.nl.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.no.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.oc.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.pl.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.pt-BR.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.pt.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.ro.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.rs-latin.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.rs.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.ru.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.si.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.sk.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.sl.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.sq.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.sr-latin.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.sr.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.sv.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.sw.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.ta.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.tg.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.th.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.tk.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.tr.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.uk.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.uz-cyrl.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.uz-latn.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.vi.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.zh-CN.min.js",
+        "content/Scripts/locales/bootstrap-datepicker.zh-TW.min.js"
+      ]
+    },
     "Dapper/1.60.6": {
       "sha512": "mmnJNhKMeF2KhvVXDoVQlFxre8aJAo71YBJrKqFlvuqzYC2QiXUq94/GCDBJzU7paq4GqpkV2glw3308TcGibw==",
       "type": "package",
@@ -4734,6 +5231,47 @@
         "lib/netstandard1.3/Dapper.xml",
         "lib/netstandard2.0/Dapper.dll",
         "lib/netstandard2.0/Dapper.xml"
+      ]
+    },
+    "jQuery/1.12.4": {
+      "sha512": "pIYtWlFI5PGlJVB8jm9H96pAQ27jQhA9sCxMeGweeC3ByQRaB8BwkIuGdTt4go3IEKTmmfRC2y5k0FLFizWDQg==",
+      "type": "package",
+      "path": "jquery/1.12.4",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Content/Scripts/jquery-1.12.4-vsdoc.js",
+        "Content/Scripts/jquery-1.12.4.js",
+        "Content/Scripts/jquery-1.12.4.min.js",
+        "Content/Scripts/jquery-1.12.4.min.map",
+        "Tools/common.ps1",
+        "Tools/install.ps1",
+        "Tools/jquery-1.12.4.intellisense.js",
+        "Tools/uninstall.ps1",
+        "jquery.1.12.4.nupkg.sha512",
+        "jquery.nuspec"
+      ]
+    },
+    "jQuery.UI/1.12.1.1": {
+      "sha512": "E+n7ILz0Pl7gGiPUXcMvdMtr8eIa8FPByfaoParBTLYFNtaNj9QA6gpD3IdWe9tARMNkpHCVmZ0Xo//kXh38Vg==",
+      "type": "package",
+      "path": "jquery.ui/1.12.1.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Content/Content/images/ui-icons_444444_256x240.png",
+        "Content/Content/images/ui-icons_555555_256x240.png",
+        "Content/Content/images/ui-icons_777620_256x240.png",
+        "Content/Content/images/ui-icons_777777_256x240.png",
+        "Content/Content/images/ui-icons_cc0000_256x240.png",
+        "Content/Content/images/ui-icons_ffffff_256x240.png",
+        "Content/Content/jquery-ui.css",
+        "Content/Content/jquery-ui.structure.css",
+        "Content/Content/jquery-ui.theme.css",
+        "Content/Scripts/jquery-ui.js",
+        "jquery.ui.1.12.1.1.nupkg.sha512",
+        "jquery.ui.nuspec"
       ]
     },
     "Microsoft.AspNet.WebApi.Client/5.2.6": {
@@ -5691,6 +6229,21 @@
         "microsoft.aspnetcore.razor.runtime.nuspec"
       ]
     },
+    "Microsoft.AspNetCore.Razor.Tools/1.1.0-preview4-final": {
+      "sha512": "elen0GMaXIUZjL7X61V6tvCm64vYw6NL+XDBIUguFXpx3PK4GXvYALLDK8zzjgUVSS0ChYBX3o4Xw20iQwXiJQ==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.razor.tools/1.1.0-preview4-final",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net451/dotnet-razor-tooling.exe",
+        "lib/net451/dotnet-razor-tooling.xml",
+        "lib/netcoreapp1.0/dotnet-razor-tooling.dll",
+        "lib/netcoreapp1.0/dotnet-razor-tooling.runtimeconfig.json",
+        "lib/netcoreapp1.0/dotnet-razor-tooling.xml",
+        "microsoft.aspnetcore.razor.tools.1.1.0-preview4-final.nupkg.sha512",
+        "microsoft.aspnetcore.razor.tools.nuspec"
+      ]
+    },
     "Microsoft.AspNetCore.ResponseCaching/2.1.1": {
       "sha512": "cWottukasno+Z711nAMe7Pp0961/PhxquLhzWv5Jlbt/EE6RjYTnggBg3weE7N0oWXPe8SkgQURqUKuqZcrrQQ==",
       "type": "package",
@@ -6163,6 +6716,18 @@
         "version.txt"
       ]
     },
+    "Microsoft.DotNet.Cli.Utils/1.0.0-preview2-003121": {
+      "sha512": "FLXqhQjkjj83Sh0TRlLEyMIMtAhDRJuPRWnDONtnCv5bozk1jPzflLEXYbk2xsnsOMpnYrUvKQbwUKUWyaXuFQ==",
+      "type": "package",
+      "path": "microsoft.dotnet.cli.utils/1.0.0-preview2-003121",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net451/Microsoft.DotNet.Cli.Utils.dll",
+        "lib/netstandard1.6/Microsoft.DotNet.Cli.Utils.dll",
+        "microsoft.dotnet.cli.utils.1.0.0-preview2-003121.nupkg.sha512",
+        "microsoft.dotnet.cli.utils.nuspec"
+      ]
+    },
     "Microsoft.DotNet.PlatformAbstractions/2.1.0": {
       "sha512": "9KPDwvb/hLEVXYruVHVZ8BkebC8j17DmPb56LnqRF74HqSPLjCkrlFUjOtFpQPA2DeADBRTI/e69aCfRBfrhxw==",
       "type": "package",
@@ -6176,6 +6741,29 @@
         "lib/netstandard1.3/Microsoft.DotNet.PlatformAbstractions.dll",
         "microsoft.dotnet.platformabstractions.2.1.0.nupkg.sha512",
         "microsoft.dotnet.platformabstractions.nuspec"
+      ]
+    },
+    "Microsoft.DotNet.ProjectModel/1.0.0-rc3-003121": {
+      "sha512": "wnWw5KsKinG2wWxdoQIJXZlMFvPNhL7WmIyW9q6xrZFUi/uld5PC3ksq2QDZepF148FUjCIyTP+TnRwU3RJqUg==",
+      "type": "package",
+      "path": "microsoft.dotnet.projectmodel/1.0.0-rc3-003121",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net451/Microsoft.DotNet.ProjectModel.dll",
+        "lib/netstandard1.6/Microsoft.DotNet.ProjectModel.dll",
+        "microsoft.dotnet.projectmodel.1.0.0-rc3-003121.nupkg.sha512",
+        "microsoft.dotnet.projectmodel.nuspec"
+      ]
+    },
+    "Microsoft.DotNet.ProjectModel.Loader/1.0.0-preview2-003121": {
+      "sha512": "dpGbzFkk6se2DLkKjyycSBNlFFzjZWc3gxrviVq6UyOJDDUBKuiOk0si41dkRtfIGHB7dcPBlZHXUiEC7tPhKQ==",
+      "type": "package",
+      "path": "microsoft.dotnet.projectmodel.loader/1.0.0-preview2-003121",
+      "files": [
+        ".nupkg.metadata",
+        "lib/netstandard1.6/Microsoft.DotNet.ProjectModel.Loader.dll",
+        "microsoft.dotnet.projectmodel.loader.1.0.0-preview2-003121.nupkg.sha512",
+        "microsoft.dotnet.projectmodel.loader.nuspec"
       ]
     },
     "Microsoft.EntityFrameworkCore/2.1.1": {
@@ -6835,6 +7423,20 @@
         "microsoft.extensions.options.configurationextensions.nuspec"
       ]
     },
+    "Microsoft.Extensions.PlatformAbstractions/1.0.0": {
+      "sha512": "zyjUzrOmuevOAJpIo3Mt5GmpALVYCVdLZ99keMbmCxxgQH7oxzU58kGHzE6hAgYEiWsdfMJLjVR7r+vSmaJmtg==",
+      "type": "package",
+      "path": "microsoft.extensions.platformabstractions/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net451/Microsoft.Extensions.PlatformAbstractions.dll",
+        "lib/net451/Microsoft.Extensions.PlatformAbstractions.xml",
+        "lib/netstandard1.3/Microsoft.Extensions.PlatformAbstractions.dll",
+        "lib/netstandard1.3/Microsoft.Extensions.PlatformAbstractions.xml",
+        "microsoft.extensions.platformabstractions.1.0.0.nupkg.sha512",
+        "microsoft.extensions.platformabstractions.nuspec"
+      ]
+    },
     "Microsoft.Extensions.Primitives/2.1.1": {
       "sha512": "scJ1GZNIxMmjpENh0UZ8XCQ6vzr/LzeF9WvEA51Ix2OQGAs9WPgPu8ABVUdvpKPLuor/t05gm6menJK3PwqOXg==",
       "type": "package",
@@ -7335,49 +7937,49 @@
         "version.txt"
       ]
     },
-    "Microsoft.VisualStudio.Web.CodeGeneration/2.1.9": {
-      "sha512": "fnArZMBAlGUxuVIffEYoi+IsUR+rTQ/Mz+pIHyOnf5AHBJ5Jp1LvWQmyoWcs5k+Q0xXOhTNiJTvvwdw84H5rZA==",
+    "Microsoft.VisualStudio.Web.CodeGeneration/2.1.10": {
+      "sha512": "HCIqKUjVJiq5PN2vngvVz8e4/GLl1gqUwdUXPObF4xAQUTdlutfA8OTcjaIEF1YzAR95tbzCAwD15L3d6LLhrQ==",
       "type": "package",
-      "path": "microsoft.visualstudio.web.codegeneration/2.1.9",
+      "path": "microsoft.visualstudio.web.codegeneration/2.1.10",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.dll",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.xml",
-        "microsoft.visualstudio.web.codegeneration.2.1.9.nupkg.sha512",
+        "microsoft.visualstudio.web.codegeneration.2.1.10.nupkg.sha512",
         "microsoft.visualstudio.web.codegeneration.nuspec"
       ]
     },
-    "Microsoft.VisualStudio.Web.CodeGeneration.Contracts/2.1.9": {
-      "sha512": "rLQcbV5lbWi1pSTnPk5FAKW9AVi7VP3WVXj5vrzI8M1PlnAXn2LipA3biumlDcDOwCHrLth61I5JnRiqgFi+nA==",
+    "Microsoft.VisualStudio.Web.CodeGeneration.Contracts/2.1.10": {
+      "sha512": "oEiesUAQqG1XaigyqRmwVk0oSEFxnZdz6M4+xqj+Ju/dGghktqJVYJOdlCpdsZTZP4s/tntt+mFbomuKBi5SRA==",
       "type": "package",
-      "path": "microsoft.visualstudio.web.codegeneration.contracts/2.1.9",
+      "path": "microsoft.visualstudio.web.codegeneration.contracts/2.1.10",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Contracts.dll",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Contracts.xml",
-        "microsoft.visualstudio.web.codegeneration.contracts.2.1.9.nupkg.sha512",
+        "microsoft.visualstudio.web.codegeneration.contracts.2.1.10.nupkg.sha512",
         "microsoft.visualstudio.web.codegeneration.contracts.nuspec"
       ]
     },
-    "Microsoft.VisualStudio.Web.CodeGeneration.Core/2.1.9": {
-      "sha512": "zL3c+GzGhyN9ycpL/uBEcYe+mvNGyVFIOXwdzROVgOLt6j6ceFvSL38Vdq/ISUz6OFdkBPdIo71Qct8M9Z1QNg==",
+    "Microsoft.VisualStudio.Web.CodeGeneration.Core/2.1.10": {
+      "sha512": "JN5NlZlqMryeA8kXDgWsyrS3O3bGVDLfLgsUIT2baLFMIQOrLOPx3HCKSvH5hOS+J4KtHu9PXm8X91QILKMIxQ==",
       "type": "package",
-      "path": "microsoft.visualstudio.web.codegeneration.core/2.1.9",
+      "path": "microsoft.visualstudio.web.codegeneration.core/2.1.10",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Core.dll",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Core.xml",
-        "microsoft.visualstudio.web.codegeneration.core.2.1.9.nupkg.sha512",
+        "microsoft.visualstudio.web.codegeneration.core.2.1.10.nupkg.sha512",
         "microsoft.visualstudio.web.codegeneration.core.nuspec"
       ]
     },
-    "Microsoft.VisualStudio.Web.CodeGeneration.Design/2.1.9": {
-      "sha512": "hoMP2Sr2AZF00niWLXXjHM8275c7e11f0P7PlRS3j/ETG6wizByADxRF2Q2Yb/PUhg/hXRwfj4u3vS/sxcqJJw==",
+    "Microsoft.VisualStudio.Web.CodeGeneration.Design/2.1.10": {
+      "sha512": "IqUmvUZ9QCBkwJZxUrpRB1t/luIOnF1cVCkQ2fHP6v/pz1/2BP0A2DGrCpGQZJNgMSTFqvvcSUpI5ehIDvFWlA==",
       "type": "package",
-      "path": "microsoft.visualstudio.web.codegeneration.design/2.1.9",
+      "path": "microsoft.visualstudio.web.codegeneration.design/2.1.10",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -7385,7 +7987,7 @@
         "lib/net461/dotnet-aspnet-codegenerator-design.xml",
         "lib/netstandard2.0/dotnet-aspnet-codegenerator-design.dll",
         "lib/netstandard2.0/dotnet-aspnet-codegenerator-design.xml",
-        "microsoft.visualstudio.web.codegeneration.design.2.1.9.nupkg.sha512",
+        "microsoft.visualstudio.web.codegeneration.design.2.1.10.nupkg.sha512",
         "microsoft.visualstudio.web.codegeneration.design.nuspec",
         "runtimes/win-arm/lib/net461/dotnet-aspnet-codegenerator-design.exe",
         "runtimes/win-arm/lib/net461/dotnet-aspnet-codegenerator-design.xml",
@@ -7397,50 +7999,50 @@
         "runtimes/win7-x86/lib/net461/dotnet-aspnet-codegenerator-design.xml"
       ]
     },
-    "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore/2.1.9": {
-      "sha512": "P9qpgTmOHb7odcAo/EqbaofUlaM8JcYu9d5wewX5ZbJMn5GcbnjDQhg5LF7DoKkcpLBCUiXG04F7lqBcsZqtUA==",
+    "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore/2.1.10": {
+      "sha512": "B+vOry1z9hCnj1K3ZHWil1iKXpJfAQ57kwctvXTCLh5z92NMK4IwAS2hud4I/Viksz1M1YMPgDSCUf6q+Ywawg==",
       "type": "package",
-      "path": "microsoft.visualstudio.web.codegeneration.entityframeworkcore/2.1.9",
+      "path": "microsoft.visualstudio.web.codegeneration.entityframeworkcore/2.1.10",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Templates/DbContext/NewLocalDbContext.cshtml",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore.dll",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore.xml",
-        "microsoft.visualstudio.web.codegeneration.entityframeworkcore.2.1.9.nupkg.sha512",
+        "microsoft.visualstudio.web.codegeneration.entityframeworkcore.2.1.10.nupkg.sha512",
         "microsoft.visualstudio.web.codegeneration.entityframeworkcore.nuspec"
       ]
     },
-    "Microsoft.VisualStudio.Web.CodeGeneration.Templating/2.1.9": {
-      "sha512": "Vuw0yVKRfj/3/jcFdvJEULf+fu2VoeA/loEyX5wfj2EzFc+lpEQ+6vIvvKCc6gtjh/O3MsZZxtFGFcWcDrNK/g==",
+    "Microsoft.VisualStudio.Web.CodeGeneration.Templating/2.1.10": {
+      "sha512": "9DarhKUfbHUiFjim9y4FySfvdHZKaQB7WcR5AOwEYMRiIur6NxNKqH+n/Ljje/9WlWpdTVPTDePj5TZWHlzvcQ==",
       "type": "package",
-      "path": "microsoft.visualstudio.web.codegeneration.templating/2.1.9",
+      "path": "microsoft.visualstudio.web.codegeneration.templating/2.1.10",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Templating.dll",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Templating.xml",
-        "microsoft.visualstudio.web.codegeneration.templating.2.1.9.nupkg.sha512",
+        "microsoft.visualstudio.web.codegeneration.templating.2.1.10.nupkg.sha512",
         "microsoft.visualstudio.web.codegeneration.templating.nuspec"
       ]
     },
-    "Microsoft.VisualStudio.Web.CodeGeneration.Utils/2.1.9": {
-      "sha512": "HGtpCMW7GEPygFaNjzE/zPt5zP9e7u8galmYQoR3taGL+2JRFDx9P5xd2jsRxlQUdNB0GVf/0OHxjeLJJYWJBw==",
+    "Microsoft.VisualStudio.Web.CodeGeneration.Utils/2.1.10": {
+      "sha512": "HvhLvuEaFfDUT5lmpNZJufPBmxK/i3himNz14JqEwakCScPfeJFQfuIigjQ0AAte7ssRHQl6PT72++aFpc2XmA==",
       "type": "package",
-      "path": "microsoft.visualstudio.web.codegeneration.utils/2.1.9",
+      "path": "microsoft.visualstudio.web.codegeneration.utils/2.1.10",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Utils.xml",
-        "microsoft.visualstudio.web.codegeneration.utils.2.1.9.nupkg.sha512",
+        "microsoft.visualstudio.web.codegeneration.utils.2.1.10.nupkg.sha512",
         "microsoft.visualstudio.web.codegeneration.utils.nuspec"
       ]
     },
-    "Microsoft.VisualStudio.Web.CodeGenerators.Mvc/2.1.9": {
-      "sha512": "bmqEQaGpXME9ErK6N+Ew3g7hia2t5tJeARZYrD6T21TT/2+OIwDrVuI3cu9RpeoLWXJa76eqcyC7tC+SYGfIZA==",
+    "Microsoft.VisualStudio.Web.CodeGenerators.Mvc/2.1.10": {
+      "sha512": "PKKvTxC/isyZjRtFSSfbzFlFNvLUL1JjEGex3YJQXhwGhGplIAQkDvm1PQDl9AgvrLtKv0OnUG80uq5p2I+4CA==",
       "type": "package",
-      "path": "microsoft.visualstudio.web.codegenerators.mvc/2.1.9",
+      "path": "microsoft.visualstudio.web.codegenerators.mvc/2.1.10",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -7594,8 +8196,45 @@
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll",
         "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGenerators.Mvc.xml",
         "lib/netstandard2.0/identitygeneratorfilesconfig.json",
-        "microsoft.visualstudio.web.codegenerators.mvc.2.1.9.nupkg.sha512",
+        "microsoft.visualstudio.web.codegenerators.mvc.2.1.10.nupkg.sha512",
         "microsoft.visualstudio.web.codegenerators.mvc.nuspec"
+      ]
+    },
+    "Microsoft.Win32.Primitives/4.0.1": {
+      "sha512": "fQnBHO9DgcmkC9dYSJoBqo6sH1VJwJprUHh8F3hbcRlxiQiBUuTntdk8tUwV490OqC2kQUrinGwZyQHTieuXRA==",
+      "type": "package",
+      "path": "microsoft.win32.primitives/4.0.1",
+      "files": [
+        ".nupkg.metadata",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net46/Microsoft.Win32.Primitives.dll",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "microsoft.win32.primitives.4.0.1.nupkg.sha512",
+        "microsoft.win32.primitives.nuspec",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net46/Microsoft.Win32.Primitives.dll",
+        "ref/netstandard1.3/Microsoft.Win32.Primitives.dll",
+        "ref/netstandard1.3/Microsoft.Win32.Primitives.xml",
+        "ref/netstandard1.3/de/Microsoft.Win32.Primitives.xml",
+        "ref/netstandard1.3/es/Microsoft.Win32.Primitives.xml",
+        "ref/netstandard1.3/fr/Microsoft.Win32.Primitives.xml",
+        "ref/netstandard1.3/it/Microsoft.Win32.Primitives.xml",
+        "ref/netstandard1.3/ja/Microsoft.Win32.Primitives.xml",
+        "ref/netstandard1.3/ko/Microsoft.Win32.Primitives.xml",
+        "ref/netstandard1.3/ru/Microsoft.Win32.Primitives.xml",
+        "ref/netstandard1.3/zh-hans/Microsoft.Win32.Primitives.xml",
+        "ref/netstandard1.3/zh-hant/Microsoft.Win32.Primitives.xml",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._"
       ]
     },
     "Microsoft.Win32.Registry/4.5.0": {
@@ -7810,6 +8449,48 @@
         "newtonsoft.json.bson.nuspec"
       ]
     },
+    "NuGet.Common/3.5.0-beta2-1484": {
+      "sha512": "rLBmcZOPVF7Mne/LumDNACZZyI5B67hjylt+Z/WSEUQ/IXE9nLv8IVL0+T9xljIaSSQCjO8cOtmJ6ztqrsQKcQ==",
+      "type": "package",
+      "path": "nuget.common/3.5.0-beta2-1484",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net45/NuGet.Common.dll",
+        "lib/net45/NuGet.Common.xml",
+        "lib/netstandard1.3/NuGet.Common.dll",
+        "lib/netstandard1.3/NuGet.Common.xml",
+        "nuget.common.3.5.0-beta2-1484.nupkg.sha512",
+        "nuget.common.nuspec"
+      ]
+    },
+    "NuGet.Configuration/3.5.0-beta2-1484": {
+      "sha512": "ee2jhTjPMztWmUIuaM1pdVRytXO7n8V/ZlENzJ/uTsZcnAbPZZLasAUoKJf7kKacBNTfSHd1MmWII/YweHWPGQ==",
+      "type": "package",
+      "path": "nuget.configuration/3.5.0-beta2-1484",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net45/NuGet.Configuration.dll",
+        "lib/net45/NuGet.Configuration.xml",
+        "lib/netstandard1.3/NuGet.Configuration.dll",
+        "lib/netstandard1.3/NuGet.Configuration.xml",
+        "nuget.configuration.3.5.0-beta2-1484.nupkg.sha512",
+        "nuget.configuration.nuspec"
+      ]
+    },
+    "NuGet.DependencyResolver.Core/3.5.0-beta2-1484": {
+      "sha512": "C33r3vl2eMbo3YFi7mKMnyFBSVzXxaQA045913UpQQi6oIFkNn8m9Ozztbfv7wQXQGlG+ftopObFE/Ig5I2e8Q==",
+      "type": "package",
+      "path": "nuget.dependencyresolver.core/3.5.0-beta2-1484",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net45/NuGet.DependencyResolver.Core.dll",
+        "lib/net45/NuGet.DependencyResolver.Core.xml",
+        "lib/netstandard1.3/NuGet.DependencyResolver.Core.dll",
+        "lib/netstandard1.3/NuGet.DependencyResolver.Core.xml",
+        "nuget.dependencyresolver.core.3.5.0-beta2-1484.nupkg.sha512",
+        "nuget.dependencyresolver.core.nuspec"
+      ]
+    },
     "NuGet.Frameworks/4.7.0": {
       "sha512": "qbXaB76XYUVLocLBs8Z9TS/ERGK2wm797feO+0JEPFvT7o7MRadOR77mqaSD4J1k8G+DlZQyq+MlkCuxrkr3ag==",
       "type": "package",
@@ -7825,6 +8506,146 @@
         "lib/netstandard1.6/NuGet.Frameworks.xml",
         "nuget.frameworks.4.7.0.nupkg.sha512",
         "nuget.frameworks.nuspec"
+      ]
+    },
+    "NuGet.LibraryModel/3.5.0-beta2-1484": {
+      "sha512": "DliyPvB2O5sLAjhlBceACSm6fzzPDoWRdzbs/7Z89TWqp2JRQ98I5ds5HzeMJjfqO6t1BYoCVDV0h1ymoTuyVQ==",
+      "type": "package",
+      "path": "nuget.librarymodel/3.5.0-beta2-1484",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net45/NuGet.LibraryModel.dll",
+        "lib/net45/NuGet.LibraryModel.xml",
+        "lib/netstandard1.3/NuGet.LibraryModel.dll",
+        "lib/netstandard1.3/NuGet.LibraryModel.xml",
+        "nuget.librarymodel.3.5.0-beta2-1484.nupkg.sha512",
+        "nuget.librarymodel.nuspec"
+      ]
+    },
+    "NuGet.Packaging/3.5.0-beta2-1484": {
+      "sha512": "/+7d3vvCel4KhJo6AyOneg07fbAkUsy/ORgIaxW3nNdJubCXSrAdg1wfQpwzBygmErjrPcdYzzk2y2Sc6m7hwQ==",
+      "type": "package",
+      "path": "nuget.packaging/3.5.0-beta2-1484",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net45/NuGet.Packaging.dll",
+        "lib/net45/NuGet.Packaging.xml",
+        "lib/netstandard1.3/NuGet.Packaging.dll",
+        "lib/netstandard1.3/NuGet.Packaging.xml",
+        "nuget.packaging.3.5.0-beta2-1484.nupkg.sha512",
+        "nuget.packaging.nuspec"
+      ]
+    },
+    "NuGet.Packaging.Core/3.5.0-beta2-1484": {
+      "sha512": "Lsz2lgYH0mdOvuL8C3G4XLm9EaAheBOqrgLgnBNxCeLGLU+n+Zu8Lt6K1bpzgkeKyTyAhJdWbv/3lS4w7s04gw==",
+      "type": "package",
+      "path": "nuget.packaging.core/3.5.0-beta2-1484",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net45/NuGet.Packaging.Core.dll",
+        "lib/net45/NuGet.Packaging.Core.xml",
+        "lib/netstandard1.3/NuGet.Packaging.Core.dll",
+        "lib/netstandard1.3/NuGet.Packaging.Core.xml",
+        "nuget.packaging.core.3.5.0-beta2-1484.nupkg.sha512",
+        "nuget.packaging.core.nuspec"
+      ]
+    },
+    "NuGet.Packaging.Core.Types/3.5.0-beta2-1484": {
+      "sha512": "4mEXZBoe/RKTDVQGwdrl/f5gqolU2d1JWjpbGdQv5EG/xQCC8IQ8FTNYzk0+ydV/vuRM1yaNe+6UQ90nGE+1kQ==",
+      "type": "package",
+      "path": "nuget.packaging.core.types/3.5.0-beta2-1484",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net45/NuGet.Packaging.Core.Types.dll",
+        "lib/net45/NuGet.Packaging.Core.Types.xml",
+        "lib/netstandard1.3/NuGet.Packaging.Core.Types.dll",
+        "lib/netstandard1.3/NuGet.Packaging.Core.Types.xml",
+        "nuget.packaging.core.types.3.5.0-beta2-1484.nupkg.sha512",
+        "nuget.packaging.core.types.nuspec"
+      ]
+    },
+    "NuGet.ProjectModel/3.5.0-beta2-1484": {
+      "sha512": "7SFxD1wBRusat8rJm/hICDues0Fm9ECNJLaxbzq6xdPBBN3NljGMp3V3ZeyEose6ItetqPBY9+ZcKhiPIsmx6A==",
+      "type": "package",
+      "path": "nuget.projectmodel/3.5.0-beta2-1484",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net45/NuGet.ProjectModel.dll",
+        "lib/net45/NuGet.ProjectModel.xml",
+        "lib/netstandard1.3/NuGet.ProjectModel.dll",
+        "lib/netstandard1.3/NuGet.ProjectModel.xml",
+        "nuget.projectmodel.3.5.0-beta2-1484.nupkg.sha512",
+        "nuget.projectmodel.nuspec"
+      ]
+    },
+    "NuGet.Protocol.Core.Types/3.5.0-beta2-1484": {
+      "sha512": "y+HMFeV4/vqryIhRQATC1HZvE9QOGgOwesCUWlVAY24yi4HcTTVWWSv0WVX8OzJj+uobYWVfICFyC28JnuMEoA==",
+      "type": "package",
+      "path": "nuget.protocol.core.types/3.5.0-beta2-1484",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net45/NuGet.Protocol.Core.Types.dll",
+        "lib/net45/NuGet.Protocol.Core.Types.xml",
+        "lib/netstandard1.3/NuGet.Protocol.Core.Types.dll",
+        "lib/netstandard1.3/NuGet.Protocol.Core.Types.xml",
+        "nuget.protocol.core.types.3.5.0-beta2-1484.nupkg.sha512",
+        "nuget.protocol.core.types.nuspec"
+      ]
+    },
+    "NuGet.Protocol.Core.v3/3.5.0-beta2-1484": {
+      "sha512": "DsLSsObYuTF9CJ22/ti5femoz1H5zZiQ5SjnZjhoNrz26Af0M9y3fcLvJGTFO7xPDU6QC1G9lZ0fNW7ucH/GpQ==",
+      "type": "package",
+      "path": "nuget.protocol.core.v3/3.5.0-beta2-1484",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net45/NuGet.Protocol.Core.v3.dll",
+        "lib/net45/NuGet.Protocol.Core.v3.xml",
+        "lib/netstandard1.3/NuGet.Protocol.Core.v3.dll",
+        "lib/netstandard1.3/NuGet.Protocol.Core.v3.xml",
+        "nuget.protocol.core.v3.3.5.0-beta2-1484.nupkg.sha512",
+        "nuget.protocol.core.v3.nuspec"
+      ]
+    },
+    "NuGet.Repositories/3.5.0-beta2-1484": {
+      "sha512": "+3ozgJleYPKL2VG44XRzVyFGu8dLOIJ2Kohg2VY87DzTJEnH3kLOMhudZERowNxxzfJpwiSDUXNsDNiWH4EujA==",
+      "type": "package",
+      "path": "nuget.repositories/3.5.0-beta2-1484",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net45/NuGet.Repositories.dll",
+        "lib/net45/NuGet.Repositories.xml",
+        "lib/netstandard1.3/NuGet.Repositories.dll",
+        "lib/netstandard1.3/NuGet.Repositories.xml",
+        "nuget.repositories.3.5.0-beta2-1484.nupkg.sha512",
+        "nuget.repositories.nuspec"
+      ]
+    },
+    "NuGet.RuntimeModel/3.5.0-beta2-1484": {
+      "sha512": "vg29WbKcExD9AJrKMr7NB9pnp+0MTAcDHB6gFHCqRynSo6jgjC8q+ZPAlxC115rQiO8fqzOEP59Q8hx20anUtA==",
+      "type": "package",
+      "path": "nuget.runtimemodel/3.5.0-beta2-1484",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net45/NuGet.RuntimeModel.dll",
+        "lib/net45/NuGet.RuntimeModel.xml",
+        "lib/netstandard1.3/NuGet.RuntimeModel.dll",
+        "lib/netstandard1.3/NuGet.RuntimeModel.xml",
+        "nuget.runtimemodel.3.5.0-beta2-1484.nupkg.sha512",
+        "nuget.runtimemodel.nuspec"
+      ]
+    },
+    "NuGet.Versioning/3.5.0-beta2-1484": {
+      "sha512": "Stok+SI5lWxOkTgZZM7jT4xuAZogm5+j85mKJeHSXb8o0OAbB+qDX9jkdM2wIEnjoR8R29J0nQYwk2Kl2lWFpA==",
+      "type": "package",
+      "path": "nuget.versioning/3.5.0-beta2-1484",
+      "files": [
+        ".nupkg.metadata",
+        "lib/net45/NuGet.Versioning.dll",
+        "lib/net45/NuGet.Versioning.xml",
+        "lib/netstandard1.0/NuGet.Versioning.dll",
+        "lib/netstandard1.0/NuGet.Versioning.xml",
+        "nuget.versioning.3.5.0-beta2-1484.nupkg.sha512",
+        "nuget.versioning.nuspec"
       ]
     },
     "Remotion.Linq/2.2.0": {
@@ -7875,7 +8696,7 @@
       ]
     },
     "runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
-      "sha512": "c3YNH1GQJbfIPJeCnr4avseugSqPrxwIqzthYyZDN6EuOyNOzq+y2KSUfRcXauya1sF4foESTgwM5e1A8arAKw==",
+      "sha512": "LdIvj7Bi2jiaNTqY/ezZGVXHe1KI5fjLSI026O1TjVzsmdgTP/zTF+f3nwHCjwttyhsPBEiswv0PekimPWZwWg==",
       "type": "package",
       "path": "runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
       "files": [
@@ -7916,7 +8737,7 @@
       ]
     },
     "runtime.native.System.IO.Compression/4.3.0": {
-      "sha512": "INBPonS5QPEgn7naufQFXJEp3zX6L4bwHgJ/ZH78aBTpeNfQMtf7C6VrAFhlq2xxWBveIOWyFzQjJ8XzHMhdOQ==",
+      "sha512": "b+V9JC/Ii3sR659flBeaBJww111425tgjcDS1k+hqV4sGh9FALRDBvJnDtQ895gAzpPTUOFDHdqaZ2Et7BpZMg==",
       "type": "package",
       "path": "runtime.native.system.io.compression/4.3.0",
       "files": [
@@ -7996,12 +8817,11 @@
       ]
     },
     "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple/4.3.0": {
-      "sha512": "kVXCuMTrTlxq4XOOMAysuNwsXWpYeboGddNGpIgNSZmv1b6r/s/DPk0fYMB7Q5Qo4bY68o48jt4T4y5BVecbCQ==",
+      "sha512": "Kh9W4agE0r/hK8AX1LvyQI2NrKHBL8pO0gRoDTdDb0LL6Ta1Z2OtFx3lOaAE0ZpCUc/dt9Wzs3rA7a3IsKdOVA==",
       "type": "package",
       "path": "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.apple/4.3.0",
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.apple.4.3.0.nupkg.sha512",
@@ -8036,7 +8856,7 @@
       ]
     },
     "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
-      "sha512": "ytoewC6wGorL7KoCAvRfsgoJPJbNq+64k2SqW6JcOAebWsFUvCCYgfzQMrnpvPiEl4OrblUlhF2ji+Q1+SVLrQ==",
+      "sha512": "JGc0pAWRE8lB4Ucygk2pYSKbUPLlAIq6Bczf5/WF2D/VKJEPtYlVUMxk8fbl1zRfTWzSHi+VcFZlaPlWiNxeKg==",
       "type": "package",
       "path": "runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
       "files": [
@@ -8400,7 +9220,7 @@
       ]
     },
     "System.Collections.Specialized/4.3.0": {
-      "sha512": "Epx8PoVZR0iuOnJJDzp7pWvdfMMOAvpUo95pC4ScH2mJuXkKA2Y4aR3cG9qt2klHgSons1WFh4kcGW7cSXvrxg==",
+      "sha512": "NoPBj0ykejqAWW4p4gGtrrL+3c84ZLSvGnHgq422ew1Rj4WKj1FA8/BCybqC111EtgcqUl6ZJNFYYS22HLgbjA==",
       "type": "package",
       "path": "system.collections.specialized/4.3.0",
       "files": [
@@ -8932,6 +9752,62 @@
         "runtimes/win/lib/netstandard1.3/System.Diagnostics.FileVersionInfo.dll",
         "system.diagnostics.fileversioninfo.4.3.0.nupkg.sha512",
         "system.diagnostics.fileversioninfo.nuspec"
+      ]
+    },
+    "System.Diagnostics.Process/4.1.0": {
+      "sha512": "mpVZ5bnlSs3tTeJ6jYyDJEIa6tavhAd88lxq1zbYhkkCu0Pno2+gHXcvZcoygq2d8JxW3gojXqNJMTAshduqZA==",
+      "type": "package",
+      "path": "system.diagnostics.process/4.1.0",
+      "files": [
+        ".nupkg.metadata",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net46/System.Diagnostics.Process.dll",
+        "lib/net461/System.Diagnostics.Process.dll",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net46/System.Diagnostics.Process.dll",
+        "ref/net461/System.Diagnostics.Process.dll",
+        "ref/netstandard1.3/System.Diagnostics.Process.dll",
+        "ref/netstandard1.3/System.Diagnostics.Process.xml",
+        "ref/netstandard1.3/de/System.Diagnostics.Process.xml",
+        "ref/netstandard1.3/es/System.Diagnostics.Process.xml",
+        "ref/netstandard1.3/fr/System.Diagnostics.Process.xml",
+        "ref/netstandard1.3/it/System.Diagnostics.Process.xml",
+        "ref/netstandard1.3/ja/System.Diagnostics.Process.xml",
+        "ref/netstandard1.3/ko/System.Diagnostics.Process.xml",
+        "ref/netstandard1.3/ru/System.Diagnostics.Process.xml",
+        "ref/netstandard1.3/zh-hans/System.Diagnostics.Process.xml",
+        "ref/netstandard1.3/zh-hant/System.Diagnostics.Process.xml",
+        "ref/netstandard1.4/System.Diagnostics.Process.dll",
+        "ref/netstandard1.4/System.Diagnostics.Process.xml",
+        "ref/netstandard1.4/de/System.Diagnostics.Process.xml",
+        "ref/netstandard1.4/es/System.Diagnostics.Process.xml",
+        "ref/netstandard1.4/fr/System.Diagnostics.Process.xml",
+        "ref/netstandard1.4/it/System.Diagnostics.Process.xml",
+        "ref/netstandard1.4/ja/System.Diagnostics.Process.xml",
+        "ref/netstandard1.4/ko/System.Diagnostics.Process.xml",
+        "ref/netstandard1.4/ru/System.Diagnostics.Process.xml",
+        "ref/netstandard1.4/zh-hans/System.Diagnostics.Process.xml",
+        "ref/netstandard1.4/zh-hant/System.Diagnostics.Process.xml",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "runtimes/linux/lib/netstandard1.4/System.Diagnostics.Process.dll",
+        "runtimes/osx/lib/netstandard1.4/System.Diagnostics.Process.dll",
+        "runtimes/win/lib/net46/System.Diagnostics.Process.dll",
+        "runtimes/win/lib/net461/System.Diagnostics.Process.dll",
+        "runtimes/win/lib/netstandard1.4/System.Diagnostics.Process.dll",
+        "runtimes/win7/lib/netcore50/_._",
+        "system.diagnostics.process.4.1.0.nupkg.sha512",
+        "system.diagnostics.process.nuspec"
       ]
     },
     "System.Diagnostics.StackTrace/4.3.0": {
@@ -11086,6 +11962,31 @@
         "system.runtime.interopservices.runtimeinformation.nuspec"
       ]
     },
+    "System.Runtime.Loader/4.0.0": {
+      "sha512": "4UN78GOVU/mbDFcXkEWtetJT/sJ0yic2gGk1HSlSpWI0TDf421xnrZTDZnwNBapk1GQeYN7U1lTj/aQB1by6ow==",
+      "type": "package",
+      "path": "system.runtime.loader/4.0.0",
+      "files": [
+        ".nupkg.metadata",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "lib/net462/_._",
+        "lib/netstandard1.5/System.Runtime.Loader.dll",
+        "ref/netstandard1.5/System.Runtime.Loader.dll",
+        "ref/netstandard1.5/System.Runtime.Loader.xml",
+        "ref/netstandard1.5/de/System.Runtime.Loader.xml",
+        "ref/netstandard1.5/es/System.Runtime.Loader.xml",
+        "ref/netstandard1.5/fr/System.Runtime.Loader.xml",
+        "ref/netstandard1.5/it/System.Runtime.Loader.xml",
+        "ref/netstandard1.5/ja/System.Runtime.Loader.xml",
+        "ref/netstandard1.5/ko/System.Runtime.Loader.xml",
+        "ref/netstandard1.5/ru/System.Runtime.Loader.xml",
+        "ref/netstandard1.5/zh-hans/System.Runtime.Loader.xml",
+        "ref/netstandard1.5/zh-hant/System.Runtime.Loader.xml",
+        "system.runtime.loader.4.0.0.nupkg.sha512",
+        "system.runtime.loader.nuspec"
+      ]
+    },
     "System.Runtime.Numerics/4.3.0": {
       "sha512": "yMH+MfdzHjy17l2KESnPiF2dwq7T+xLnSJar7slyimAkUh/gTrS9/UQOtv7xarskJ2/XDSNvfLGOBQPjL7PaHQ==",
       "type": "package",
@@ -11144,7 +12045,7 @@
       ]
     },
     "System.Runtime.Serialization.Primitives/4.3.0": {
-      "sha512": "Wz+0KOukJGAlXjtKr+5Xpuxf8+c8739RI1C+A2BoQZT+wMCCoMDDdO8/4IRHfaVINqL78GO8dW8G2lW/e45Mcw==",
+      "sha512": "2Z5t70a2SwMsfQDp9KOclaZNyQhfIga2gppq9lIUDM1A4ohTshn4JqT7ir8bvIhXgorWKYDAr6rPzEbi/nTGKg==",
       "type": "package",
       "path": "system.runtime.serialization.primitives/4.3.0",
       "files": [
@@ -11470,7 +12371,7 @@
       ]
     },
     "System.Security.Cryptography.Csp/4.3.0": {
-      "sha512": "X4s/FCkEUnRGnwR3aSfVIkldBmtURMhmexALNTwpjklzxWU7yjMk7GHLKOZTNkgnWnE0q7+BCf9N2LVRWxewaA==",
+      "sha512": "yO2k5o+Z+DiFRBvvB9vdRRAGHi6bm02M9OWXfCqQ8K0UxD3Woc3svQheZfb7PoTEFs0kGacO0IzzMWsb6Mkeow==",
       "type": "package",
       "path": "system.security.cryptography.csp/4.3.0",
       "files": [
@@ -11541,7 +12442,7 @@
       ]
     },
     "System.Security.Cryptography.OpenSsl/4.3.0": {
-      "sha512": "h4CEgOgv5PKVF/HwaHzJRiVboL2THYCou97zpmhjghx5frc7fIvlkY1jL+lnIQyChrJDMNEXS6r7byGif8Cy4w==",
+      "sha512": "vOYy7Jv9KsG3ld2hLt0GoERd82SZi4BelrbXLwI9yFBYX7kpbvUCWYo4eyevk47cuJXZ9ZLVAryANcc7iY71aA==",
       "type": "package",
       "path": "system.security.cryptography.openssl/4.3.0",
       "files": [
@@ -12436,6 +13337,45 @@
         "system.threading.thread.nuspec"
       ]
     },
+    "System.Threading.ThreadPool/4.0.10": {
+      "sha512": "IMXgB5Vf/5Qw1kpoVgJMOvUO1l32aC+qC3OaIZjWJOjvcxuxNWOK2ZTWWYXfij22NHxT2j1yWX5vlAeQWld9vA==",
+      "type": "package",
+      "path": "system.threading.threadpool/4.0.10",
+      "files": [
+        ".nupkg.metadata",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net46/System.Threading.ThreadPool.dll",
+        "lib/netcore50/_._",
+        "lib/netstandard1.3/System.Threading.ThreadPool.dll",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net46/System.Threading.ThreadPool.dll",
+        "ref/netstandard1.3/System.Threading.ThreadPool.dll",
+        "ref/netstandard1.3/System.Threading.ThreadPool.xml",
+        "ref/netstandard1.3/de/System.Threading.ThreadPool.xml",
+        "ref/netstandard1.3/es/System.Threading.ThreadPool.xml",
+        "ref/netstandard1.3/fr/System.Threading.ThreadPool.xml",
+        "ref/netstandard1.3/it/System.Threading.ThreadPool.xml",
+        "ref/netstandard1.3/ja/System.Threading.ThreadPool.xml",
+        "ref/netstandard1.3/ko/System.Threading.ThreadPool.xml",
+        "ref/netstandard1.3/ru/System.Threading.ThreadPool.xml",
+        "ref/netstandard1.3/zh-hans/System.Threading.ThreadPool.xml",
+        "ref/netstandard1.3/zh-hant/System.Threading.ThreadPool.xml",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "system.threading.threadpool.4.0.10.nupkg.sha512",
+        "system.threading.threadpool.nuspec"
+      ]
+    },
     "System.ValueTuple/4.3.0": {
       "sha512": "cNLEvBX3d6MMQRZe3SMFNukVbitDAEpVZO17qa0/2FHxZ7Y7PpFRpr6m2615XYM/tYYYf0B+WyHNujqIw8Luwg==",
       "type": "package",
@@ -12778,6 +13718,23 @@
         "system.xml.xpath.xdocument.nuspec"
       ]
     },
+    "ValueInjecter/3.2.0": {
+      "sha512": "cB+YW4Jb9DRwLkAEsLZhK1mKvi5gwhPav9zMDrKaCH6CfheDcy7eJREEqshK81aP5j+48FyBeFE5PxbWwjpwYg==",
+      "type": "package",
+      "path": "valueinjecter/3.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net45/Omu.ValueInjecter.dll",
+        "lib/net45/Omu.ValueInjecter.xml",
+        "lib/netstandard1.6/Omu.ValueInjecter.dll",
+        "lib/netstandard1.6/Omu.ValueInjecter.xml",
+        "lib/netstandard2.0/Omu.ValueInjecter.dll",
+        "lib/netstandard2.0/Omu.ValueInjecter.xml",
+        "valueinjecter.3.2.0.nupkg.sha512",
+        "valueinjecter.nuspec"
+      ]
+    },
     "Base/1.0.0": {
       "type": "project",
       "path": "../Base/Base.csproj",
@@ -12797,32 +13754,38 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.1": [
       "BLL >= 1.0.0",
+      "Base >= 1.0.0",
+      "Bootstrap.Datepicker >= 1.8.0.1",
       "DAL >= 1.0.0",
       "Microsoft.AspNetCore.App >= 2.1.1",
       "Microsoft.AspNetCore.Authentication >= 2.1.1",
       "Microsoft.AspNetCore.Razor.Design >= 2.1.2",
+      "Microsoft.Extensions.Caching.Abstractions >= 2.1.1",
+      "Microsoft.Extensions.Primitives >= 2.1.1",
       "Microsoft.NETCore.App >= 2.1.0",
-      "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.1.9"
+      "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.1.10",
+      "jQuery.UI >= 1.12.1.1",
+      "microsoft.aspnetcore.razor.tools >= 1.1.0-preview4-final"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\doctor\\.nuget\\packages\\": {},
+    "C:\\Users\\WG\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\GitHub\\MvcCore\\WebApplication1\\WebApplication1.csproj",
+      "projectUniqueName": "D:\\MvcCore\\WebApplication1\\WebApplication1.csproj",
       "projectName": "WebApplication1",
-      "projectPath": "D:\\GitHub\\MvcCore\\WebApplication1\\WebApplication1.csproj",
-      "packagesPath": "C:\\Users\\doctor\\.nuget\\packages\\",
-      "outputPath": "D:\\GitHub\\MvcCore\\WebApplication1\\obj\\",
+      "projectPath": "D:\\MvcCore\\WebApplication1\\WebApplication1.csproj",
+      "packagesPath": "C:\\Users\\WG\\.nuget\\packages\\",
+      "outputPath": "D:\\MvcCore\\WebApplication1\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\doctor\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\WG\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -12830,16 +13793,20 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {},
+        "https://www.nuget.org/api/v2/": {}
       },
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "D:\\GitHub\\MvcCore\\BLL\\BLL.csproj": {
-              "projectPath": "D:\\GitHub\\MvcCore\\BLL\\BLL.csproj"
+            "D:\\MvcCore\\Base\\Base.csproj": {
+              "projectPath": "D:\\MvcCore\\Base\\Base.csproj"
             },
-            "D:\\GitHub\\MvcCore\\DAL\\DAL.csproj": {
-              "projectPath": "D:\\GitHub\\MvcCore\\DAL\\DAL.csproj"
+            "D:\\MvcCore\\BLL\\BLL.csproj": {
+              "projectPath": "D:\\MvcCore\\BLL\\BLL.csproj"
+            },
+            "D:\\MvcCore\\DAL\\DAL.csproj": {
+              "projectPath": "D:\\MvcCore\\DAL\\DAL.csproj"
             }
           }
         }
@@ -12853,6 +13820,10 @@
     "frameworks": {
       "netcoreapp2.1": {
         "dependencies": {
+          "Bootstrap.Datepicker": {
+            "target": "Package",
+            "version": "[1.8.0.1, )"
+          },
           "Microsoft.AspNetCore.App": {
             "suppressParent": "All",
             "target": "Package",
@@ -12868,21 +13839,44 @@
             "target": "Package",
             "version": "[2.1.2, )"
           },
+          "Microsoft.Extensions.Caching.Abstractions": {
+            "target": "Package",
+            "version": "[2.1.1, )"
+          },
+          "Microsoft.Extensions.Primitives": {
+            "target": "Package",
+            "version": "[2.1.1, )"
+          },
           "Microsoft.NETCore.App": {
+            "suppressParent": "All",
             "target": "Package",
             "version": "[2.1.0, )",
             "autoReferenced": true
           },
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
-            "version": "[2.1.9, )"
+            "version": "[2.1.10, )"
+          },
+          "jQuery.UI": {
+            "target": "Package",
+            "version": "[1.12.1.1, )"
+          },
+          "microsoft.aspnetcore.razor.tools": {
+            "target": "Package",
+            "version": "[1.1.0-preview4-final, )"
           }
         },
         "imports": [
-          "net461"
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
         ],
         "assetTargetFallback": true,
-        "warn": true
+        "warn": true,
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

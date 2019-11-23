@@ -208,8 +208,8 @@ namespace UnitTestBLL
             Assert.AreEqual(true, result.rtn.IsSuccess);
             Assert.AreEqual(1800, result.shopCar.shopcarProducts[0].Amount);
             Assert.AreEqual(100, result.shopCar.shopcarProducts[1].Amount);
-            Assert.AreEqual(1100, result.shopCar.TotalAmount);
-            Assert.AreEqual(0, result.shopCar.Discount);
+            Assert.AreEqual(1100, result.shopCar.totalAmount);
+            Assert.AreEqual(0, result.shopCar.discount);
         }
 
         [ClassCleanup]

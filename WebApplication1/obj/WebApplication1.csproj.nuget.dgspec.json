@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\GitHub\\MvcCore\\WebApplication1\\WebApplication1.csproj": {}
+    "D:\\MvcCore\\WebApplication1\\WebApplication1.csproj": {}
   },
   "projects": {
-    "D:\\GitHub\\MvcCore\\Base\\Base.csproj": {
+    "D:\\MvcCore\\Base\\Base.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GitHub\\MvcCore\\Base\\Base.csproj",
+        "projectUniqueName": "D:\\MvcCore\\Base\\Base.csproj",
         "projectName": "Base",
-        "projectPath": "D:\\GitHub\\MvcCore\\Base\\Base.csproj",
-        "packagesPath": "C:\\Users\\doctor\\.nuget\\packages\\",
-        "outputPath": "D:\\GitHub\\MvcCore\\Base\\obj\\",
+        "projectPath": "D:\\MvcCore\\Base\\Base.csproj",
+        "packagesPath": "C:\\Users\\WG\\.nuget\\packages\\",
+        "outputPath": "D:\\MvcCore\\Base\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\doctor\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\WG\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -25,7 +25,8 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {},
+          "https://www.nuget.org/api/v2/": {}
         },
         "frameworks": {
           "netstandard2.0": {
@@ -49,27 +50,33 @@
             }
           },
           "imports": [
-            "net461"
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
           ],
           "assetTargetFallback": true,
-          "warn": true
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\GitHub\\MvcCore\\BLL\\BLL.csproj": {
+    "D:\\MvcCore\\BLL\\BLL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GitHub\\MvcCore\\BLL\\BLL.csproj",
+        "projectUniqueName": "D:\\MvcCore\\BLL\\BLL.csproj",
         "projectName": "BLL",
-        "projectPath": "D:\\GitHub\\MvcCore\\BLL\\BLL.csproj",
-        "packagesPath": "C:\\Users\\doctor\\.nuget\\packages\\",
-        "outputPath": "D:\\GitHub\\MvcCore\\BLL\\obj\\",
+        "projectPath": "D:\\MvcCore\\BLL\\BLL.csproj",
+        "packagesPath": "C:\\Users\\WG\\.nuget\\packages\\",
+        "outputPath": "D:\\MvcCore\\BLL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\doctor\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\WG\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -77,16 +84,17 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {},
+          "https://www.nuget.org/api/v2/": {}
         },
         "frameworks": {
           "netstandard2.0": {
             "projectReferences": {
-              "D:\\GitHub\\MvcCore\\Base\\Base.csproj": {
-                "projectPath": "D:\\GitHub\\MvcCore\\Base\\Base.csproj"
+              "D:\\MvcCore\\Base\\Base.csproj": {
+                "projectPath": "D:\\MvcCore\\Base\\Base.csproj"
               },
-              "D:\\GitHub\\MvcCore\\DAL\\DAL.csproj": {
-                "projectPath": "D:\\GitHub\\MvcCore\\DAL\\DAL.csproj"
+              "D:\\MvcCore\\DAL\\DAL.csproj": {
+                "projectPath": "D:\\MvcCore\\DAL\\DAL.csproj"
               }
             }
           }
@@ -100,6 +108,18 @@
       "frameworks": {
         "netstandard2.0": {
           "dependencies": {
+            "Microsoft.AspNetCore.Mvc.ViewFeatures": {
+              "target": "Package",
+              "version": "[2.1.1, )"
+            },
+            "Microsoft.Extensions.Caching.Abstractions": {
+              "target": "Package",
+              "version": "[2.1.1, )"
+            },
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[2.1.1, )"
+            },
             "NETStandard.Library": {
               "suppressParent": "All",
               "target": "Package",
@@ -109,30 +129,40 @@
             "System.Runtime.Caching": {
               "target": "Package",
               "version": "[4.5.0, )"
+            },
+            "ValueInjecter": {
+              "target": "Package",
+              "version": "[3.2.0, )"
             }
           },
           "imports": [
-            "net461"
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
           ],
           "assetTargetFallback": true,
-          "warn": true
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\GitHub\\MvcCore\\DAL\\DAL.csproj": {
+    "D:\\MvcCore\\DAL\\DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GitHub\\MvcCore\\DAL\\DAL.csproj",
+        "projectUniqueName": "D:\\MvcCore\\DAL\\DAL.csproj",
         "projectName": "DAL",
-        "projectPath": "D:\\GitHub\\MvcCore\\DAL\\DAL.csproj",
-        "packagesPath": "C:\\Users\\doctor\\.nuget\\packages\\",
-        "outputPath": "D:\\GitHub\\MvcCore\\DAL\\obj\\",
+        "projectPath": "D:\\MvcCore\\DAL\\DAL.csproj",
+        "packagesPath": "C:\\Users\\WG\\.nuget\\packages\\",
+        "outputPath": "D:\\MvcCore\\DAL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\doctor\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\WG\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -140,13 +170,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {},
+          "https://www.nuget.org/api/v2/": {}
         },
         "frameworks": {
           "netstandard2.0": {
             "projectReferences": {
-              "D:\\GitHub\\MvcCore\\Base\\Base.csproj": {
-                "projectPath": "D:\\GitHub\\MvcCore\\Base\\Base.csproj"
+              "D:\\MvcCore\\Base\\Base.csproj": {
+                "projectPath": "D:\\MvcCore\\Base\\Base.csproj"
               }
             }
           }
@@ -164,6 +195,10 @@
               "target": "Package",
               "version": "[1.60.6, )"
             },
+            "Microsoft.AspNetCore.Mvc.ViewFeatures": {
+              "target": "Package",
+              "version": "[2.1.1, )"
+            },
             "NETStandard.Library": {
               "suppressParent": "All",
               "target": "Package",
@@ -172,27 +207,33 @@
             }
           },
           "imports": [
-            "net461"
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
           ],
           "assetTargetFallback": true,
-          "warn": true
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\GitHub\\MvcCore\\WebApplication1\\WebApplication1.csproj": {
+    "D:\\MvcCore\\WebApplication1\\WebApplication1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GitHub\\MvcCore\\WebApplication1\\WebApplication1.csproj",
+        "projectUniqueName": "D:\\MvcCore\\WebApplication1\\WebApplication1.csproj",
         "projectName": "WebApplication1",
-        "projectPath": "D:\\GitHub\\MvcCore\\WebApplication1\\WebApplication1.csproj",
-        "packagesPath": "C:\\Users\\doctor\\.nuget\\packages\\",
-        "outputPath": "D:\\GitHub\\MvcCore\\WebApplication1\\obj\\",
+        "projectPath": "D:\\MvcCore\\WebApplication1\\WebApplication1.csproj",
+        "packagesPath": "C:\\Users\\WG\\.nuget\\packages\\",
+        "outputPath": "D:\\MvcCore\\WebApplication1\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\doctor\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\WG\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -200,16 +241,20 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {},
+          "https://www.nuget.org/api/v2/": {}
         },
         "frameworks": {
           "netcoreapp2.1": {
             "projectReferences": {
-              "D:\\GitHub\\MvcCore\\BLL\\BLL.csproj": {
-                "projectPath": "D:\\GitHub\\MvcCore\\BLL\\BLL.csproj"
+              "D:\\MvcCore\\Base\\Base.csproj": {
+                "projectPath": "D:\\MvcCore\\Base\\Base.csproj"
               },
-              "D:\\GitHub\\MvcCore\\DAL\\DAL.csproj": {
-                "projectPath": "D:\\GitHub\\MvcCore\\DAL\\DAL.csproj"
+              "D:\\MvcCore\\BLL\\BLL.csproj": {
+                "projectPath": "D:\\MvcCore\\BLL\\BLL.csproj"
+              },
+              "D:\\MvcCore\\DAL\\DAL.csproj": {
+                "projectPath": "D:\\MvcCore\\DAL\\DAL.csproj"
               }
             }
           }
@@ -223,6 +268,10 @@
       "frameworks": {
         "netcoreapp2.1": {
           "dependencies": {
+            "Bootstrap.Datepicker": {
+              "target": "Package",
+              "version": "[1.8.0.1, )"
+            },
             "Microsoft.AspNetCore.App": {
               "suppressParent": "All",
               "target": "Package",
@@ -238,21 +287,44 @@
               "target": "Package",
               "version": "[2.1.2, )"
             },
+            "Microsoft.Extensions.Caching.Abstractions": {
+              "target": "Package",
+              "version": "[2.1.1, )"
+            },
+            "Microsoft.Extensions.Primitives": {
+              "target": "Package",
+              "version": "[2.1.1, )"
+            },
             "Microsoft.NETCore.App": {
+              "suppressParent": "All",
               "target": "Package",
               "version": "[2.1.0, )",
               "autoReferenced": true
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[2.1.9, )"
+              "version": "[2.1.10, )"
+            },
+            "jQuery.UI": {
+              "target": "Package",
+              "version": "[1.12.1.1, )"
+            },
+            "microsoft.aspnetcore.razor.tools": {
+              "target": "Package",
+              "version": "[1.1.0-preview4-final, )"
             }
           },
           "imports": [
-            "net461"
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
           ],
           "assetTargetFallback": true,
-          "warn": true
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }
