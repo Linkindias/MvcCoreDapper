@@ -87,3 +87,14 @@ WebApplication1/obj/project.assets.json
 WebApplication1/obj/WebApplication1.csproj.nuget.cache
 WebApplication1/obj/WebApplication1.csproj.nuget.dgspec.json
 WebApplication1/obj/WebApplication1.csproj.nuget.g.props
+DALCore/obj/project.assets.json
+DALCore/obj/Debug/netstandard2.0/DALCore.csprojAssemblyReference.cache
+DALCore/obj/Debug/netstandard2.0/DALCore.csproj.FileListAbsolute.txt
+DALCore/obj/Debug/netstandard2.0/DALCore.assets.cache
+DALCore/obj/Debug/netstandard2.0/DALCore.AssemblyInfoInputs.cache
+DALCore/obj/Debug/netstandard2.0/DALCore.AssemblyInfo.cs
+DALCore/obj/DALCore.csproj.nuget.g.targets
+DALCore/obj/DALCore.csproj.nuget.g.props
+DALCore/obj/DALCore.csproj.nuget.dgspec.json
+DALCore/obj/DALCore.csproj.nuget.cache
+DALCore/bin/Debug/netstandard2.0/DALCore.deps.json
