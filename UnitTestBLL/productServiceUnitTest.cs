@@ -187,6 +187,8 @@ namespace UnitTestBLL
                     CategoryID = 1, ProductID = 2, ProductName = "test2",UnitsInStock = 10, UnitPrice = 900m,
                 }}));
             mockMember.Setup(p => p.GetCalculateAmounts(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (1100, 0.0));
+            var entryMock = new Mock<ICacheEntry>();
+            mockCache.Setup(m => m.CreateEntry(It.IsAny<object>())).Returns(entryMock.Object);
 
             var result = ProductService.GetShopCarProducts("1", new List<ShopCarProductModel>() { 
                 new ShopCarProductModel()
@@ -206,10 +208,20 @@ namespace UnitTestBLL
             });
 
             Assert.AreEqual(true, result.rtn.IsSuccess);
-            Assert.AreEqual(1800, result.shopCar.shopcarProducts[0].Amount);
-            Assert.AreEqual(100, result.shopCar.shopcarProducts[1].Amount);
             Assert.AreEqual(1100, result.shopCar.totalAmount);
             Assert.AreEqual(0, result.shopCar.discount);
+        }
+
+        [TestMethod()]
+        public void GetProductsById_當依登入者取得購物車產品資訊正確_則回傳購物車產品資訊()
+        {
+            string Id = "1";
+            var entryMock = new Mock<ICacheEntry>();
+            mockCache.Setup(m => m.CreateEntry(It.IsAny<object>())).Returns(entryMock.Object);
+            
+            var result = ProductService.GetProductsById(Id).ToList();
+
+            Assert.AreEqual(null, result);
         }
 
         [ClassCleanup]
