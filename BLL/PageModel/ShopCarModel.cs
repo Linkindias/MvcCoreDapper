@@ -1,11 +1,12 @@
-﻿using DAL.DBModel;
+﻿using Base;
+using DAL.DBModel;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace BLL.PageModel
 {
-    public class ShopCarModel
+    public class ShopCarModel : Result
     {
         public int totalAmount { get; set; }
 
