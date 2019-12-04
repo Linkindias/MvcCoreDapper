@@ -62,12 +62,14 @@ namespace WebApplication1.Controllers
         /// </summary>
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult ShopCar(ShopCarModel shopcars)
+        public ActionResult ShopCar(ShopCarModel shopcar)
         {
             ViewBag.Name = HttpContext.Session.GetString("Name");
             ViewBag.Id = HttpContext.Session.GetString("Id");
 
-            return View("ShopCar", shopcars);
+            shopcar.products = ProductService.GetProductsById(ViewBag.Id);
+
+            return View("ShopCar", shopcar);
         }
     }
 }

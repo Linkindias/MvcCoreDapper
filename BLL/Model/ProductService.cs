@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using BLL.InterFace;
+using Microsoft.AspNetCore.Http;
 
 namespace BLL.Model
 {
@@ -119,15 +120,15 @@ namespace BLL.Model
         }
 
         /// <summary>
-        /// 取得購物車產品資訊
+        /// 依購物產單清單 取得購物車產品資訊
         /// </summary>
-        public (Result rtn, ShopCarModel shopCar) GetShopCarProducts(string Id, List<ShopCarProductModel> shopcars)
+        public (Result rtn, ShopCarModel shopCar) GetShopCarProducts(string Id, List<ShopCarProductModel> products)
         {
-            var result = ProductRep.GetProductsByParam(0, "", shopcars.Select(o => o.Id).Distinct().ToArray(), false);
+            var result = ProductRep.GetProductsByParam(0, "", products.Select(o => o.Id).Distinct().ToArray(), false);
             if (result.rtn.IsSuccess)
             {
                 int TotalAmount = 0;
-                shopcars.ForEach(o =>
+                products.ForEach(o =>
                 {
                     o.InjectFrom(result.products.Where(p => p.ProductID == o.Id).FirstOrDefault());
                     o.Amount = o.Count * (int)o.UnitPrice; //數量 * 單價
@@ -136,13 +137,32 @@ namespace BLL.Model
 
                 var rtnAmount = MemberService.GetCalculateAmounts(Id, TotalAmount);
 
-                ShopCar.shopcarProducts = shopcars;
                 ShopCar.totalAmount = rtnAmount.TotalAmount;
                 ShopCar.discount = rtnAmount.Discount;
+
+                string keyShopCar = $"ShopCar{Id}";
+                TimeSpan ts = DateTime.Now.AddHours(3) - DateTime.Now; //1天
+                cache.Set<IEnumerable<ShopCarProductModel>>(keyShopCar, products, ts); //購物車加入快取
 
                 return (result.rtn, ShopCar);
             }
             return (result.rtn, new ShopCarModel());
+        }
+
+        /// <summary>
+        /// 依登入者 取得購物車產品資訊
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public IEnumerable<ShopCarProductModel> GetProductsById(string Id)
+        {
+            IEnumerable<ShopCarProductModel> products = null;
+
+            string keyShopCar = $"ShopCar{Id}";
+
+            cache.TryGetValue<IEnumerable<ShopCarProductModel>>(keyShopCar, out products);
+
+            return products;
         }
 
         protected virtual IEnumerable<SelectListItem> GetOptions(int mix, int max)

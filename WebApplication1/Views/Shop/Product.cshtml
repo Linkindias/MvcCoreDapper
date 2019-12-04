@@ -151,8 +151,10 @@
                                onclick="goShopCar(); return false;" style="width:105%" />
                     </div>
                 }
-                using (Html.BeginForm("ShopCar", "Shop", FormMethod.Post, new { id = "ShopCarForm", ShopCars = @ViewBag.ShopCars, @style = "display:none;" }))
+                using (Html.BeginForm("ShopCar", "Shop", FormMethod.Post, new { id = "ShopCarForm", @style = "display:none;" }))
                 {
+                    <input type="hidden" id="totalAmount" name="totalAmount" value="">
+                    <input type="hidden" id="discount" name="discount" value="">
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 }
             }
@@ -164,35 +166,37 @@
 
     function closeModal() {
         $('#msgModal').modal('hide');
-                }
+    }
 
-                function setShopCar(productId) {
-                    var shopCar = window.localStorage.getItem('shopcar');
-                    var data = [{ Id: productId, Count: parseInt($('select[name=shopcount_' + productId + ']').val(), 10) }];
+    function setShopCar(productId) {
+        var shopCar = window.localStorage.getItem('shopcar');
+        var data = [{ Id: productId, Count: parseInt($('select[name=shopcount_' + productId + ']').val(), 10) }];
 
-                    if (shopCar == null) {
-                        window.localStorage.setItem("shopcar", JSON.stringify(data));
-                    }
-                    else {
-                        var car = JSON.parse(shopCar);
-                        car.push({ Id: productId, Count: parseInt($('select[name=shopcount_' + productId + ']').val(), 10) });
-                        window.localStorage.setItem("shopcar", JSON.stringify(car));
-                    }
-                    return false;
-                }
+        if (shopCar == null) {
+            window.localStorage.setItem("shopcar", JSON.stringify(data));
+        }
+        else {
+            var car = JSON.parse(shopCar);
+            car.push({ Id: productId, Count: parseInt($('select[name=shopcount_' + productId + ']').val(), 10) });
+            window.localStorage.setItem("shopcar", JSON.stringify(car));
+        }
+        return false;
+    }
 
-                function goShopCar() {
+    function goShopCar() {
         $.ajax({
-                    type: 'POST',
+            type: 'POST',
             url: '@Url.Action("GetProducts", "Shop")',
             data: {
-                        __RequestVerificationToken: '@GetAntiXsrfRequestToken()',
+                __RequestVerificationToken: '@GetAntiXsrfRequestToken()',
                 shopcars:JSON.parse(window.localStorage.getItem('shopcar')),
             },
             async: true,
             success: function (data) {
                 if (data != null) {
                     console.log(data);
+                    $("#totalAmount").val(data.totalAmount);
+                    $("#discount").val(data.discount);
                     $("#ShopCarForm").submit();
                 }
             },
@@ -222,4 +226,5 @@
     })
 
 </script>
+
 

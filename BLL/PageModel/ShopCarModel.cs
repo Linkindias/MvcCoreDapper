@@ -7,10 +7,10 @@ namespace BLL.PageModel
 {
     public class ShopCarModel
     {
-        public List<ShopCarProductModel> shopcarProducts { get; set; }
-
         public int totalAmount { get; set; }
 
         public double discount { get; set; }
+
+        public List<ShopCarProductModel> products { get; set; }
     }
 }
