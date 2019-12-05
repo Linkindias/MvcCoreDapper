@@ -7,29 +7,72 @@
     }
 }
 <style type="text/css">
+    .row {
+        margin-top: 10%;
+    }
+
+    .products {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        flex-wrap: wrap;
+    }
 </style>
 <div class="container">
     <div class="row">
-        <div class="col-12">
-            @{
-                if (!Model.IsSuccess)
-                {
-                    <script type="text/javascript">
+        @{
+            if (!Model.IsSuccess)
+            {
+                <script type="text/javascript">
                             $('#msgModalbody').text('@Model.ErrorMsg').css({ 'color': 'blue'});;
                             $('#msgModal').modal('show');
-                    </script>
-                    }
-                    using (Html.BeginForm("Index", "Order", FormMethod.Post, new { id = "OrderForm" }))
-                    {
+                </script>
+            }
+            using (Html.BeginForm("Index", "Order", FormMethod.Post, new { id = "OrderForm" }))
+            {
+                <div class="products">
+                    @{
                         for (int i = 0; i < Model.products.Count(); i++)
                         {
+                            @Html.Partial("ProductOfShopCar", Model.products[i]);
                         }
                     }
-                }
+                </div>
+            }
+        }
+    </div>
+    <div>
+        <div>
+            @Html.Label("Items", $"產品品項: {Model.products.Count()}", new { style = "white-space:nowrap" })
+        </div>
+        <div>
+            @Html.Label("TotalAmount", $"總金額: {Model.totalAmount}", new { style = "white-space:nowrap" })
+        </div>
+        <div>
+            @Html.Label("Discount", $"折扣: {Model.discount * 10}", new { style = "white-space:nowrap" })
+        </div>
+        <div>
+            @Html.Label("DisAmount", $"付款金額: {Model.disAmount}", new { style = "white-space:nowrap" })
+        </div>
+        <div>
+            <input type="button" class="btn btn-success btn-block bt" id="submit" value="確定訂單" />
         </div>
     </div>
-    <div class="row">
-    </div>
+    @Html.Partial("BootstrapModal")
 </div>
 <script type="text/javascript">
+    $(function () {
+        var products = JSON.parse(window.localStorage.getItem('shopcar'));
+        if (products != null) {
+            if (products.length == 0) {
+                $("#Items").val('產品品項:0');
+                $("#TotalAmount").val('總金額:0');
+                $("#Discount").val('折扣:0');
+                $("#submit").disabled = true;
+            }
+            else
+                $("#submit").disabled = false;
+        }
+    })
 </script>

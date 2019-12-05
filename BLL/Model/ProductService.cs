@@ -23,11 +23,13 @@ namespace BLL.Model
         ProductRepository ProductRep;
         CategorieRepository CategorieRep;
         OrderDetailRepository OrderDetailRep;
+        SupplierRepository SupplierRep;
         ProductModel Product;
         ShopCarModel ShopCar;
 
         public ProductService(IConfiguration configuration, IMemoryCache memoryCache, IMemberOfProduct memberOfProduct,
             ProductRepository productRepository, CategorieRepository categorieRepository, OrderDetailRepository orderDetailRepository,
+            SupplierRepository supplierRepository,
             ProductModel productModel, ShopCarModel shopCarModel)
         {
             this.configuration = configuration;
@@ -36,6 +38,7 @@ namespace BLL.Model
             this.ProductRep = productRepository;
             this.CategorieRep = categorieRepository;
             this.OrderDetailRep = orderDetailRepository;
+            this.SupplierRep = supplierRepository;
             this.Product = productModel;
             this.ShopCar = shopCarModel;
         }
@@ -43,30 +46,36 @@ namespace BLL.Model
         /// <summary>
         /// 取得產品類別、 產品資訊
         /// </summary>
-        public (Result rtn, ProductModel product) GetCategoriesAndProducts(string CategoryId = "", string ProductName = "")
+        public (Result rtn, ProductModel product) GetCategoriesAndProducts(string Id, string CategoryId = "", string ProductName = "")
         {
             IEnumerable<Categories> categories = null;
             IEnumerable<Products> products = null;
+            IEnumerable<Suppliers> suppliers = null;
 
-            string keyCategory = $"GetCategory{CategoryId}";
-            string keyProduct = $"GetProduct{CategoryId}{ProductName}";
+            string keyCategory = $"GetCategory";
+            string keyProduct = $"GetProduct{Id}";
+            string keySupplier = $"GetSupplier";
 
             cache.TryGetValue<IEnumerable<Categories>>(keyCategory, out categories);
             cache.TryGetValue<IEnumerable<Products>>(keyProduct, out products);
+            cache.TryGetValue<IEnumerable<Suppliers>>(keySupplier, out suppliers);
 
-            if (categories == null && products == null)
+            if (categories == null && products == null && suppliers == null)
             {
                 var resultCategroy = CategorieRep.GetCategorys();
                 var resultProduct = ProductRep.GetProductsByParam(string.IsNullOrEmpty(CategoryId) ? 0 : int.Parse(CategoryId), ProductName,new int[0], false);
+                var resultSupplier = SupplierRep.GetSuppliers();
 
-                if (resultCategroy.rtn.IsSuccess && resultProduct.rtn.IsSuccess)
+                if (resultCategroy.rtn.IsSuccess && resultProduct.rtn.IsSuccess && resultSupplier.rtn.IsSuccess)
                 {
                     categories = resultCategroy.Categorys;
                     products = resultProduct.products;
+                    suppliers = resultSupplier.Suppliers;
 
                     TimeSpan ts = DateTime.Today.AddDays(1) - DateTime.Now; //1天
                     cache.Set<IEnumerable<Categories>>(keyCategory, categories, ts); //產品類別加入快取
                     cache.Set<IEnumerable<Products>>(keyProduct, products, ts); //產品資訊加入快取
+                    cache.Set<IEnumerable<Suppliers>>(keySupplier, suppliers, ts); //供應商資訊加入快取
                 }
 
                 if (!resultCategroy.rtn.IsSuccess)
@@ -79,6 +88,12 @@ namespace BLL.Model
                 {
                     resultProduct.rtn.ErrorMsg = "查無產品資訊";
                     return (resultProduct.rtn, Product);
+                }
+
+                if (!resultSupplier.rtn.IsSuccess)
+                {
+                    resultSupplier.rtn.ErrorMsg = "查無供應商";
+                    return (resultSupplier.rtn, Product);
                 }
             }
 
@@ -127,17 +142,43 @@ namespace BLL.Model
             var result = ProductRep.GetProductsByParam(0, "", products.Select(o => o.Id).Distinct().ToArray(), false);
             if (result.rtn.IsSuccess)
             {
+                string keyCategory = $"GetCategory";
+                string keySupplier = $"GetSupplier";
+                IEnumerable<Categories> categories = null;
+                IEnumerable<Suppliers> suppliers = null;
+
+                cache.TryGetValue<IEnumerable<Categories>>(keyCategory, out categories);
+                cache.TryGetValue<IEnumerable<Suppliers>>(keySupplier, out suppliers);
+
                 int TotalAmount = 0;
                 products.ForEach(o =>
                 {
                     o.InjectFrom(result.products.Where(p => p.ProductID == o.Id).FirstOrDefault());
                     o.Amount = o.Count * (int)o.UnitPrice; //數量 * 單價
                     TotalAmount += o.Amount; //總價
+
+                    if (categories.Count() > 0) //產品類別
+                    {
+                        var Category = categories.Where(p => p.CategoryID == o.CategoryID).FirstOrDefault();
+                        o.CategoryDescription = Category.Description;
+                        o.CategoryName = Category.CategoryName;
+                    }
+
+                    if (suppliers.Count() > 0) //供應商
+                    {
+                        var Supplier = suppliers.Where(p => p.SupplierID == o.SupplierID).FirstOrDefault();
+                        o.SupplierCompanyName = Supplier.CompanyName;
+                        o.SupplierContactName = Supplier.ContactName;
+                        o.SupplierContactTitle = Supplier.ContactTitle;
+                        o.SupplierPhone = Supplier.Phone;
+                        o.SupplierAddress = Supplier.Address;
+                    }
                 });
 
-                var rtnAmount = MemberService.GetCalculateAmounts(Id, TotalAmount);
+                var rtnAmount = MemberService.GetCalculateAmounts(Id, TotalAmount); //依登入號計算折扣
 
-                ShopCar.totalAmount = rtnAmount.TotalAmount;
+                ShopCar.totalAmount = TotalAmount;
+                ShopCar.disAmount = rtnAmount.TotalAmount;
                 ShopCar.discount = rtnAmount.Discount;
 
                 string keyShopCar = $"ShopCar{Id}";

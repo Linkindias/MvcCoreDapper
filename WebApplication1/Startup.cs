@@ -63,6 +63,7 @@ namespace WebApplication1
             services.AddSingleton<ProductRepository>(x => new ProductRepository(strCon, cmdTimeOut)); //產品倉
             services.AddSingleton<CategorieRepository>(x => new CategorieRepository(strCon, cmdTimeOut)); //產品類別倉
             services.AddSingleton<OrderDetailRepository>(x => new OrderDetailRepository(strCon, cmdTimeOut)); //訂單細部倉
+            services.AddSingleton<SupplierRepository>(x => new SupplierRepository(strCon, cmdTimeOut)); //供應商倉
 
             services.AddSession();
             services.AddMvc(options =>

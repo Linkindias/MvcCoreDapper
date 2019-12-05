@@ -155,6 +155,7 @@
                 {
                     <input type="hidden" id="totalAmount" name="totalAmount" value="">
                     <input type="hidden" id="discount" name="discount" value="">
+                    <input type="hidden" id="disAmount" name="disAmount" value="">
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 }
             }
@@ -197,6 +198,7 @@
                     console.log(data);
                     $("#totalAmount").val(data.totalAmount);
                     $("#discount").val(data.discount);
+                    $("#disAmount").val(data.disAmount);
                     $("#ShopCarForm").submit();
                 }
             },

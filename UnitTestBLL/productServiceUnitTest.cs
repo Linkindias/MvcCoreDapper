@@ -26,6 +26,7 @@ namespace UnitTestBLL
         static Mock<ProductRepository> mockProduct = null;
         static Mock<CategorieRepository> mockCategory = null;
         static Mock<OrderDetailRepository> mockOrderDetail = null;
+        static Mock<SupplierRepository> mockSupplier = null;
         static Mock<ProductModel> mockProductModel = null;
         static Mock<ShopCarModel> mockShopCarModel = null;
         static string connect = string.Empty;
@@ -40,10 +41,11 @@ namespace UnitTestBLL
             mockProduct = new Mock<ProductRepository>(new object[] { connect, timeout });
             mockCategory = new Mock<CategorieRepository>(new object[] { connect, timeout });
             mockOrderDetail = new Mock<OrderDetailRepository>(new object[] { connect, timeout });
+            mockSupplier = new Mock<SupplierRepository>(new object[] { connect, timeout });
             mockProductModel = new Mock<ProductModel>();
             mockShopCarModel = new Mock<ShopCarModel>();
             ProductService = new ProductService(mockConfig.Object, mockCache.Object, mockMember.Object,
-                                    mockProduct.Object, mockCategory.Object, mockOrderDetail.Object, 
+                                    mockProduct.Object, mockCategory.Object, mockOrderDetail.Object, mockSupplier.Object,
                                     mockProductModel.Object, mockShopCarModel.Object);
         }
 

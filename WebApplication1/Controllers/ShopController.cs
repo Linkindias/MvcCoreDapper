@@ -26,12 +26,12 @@ namespace WebApplication1.Controllers
         {
             ViewBag.Name = HttpContext.Session.GetString("Name");
             ViewBag.Id = HttpContext.Session.GetString("Id");
-            var result = ProductService.GetCategoriesAndProducts(CategoryId, ProductName);
+            var result = ProductService.GetCategoriesAndProducts(ViewBag.Id, CategoryId, ProductName);
 
-            if (!string.IsNullOrEmpty(CategoryId)) result.product.CategoryId = CategoryId;
-            if (!string.IsNullOrEmpty(ProductName)) result.product.ProductName = ProductName;
+            if (!string.IsNullOrEmpty(CategoryId)) result.Item2.CategoryId = CategoryId;
+            if (!string.IsNullOrEmpty(ProductName)) result.Item2.ProductName = ProductName;
 
-            if (result.rtn.IsSuccess) return View(result.product);
+            if (result.Item1.IsSuccess) return View(result.Item2);
 
             return View();
         }
@@ -48,11 +48,7 @@ namespace WebApplication1.Controllers
             
             var result = ProductService.GetShopCarProducts(ViewBag.Id, shopcars);
 
-            if (result.Item1.IsSuccess)
-            {
-                ViewBag.ShopCars = result.Item2;
-                return Ok(result.Item2);
-            }
+            if (result.Item1.IsSuccess) return Ok(result.Item2);
 
             return BadRequest(result.Item1.ErrorMsg);
         }

@@ -12,6 +12,8 @@ namespace BLL.PageModel
 
         public double discount { get; set; }
 
+        public int disAmount { get; set; }
+
         public List<ShopCarProductModel> products { get; set; }
     }
 }

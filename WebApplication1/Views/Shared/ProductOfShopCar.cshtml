@@ -1,0 +1,60 @@
+﻿@model BLL.PageModel.ShopCarProductModel
+
+<style type="text/css">
+    .div {
+        margin: 2%;
+    }
+</style>
+<div class="div" id="Product@(Model.ProductID)">
+    <form>
+        <div class="form-group" style="display:none;">
+            @Html.TextBoxFor(m => m.ProductID)
+        </div>
+        <div class="form-group">
+            @Html.Label("ProductName", $"產品: {Model.ProductName}", new { style = "white-space:nowrap" })
+        </div>
+        <div class="form-group">
+            @Html.Label("UnitPrice", $"單價: {Model.UnitPrice}", new { style = "white-space:nowrap" })
+        </div>
+        <div class="form-group">
+            @Html.Label("Count", $"數量: {Model.Count}", new { style = "white-space:nowrap" })
+        </div>
+        <div class="form-group">
+            @Html.Label("Amount", $"金額: {Model.Amount}", new { style = "white-space:nowrap" })
+        </div>
+        <div class="form-group">
+            @Html.Label("CategoryName", $"產品類別: {Model.CategoryName}", new { style = "white-space:nowrap" })
+        </div>
+        <div class="form-group">
+            @Html.Label("SupplierCompanyName", $"供應商: {Model.SupplierCompanyName}", new { style = "white-space:nowrap" })
+        </div>
+        <input type="button" class="btn btn-primary btn-block" id="submit" value="取消產品"
+               onclick="cancelProduct('@(Model.ProductID)'); return false;" />
+    </form>
+</div>
+<script type="text/javascript">
+
+    function cancelProduct(productId) {
+        var shopCar = window.localStorage.getItem('shopcar');
+        console.log('shopCar');
+        console.log(shopCar);
+
+        if (shopCar == null) {
+            window.localStorage.url = '@Url.Action("Product","Shop")';
+        }
+        else {
+            var car = JSON.parse(shopCar);
+            var index = car.findIndex(o => o.Id == productId);
+            
+            if (index != -1) {
+                car.splice(index,1);
+                
+                window.localStorage.setItem("shopcar", JSON.stringify(car));
+                //call parent viewcomponent reload
+                $("#Product" + productId).css('display','none');
+            }
+        }
+        return false;
+    }
+</script>
+
