@@ -98,3 +98,8 @@ DALCore/obj/DALCore.csproj.nuget.g.props
 DALCore/obj/DALCore.csproj.nuget.dgspec.json
 DALCore/obj/DALCore.csproj.nuget.cache
 DALCore/bin/Debug/netstandard2.0/DALCore.deps.json
+BLL/bin/Debug/netstandard2.0/DAL.dll
+.vs/WebApplication1/v16/.suo
+BLL/bin/Debug/netstandard2.0/DAL.pdb
+BLL/bin/Debug/netstandard2.0/DAL.dll
+.vs/WebApplication1/v16/.suo
