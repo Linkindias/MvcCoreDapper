@@ -50,8 +50,10 @@
                 car.splice(index,1);
                 
                 window.localStorage.setItem("shopcar", JSON.stringify(car));
-                //call parent viewcomponent reload
-                $("#Product" + productId).css('display','none');
+
+                goShopCar();
+                ////call parent viewcomponent reload
+                //$("#Product" + productId).css('display','none');
             }
         }
         return false;

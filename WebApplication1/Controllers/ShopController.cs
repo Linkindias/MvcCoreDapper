@@ -5,6 +5,7 @@ using DAL.DBModel;
 using DAL.DTOModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Omu.ValueInjecter;
 using System.Collections.Generic;
 
 namespace WebApplication1.Controllers
@@ -46,7 +47,7 @@ namespace WebApplication1.Controllers
             ViewBag.Name = HttpContext.Session.GetString("Name");
             ViewBag.Id = HttpContext.Session.GetString("Id");
             
-            var result = ProductService.GetShopCarProducts(ViewBag.Id, shopcars);
+            var result = ProductService.GetShopCarAmount(ViewBag.Id, shopcars);
 
             if (result.Item1.IsSuccess) return Ok(result.Item2);
 
@@ -64,6 +65,19 @@ namespace WebApplication1.Controllers
             ViewBag.Id = HttpContext.Session.GetString("Id");
 
             shopcar.products = ProductService.GetProductsById(ViewBag.Id);
+
+            return View("ShopCar", shopcar);
+        }
+
+        /// <summary>
+        /// 取得產品類別及產品資訊數量
+        /// </summary>
+        public ActionResult ShopCar(string Id)
+        {
+            ViewBag.Name = HttpContext.Session.GetString("Name");
+            ViewBag.Id = HttpContext.Session.GetString("Id");
+
+            ShopCarModel shopcar = ProductService.GetShopCarInfoById(ViewBag.Id);
 
             return View("ShopCar", shopcar);
         }

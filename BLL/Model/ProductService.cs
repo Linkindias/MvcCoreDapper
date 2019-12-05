@@ -135,9 +135,9 @@ namespace BLL.Model
         }
 
         /// <summary>
-        /// 依購物產單清單 取得購物車產品資訊
+        /// 依購物產單清單 取得購物車金額
         /// </summary>
-        public (Result rtn, ShopCarModel shopCar) GetShopCarProducts(string Id, List<ShopCarProductModel> products)
+        public (Result rtn, ShopCarModel shopCar) GetShopCarAmount(string Id, List<ShopCarProductModel> products)
         {
             var result = ProductRep.GetProductsByParam(0, "", products.Select(o => o.Id).Distinct().ToArray(), false);
             if (result.rtn.IsSuccess)
@@ -183,7 +183,7 @@ namespace BLL.Model
 
                 string keyShopCar = $"ShopCar{Id}";
                 TimeSpan ts = DateTime.Now.AddHours(3) - DateTime.Now; //1天
-                cache.Set<IEnumerable<ShopCarProductModel>>(keyShopCar, products, ts); //購物車加入快取
+                cache.Set<IEnumerable<ShopCarProductModel>>(keyShopCar, products, ts); //購物車產品清單加入快取
 
                 return (result.rtn, ShopCar);
             }
@@ -203,7 +203,30 @@ namespace BLL.Model
 
             cache.TryGetValue<IEnumerable<ShopCarProductModel>>(keyShopCar, out products);
 
-            return products;
+            return products ?? new List<ShopCarProductModel>();
+        }
+
+        /// <summary>
+        ///  依登入者 取得購物車資訊
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public ShopCarModel GetShopCarInfoById(string Id)
+        {
+            ShopCarModel shopcar = new ShopCarModel();
+            shopcar.products = this.GetProductsById(Id).ToList();
+            if (shopcar.products != null)
+            {
+                var result = this.GetShopCarAmount(Id, shopcar.products);
+
+                if (result.rtn.IsSuccess)
+                {
+                    shopcar.totalAmount = result.shopCar.totalAmount;
+                    shopcar.disAmount = result.shopCar.disAmount;
+                    shopcar.discount = result.shopCar.discount;
+                }
+            }
+            return shopcar;
         }
 
         protected virtual IEnumerable<SelectListItem> GetOptions(int mix, int max)

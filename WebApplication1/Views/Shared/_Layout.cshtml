@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -35,10 +42,12 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
+
     <style>
-        .navstyle{
+        .navstyle {
             width: 60%;
         }
+
         .menu {
             padding: 15px;
             color: white;
@@ -63,14 +72,43 @@
             color: white !important;
         }
 
-        .message{
-            color:red;
+        .message {
+            color: red;
         }
     </style>
 </head>
 
 <body>
     <script type="text/javascript">
+        function goShopCar() {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetProducts", "Shop")',
+                data: {
+                    __RequestVerificationToken: '@GetAntiXsrfRequestToken()',
+                    shopcars:JSON.parse(window.localStorage.getItem('shopcar')),
+                },
+                async: true,
+                success: function (data) {
+                    if (data != null) {
+                        console.log(data);
+                        $("#totalAmount").val(data.totalAmount);
+                        $("#discount").val(data.discount);
+                        $("#disAmount").val(data.disAmount);
+                        $("#ShopCarForm").submit();
+                    }
+                },
+                error: function (error) {
+                    if (error != null && error.responseText != '') {
+                        $('#msgModalbody').text(error.responseText).css({ 'color': 'red'});
+                        $('#msgModal').modal('show');
+                        $("#account").val('');
+                        $("#password").val('');
+                    }
+                }
+            });
+        }
+
         $(function () {
             var Id = '@ViewBag.Id';
 
@@ -133,6 +171,17 @@
                     }
                     <li><label class="menu">@ViewBag.Name</label></li>
                 </ul>
+            </div>
+            <div>
+                @{
+                    using (Html.BeginForm("ShopCar", "Shop", FormMethod.Post, new { id = "ShopCarForm", @style = "display:none;" }))
+                    {
+                        <input type="hidden" id="totalAmount" name="totalAmount" value="">
+                        <input type="hidden" id="discount" name="discount" value="">
+                        <input type="hidden" id="disAmount" name="disAmount" value="">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    }
+                }
             </div>
             @*@await Component.InvokeAsync("MenuC", new { Id = ViewBag.Id != null ? ViewBag.Id : "" })*@
 

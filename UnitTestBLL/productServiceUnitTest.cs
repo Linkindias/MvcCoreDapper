@@ -192,7 +192,7 @@ namespace UnitTestBLL
             var entryMock = new Mock<ICacheEntry>();
             mockCache.Setup(m => m.CreateEntry(It.IsAny<object>())).Returns(entryMock.Object);
 
-            var result = ProductService.GetShopCarProducts("1", new List<ShopCarProductModel>() { 
+            var result = ProductService.GetShopCarAmount("1", new List<ShopCarProductModel>() { 
                 new ShopCarProductModel()
                 {
                     Id = 2,
