@@ -63,8 +63,8 @@ namespace UnitTestBLL
                                     mockProductModel.Object, mockShopCarModel.Object);
             mockproduct.Protected().Setup("GetOptions", new object[] { 0, 10 }).Verifiable();
             ProductService = mockproduct.Object;
-            mockCategory.Setup(p => p.GetCategorys()).Returns(() => (new Result() { IsSuccess = true }, new List<Categories>() { 
-                new Categories() { 
+            mockCategory.Setup(p => p.GetCategorys()).Returns(() => (new Result() { IsSuccess = true }, new List<Categories>() {
+                new Categories() {
                     CategoryID = 1, CategoryName = "test"
                 }}));
             mockProduct.Setup(p => p.GetProductsByParam(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<bool>())).Returns(() => (new Result() { IsSuccess = true }, new List<Products>() {
@@ -83,7 +83,7 @@ namespace UnitTestBLL
                 }}));
             mockConfig.SetupGet(p => p[It.IsAny<String>()]).Returns("1");
 
-            var result = ProductService.GetCategoriesAndProducts("","");
+            var result = ProductService.GetCategoriesAndProducts("", "");
 
             Assert.AreEqual(true, result.rtn.IsSuccess);
             Assert.AreEqual(2, result.product.Products[0].ProductID);
@@ -99,7 +99,7 @@ namespace UnitTestBLL
             object categorys = null;
             mockCache.Setup(p => p.TryGetValue("GetCategory", out categorys)).Returns(true);
             object products = null;
-            mockCache.Setup(p => p.TryGetValue("GetProduct", out products)).Returns(true); 
+            mockCache.Setup(p => p.TryGetValue("GetProduct", out products)).Returns(true);
             object supplier = null;
             mockCache.Setup(p => p.TryGetValue("GetSupplier", out supplier)).Returns(true);
             var mockproduct = new Mock<ProductService>(mockConfig.Object, mockCache.Object, mockMember.Object,
@@ -146,7 +146,7 @@ namespace UnitTestBLL
                     CategoryID = 1, CategoryName = "test"
                 }}));
             mockProduct.Setup(p => p.GetProductsByParam(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<bool>())).Returns(() => (
-                new Result() { IsSuccess = false }, 
+                new Result() { IsSuccess = false },
                 new List<Products>() {
                     new Products() {
                         CategoryID = 1, ProductID = 2, ProductName = "producttest",UnitsInStock = 10
@@ -201,10 +201,11 @@ namespace UnitTestBLL
         [TestMethod()]
         public void GetCategoriesAndProducts_當取得產品數量錯誤_則回傳產品數量錯誤()
         {
+            string Id = "1";
             object categorys = null;
             mockCache.Setup(p => p.TryGetValue("GetCategory", out categorys)).Returns(true);
             object products = null;
-            mockCache.Setup(p => p.TryGetValue("GetProduct", out products)).Returns(true);
+            mockCache.Setup(p => p.TryGetValue($"GetProduct{Id}", out products)).Returns(true);
             object supplier = null;
             mockCache.Setup(p => p.TryGetValue("GetSupplier", out supplier)).Returns(true);
             var mockproduct = new Mock<ProductService>(mockConfig.Object, mockCache.Object, mockMember.Object,
@@ -231,25 +232,28 @@ namespace UnitTestBLL
                     CategoryID = 1, ProductID = 2, ProductName = "producttest",UnitsInStock = 10, Sales = 1,
                 }}));
 
-            var result = ProductService.GetCategoriesAndProducts("", "");
+            var result = ProductService.GetCategoriesAndProducts(Id, "", "");
 
             Assert.AreEqual(false, result.rtn.IsSuccess);
             Assert.AreEqual("查無產品數量", result.rtn.ErrorMsg);
         }
 
         [TestMethod()]
-        public void GetShopCarProducts_當取得購物車產品資訊正確_則回傳購物車產品資訊()
+        public void GetShopCarAmount_當取得購物車產品資訊正確_則回傳購物車產品資訊()
         {
             mockProduct.Setup(p => p.GetProductsByParam(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<bool>())).Returns(() => (new Result() { IsSuccess = true }, new List<Products>() {
                 new Products() {
-                    CategoryID = 1, ProductID = 1, ProductName = "test1",UnitsInStock = 10, UnitPrice = 100m,
+                    CategoryID = 1, ProductID = 1, ProductName = "test1",UnitsInStock = 10, UnitPrice = 100m, SupplierID = 1, UnitsOnOrder = 0
                 },
                 new Products() {
-                    CategoryID = 1, ProductID = 2, ProductName = "test2",UnitsInStock = 10, UnitPrice = 900m,
+                    CategoryID = 1, ProductID = 2, ProductName = "test2",UnitsInStock = 10, UnitPrice = 900m, SupplierID = 2, UnitsOnOrder = 0
                 }}));
             object categorys = new List<Categories>() { new Categories() { CategoryID =1, CategoryName = "CN", Description = "D"} };
             mockCache.Setup(p => p.TryGetValue("GetCategory", out categorys)).Returns(true);
-            object supplier = new List<Suppliers>() { new Suppliers() { SupplierID =1, CompanyName="CN",ContactName ="Cn",ContactTitle="CT",Phone="123",Address="ad"} };
+            object supplier = new List<Suppliers>() {
+                new Suppliers() { SupplierID =1, CompanyName="CN1",ContactName ="Cn1",ContactTitle="CT1",Phone="123",Address="ad1"},
+                new Suppliers() { SupplierID =2, CompanyName="CN2",ContactName ="Cn2",ContactTitle="CT2",Phone="123",Address="ad2"},
+            };
             mockCache.Setup(p => p.TryGetValue("GetSupplier", out supplier)).Returns(true);
             mockMember.Setup(p => p.GetCalculateAmounts(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (1000, 0.1));
             var entryMock = new Mock<ICacheEntry>();
@@ -273,7 +277,7 @@ namespace UnitTestBLL
             });
 
             Assert.AreEqual(true, result.rtn.IsSuccess);
-            Assert.AreEqual(1100, result.shopCar.totalAmount);
+            Assert.AreEqual(1900, result.shopCar.totalAmount);
             Assert.AreEqual(0.1, result.shopCar.discount);
             Assert.AreEqual(1000, result.shopCar.disAmount);
         }
@@ -282,34 +286,43 @@ namespace UnitTestBLL
         public void GetProductsById_當依登入者取得購物車產品資訊正確_則回傳購物車產品資訊()
         {
             string Id = "1";
-            var entryMock = new Mock<ICacheEntry>();
-            mockCache.Setup(m => m.CreateEntry(It.IsAny<object>())).Returns(entryMock.Object);
-            
+            object products = new List<ShopCarProductModel>() { new ShopCarProductModel() { } };
+            mockCache.Setup(p => p.TryGetValue($"ShopCar{Id}", out products)).Returns(true);
+
             var result = ProductService.GetProductsById(Id).ToList();
 
-            Assert.AreEqual(null, result);
+            Assert.AreEqual(1, result.Count());
         }
 
         [TestMethod()]
         public void GetShopCarInfoById_當依登入者取得購物車資訊正確_則回傳購物車資訊()
         {
-            var mockproduct = new Mock<ProductService>(mockConfig.Object, mockCache.Object, mockMember.Object,
-                                    mockProduct.Object, mockCategory.Object, mockOrderDetail.Object, mockSupplier.Object,
-                                    mockProductModel.Object, mockShopCarModel.Object);
-            mockproduct.Setup(m => m.GetProductsById(It.IsAny<string>())).Returns(
-                new List<ShopCarProductModel>() { 
-                    new ShopCarProductModel() {}
-            });
-            mockproduct.Setup(m => m.GetShopCarAmount(It.IsAny<string>(),new List<ShopCarProductModel>())).Returns(() => (new Result() { IsSuccess = true }, new ShopCarModel() {
-                disAmount =1,
-                discount =0.0,
-                totalAmount =100
-               }));
+            string Id = "1";
+            object products = new List<ShopCarProductModel>() { new ShopCarProductModel() { Id = 1,ProductID = 1, Count = 1, UnitPrice = 100, CategoryID = 1, SupplierID = 1 } };
+            mockCache.Setup(p => p.TryGetValue($"ShopCar{Id}", out products)).Returns(true);
+
+            mockProduct.Setup(p => p.GetProductsByParam(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<bool>())).Returns(() => (new Result() { IsSuccess = true }, new List<Products>() {
+                new Products() {
+                    CategoryID = 1, ProductID = 1, ProductName = "test1",UnitsInStock = 10, UnitPrice = 100m, SupplierID = 1, UnitsOnOrder = 0
+                },
+                new Products() {
+                    CategoryID = 1, ProductID = 2, ProductName = "test2",UnitsInStock = 10, UnitPrice = 900m, SupplierID = 2, UnitsOnOrder = 0
+                }}));
+            object categorys = new List<Categories>() { new Categories() { CategoryID = 1, CategoryName = "CN", Description = "D" } };
+            mockCache.Setup(p => p.TryGetValue("GetCategory", out categorys)).Returns(true);
+            object supplier = new List<Suppliers>() {
+                new Suppliers() { SupplierID =1, CompanyName="CN1",ContactName ="Cn1",ContactTitle="CT1",Phone="123",Address="ad1"},
+                new Suppliers() { SupplierID =2, CompanyName="CN2",ContactName ="Cn2",ContactTitle="CT2",Phone="123",Address="ad2"},
+            };
+            mockCache.Setup(p => p.TryGetValue("GetSupplier", out supplier)).Returns(true);
+            mockMember.Setup(p => p.GetCalculateAmounts(It.IsAny<string>(), It.IsAny<int>())).Returns(() => (1000, 0.1));
+            var entryMock = new Mock<ICacheEntry>();
+            mockCache.Setup(m => m.CreateEntry(It.IsAny<object>())).Returns(entryMock.Object);
 
             var result = ProductService.GetShopCarInfoById("1");
 
-            Assert.AreEqual(1, result.disAmount);
-            Assert.AreEqual(0.0, result.discount);
+            Assert.AreEqual(1000, result.disAmount);
+            Assert.AreEqual(0.1, result.discount);
             Assert.AreEqual(100, result.totalAmount);
         }
 
