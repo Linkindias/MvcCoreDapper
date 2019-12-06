@@ -61,11 +61,6 @@
 @Html.Partial("BootstrapModal")
 
 <script type="text/javascript">
-    //關閉Alert
-    function closeModal() {
-        $('#msgModal').modal('hide');
-    }
-
     $(function () {
         $("#Account").val(Decrypt('@Html.Raw(Model.Account)')); //帳號解碼
 

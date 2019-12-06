@@ -159,10 +159,6 @@
 </div>
 <script type="text/javascript">
 
-    function closeModal() {
-        $('#msgModal').modal('hide');
-    }
-
     function setProductToLocalstorage(productId) {
         var shopCar = window.localStorage.getItem('shopcar');
         var data = [{ Id: productId, Count: parseInt($('select[name=shopcount_' + productId + ']').val(), 10) }];

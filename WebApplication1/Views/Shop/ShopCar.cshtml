@@ -68,7 +68,9 @@
 
         var products = JSON.parse(window.localStorage.getItem('shopcar'))
 
-        if (products.length > 0)
+        if (products == null || products.length == 0)
+            window.location.href = '@Url.Action("Product", "Shop")';
+        else
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("SetOrder", "Order")',
@@ -92,8 +94,6 @@
                     }
                 }
             });
-        else
-            window.location.href = '@Url.Action("Product", "Shop")';
     }
 
     $(function () {

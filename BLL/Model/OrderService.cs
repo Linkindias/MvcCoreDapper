@@ -6,6 +6,7 @@ using DAL.Repository;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Transactions;
 
 namespace BLL.Model
 {
@@ -33,46 +34,47 @@ namespace BLL.Model
         {
             var Member = memberService.GetMember(Id);
 
-            ////交易
-            //using (var tran = conn.BeginTransaction())
-            //{
-            //    conn.Execute(strSql, datas);
-            //    tran.Commit();
-            //}
-            DateTime OrderDate = DateTime.Now;
-
-            var orderResult = OrderRep.CreateOrder(new DAL.DBModel.Orders()
+            using (var scope = new TransactionScope())
             {
-                CustomerID = Member.CustomerID,
-                OrderDate  = OrderDate,
-                ShipName = Member.CompanyName,
-                ShipAddress = Member.Address,
-                ShipCity = Member.City,
-                ShipRegion = Member.Region,
-                ShipPostalCode = Member.PostalCode,
-                ShipCountry = Member.Country
-            });
+                DateTime OrderDate = DateTime.Now;
 
-            if (!orderResult.rtn.IsSuccess) return orderResult.rtn;
-
-            var IdResult = OrderRep.GetOrderByParams(Member.CustomerID, OrderDate);
-
-            if (!IdResult.Item1.IsSuccess) return IdResult.Item1;
-
-            List<Order_Details> details = new List<Order_Details>();
-            foreach(ShopCarProductModel product in shopCar.products)
-            {
-                details.Add(new Order_Details() { 
-                    OrderID = IdResult.Item2,
-                    Discount = Convert.ToSingle(shopCar.discount),
-                    ProductID = product.ProductID,
-                    UnitPrice = product.UnitPrice.Value,
-                    Quantity = Convert.ToInt16(product.Count)
+                var orderResult = OrderRep.CreateOrder(new DAL.DBModel.Orders()
+                {
+                    CustomerID = Member.CustomerID,
+                    OrderDate = OrderDate,
+                    ShipName = Member.CompanyName,
+                    ShipAddress = Member.Address,
+                    ShipCity = Member.City,
+                    ShipRegion = Member.Region,
+                    ShipPostalCode = Member.PostalCode,
+                    ShipCountry = Member.Country
                 });
-            }
 
-            var detialResult = OrderDetailRep.CreateOrderDetail(details.ToArray());
-            return detialResult.Item1;
+                if (!orderResult.rtn.IsSuccess) return orderResult.rtn;
+
+                var IdResult = OrderRep.GetOrderByParams(Member.CustomerID, OrderDate);
+
+                if (!IdResult.Item1.IsSuccess) return IdResult.Item1;
+
+                List<Order_Details> details = new List<Order_Details>();
+                foreach (ShopCarProductModel product in shopCar.products)
+                {
+                    details.Add(new Order_Details()
+                    {
+                        OrderID = IdResult.Item2,
+                        Discount = Convert.ToSingle(shopCar.discount),
+                        ProductID = product.ProductID,
+                        UnitPrice = product.UnitPrice.Value,
+                        Quantity = Convert.ToInt16(product.Count)
+                    });
+                }
+
+                var detialResult = OrderDetailRep.CreateOrderDetail(details.ToArray());
+
+                if (detialResult.rtn.IsSuccess) scope.Complete();
+
+                return detialResult.Item1;
+            }
         }
     }
 }
