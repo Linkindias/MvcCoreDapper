@@ -15,6 +15,7 @@ namespace BLL.PageModel
 
         public string CategoryName { get; set; }
         public string CategoryDescription { get; set; }
+        public int SupplierID { get; set; }
         public string SupplierCompanyName { get; set; }
         public string SupplierContactName { get; set; }
         public string SupplierContactTitle { get; set; }
