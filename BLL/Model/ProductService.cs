@@ -137,7 +137,7 @@ namespace BLL.Model
         /// <summary>
         /// 依購物產單清單 取得購物車金額
         /// </summary>
-        public (Result rtn, ShopCarModel shopCar) GetShopCarAmount(string Id, List<ShopCarProductModel> products)
+        public virtual (Result rtn, ShopCarModel shopCar) GetShopCarAmount(string Id, List<ShopCarProductModel> products)
         {
             var result = ProductRep.GetProductsByParam(0, "", products.Select(o => o.Id).Distinct().ToArray(), false);
             if (result.rtn.IsSuccess)
@@ -206,7 +206,7 @@ namespace BLL.Model
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public IEnumerable<ShopCarProductModel> GetProductsById(string Id)
+        public virtual IEnumerable<ShopCarProductModel> GetProductsById(string Id)
         {
             IEnumerable<ShopCarProductModel> products = null;
 
