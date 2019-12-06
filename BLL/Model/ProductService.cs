@@ -153,7 +153,16 @@ namespace BLL.Model
                 int TotalAmount = 0;
                 products.ForEach(o =>
                 {
-                    o.InjectFrom(result.products.Where(p => p.ProductID == o.Id).FirstOrDefault());
+                    var product = result.products.Where(p => p.ProductID == o.Id).FirstOrDefault();
+                    o.CategoryID = product.CategoryID;
+                    o.ProductID = product.ProductID;
+                    o.ProductName = product.ProductName;
+                    o.QuantityPerUnit = product.QuantityPerUnit;
+                    o.ReorderLevel = product.ReorderLevel;
+                    o.SupplierID = product.SupplierID.Value;
+                    o.UnitPrice = product.UnitPrice;
+                    o.UnitsInStock = product.UnitsInStock.Value;
+                    o.UnitsOnOrder = product.UnitsOnOrder;
                     o.Amount = o.Count * (int)o.UnitPrice; //數量 * 單價
                     TotalAmount += o.Amount; //總價
 
@@ -167,6 +176,7 @@ namespace BLL.Model
                     if (suppliers.Count() > 0) //供應商
                     {
                         var Supplier = suppliers.Where(p => p.SupplierID == o.SupplierID).FirstOrDefault();
+                        o.SupplierID = Supplier.SupplierID;
                         o.SupplierCompanyName = Supplier.CompanyName;
                         o.SupplierContactName = Supplier.ContactName;
                         o.SupplierContactTitle = Supplier.ContactTitle;
@@ -180,6 +190,7 @@ namespace BLL.Model
                 ShopCar.totalAmount = TotalAmount;
                 ShopCar.disAmount = rtnAmount.TotalAmount;
                 ShopCar.discount = rtnAmount.Discount;
+                ShopCar.products = products;
 
                 string keyShopCar = $"ShopCar{Id}";
                 TimeSpan ts = DateTime.Now.AddHours(3) - DateTime.Now; //1天

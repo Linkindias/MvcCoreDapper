@@ -31,6 +31,7 @@
             }
             using (Html.BeginForm("Index", "Order", FormMethod.Post, new { id = "OrderForm" }))
             {
+                @Html.AntiForgeryToken()
                 <div class="products">
                     @{
                         for (int i = 0; i < Model.products.Count(); i++)
@@ -56,12 +57,45 @@
             @Html.Label("DisAmount", $"付款金額: {Model.disAmount}", new { style = "white-space:nowrap" })
         </div>
         <div>
-            <input type="button" class="btn btn-success btn-block bt" id="submit" value="確定訂單" />
+            <input type="button" class="btn btn-success btn-block bt" id="submit" value="確定訂單" 
+                   onclick="goOrder(); return false;"/>
         </div>
     </div>
     @Html.Partial("BootstrapModal")
 </div>
 <script type="text/javascript">
+    function goOrder() {
+
+        var products = JSON.parse(window.localStorage.getItem('shopcar'))
+
+        if (products.length > 0)
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("SetOrder", "Order")',
+                data: {
+                    __RequestVerificationToken: '@GetAntiXsrfRequestToken()',
+                    shopcars: JSON.parse(window.localStorage.getItem('shopcar')),
+                },
+                async: true,
+                success: function (data) {
+                    if (data != null) {
+                        console.log(data);
+                        window.location.href = data;
+                    }
+                },
+                error: function (error) {
+                    if (error != null && error.responseText != '') {
+                        $('#msgModalbody').text(error.responseText).css({ 'color': 'red' });
+                        $('#msgModal').modal('show');
+                        $("#account").val('');
+                        $("#password").val('');
+                    }
+                }
+            });
+        else
+            window.location.href = '@Url.Action("Product", "Shop")';
+    }
+
     $(function () {
         var products = JSON.parse(window.localStorage.getItem('shopcar'));
         if (products != null) {

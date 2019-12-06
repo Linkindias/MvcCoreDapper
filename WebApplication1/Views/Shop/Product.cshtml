@@ -77,6 +77,7 @@
                 }
                 using (Html.BeginForm("Shopping", "Shop", FormMethod.Post, new { id = "ShoppingForm" }))
                 {
+                    @Html.AntiForgeryToken()
                     var Categorys = Model.CategoryId != null
                                     ? new List<SelectListItem>() { Model.Categories.Where(o => o.Value == Model.CategoryId).FirstOrDefault() }
                                     : Model.Categories;

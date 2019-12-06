@@ -47,6 +47,8 @@ namespace WebApplication1
             services.AddSingleton<ProductService>(); //產品服務
             services.AddTransient<IMemberOfProduct, MemberService>(); //會員服務(帳號計算金額及折扣)
             services.AddSingleton<MemberService>(); //會員服務
+            services.AddTransient<IMemberOfOrder, MemberService>(); //會員服務(依會員編號取得會員資訊)
+            services.AddSingleton<OrderService>(); //訂單服務
 
             services.AddTransient<CustomerModel>(); //客戶
             services.AddTransient<EmployeeModel>(); //員工

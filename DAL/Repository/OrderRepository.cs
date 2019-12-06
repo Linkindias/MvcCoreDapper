@@ -65,5 +65,52 @@ where o.OrderID = @Id";
 
             return (result, myOrderDTO);
         }
+
+        /// <summary>
+        /// 依客戶編號、訂單日期，取得訂單
+        /// </summary>
+        /// <param name="OrderId"></param>
+        /// <returns></returns>
+        public (Result rtn, int orderId) GetOrderByParams(string CustomerId, DateTime OrdeDate)
+        {
+            string sqlCmd = @"
+select * from orders
+where CustomerID = @Id and OrderDate = @Date";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@Id", CustomerId);
+            parameters.Add("@Date", OrdeDate);
+
+            var result = this.GetSingleDefault<Orders>(sqlCmd, parameters);
+
+            return (result.rtn, result.result.OrderID);
+        }
+
+        /// <summary>
+        /// 建立訂單
+        /// </summary>
+        public virtual (Result rtn, int exeRows) CreateOrder(Orders order)
+        {
+            string sqlCmd = @"Insert Orders Values(@CustomerId, @EmployeeId, @OrderDate, @RequiredDate, @ShippedDate, @ShipVia, 
+                    @Freight, @ShipName, @ShipAddress, @ShipCity, @ShipRegion, @ShipPostalCode, @ShipCountry)";
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CustomerId", order.CustomerID);
+            parameters.Add("@EmployeeId", order.EmployeeID);
+            parameters.Add("@OrderDate", order.OrderDate);
+            parameters.Add("@RequiredDate", order.RequiredDate);
+            parameters.Add("@ShippedDate", order.ShippedDate);
+            parameters.Add("@ShipVia", order.ShipVia);
+            parameters.Add("@Freight", order.Freight);
+            parameters.Add("@ShipName", order.ShipName);
+            parameters.Add("@ShipAddress", order.ShipAddress);
+            parameters.Add("@ShipCity", order.ShipCity);
+            parameters.Add("@ShipRegion", order.ShipRegion);
+            parameters.Add("@ShipPostalCode", order.ShipPostalCode);
+            parameters.Add("@ShipCountry", order.ShipCountry);
+
+            var result = this.GetCUDOfRow(sqlCmd, parameters);
+
+            return (result.rtn, result.Rows);
+        }
     }
 }

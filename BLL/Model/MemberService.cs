@@ -10,7 +10,7 @@ using static Base.Enums;
 
 namespace BLL.Model
 {
-    public class MemberService : IMemberOfAuth, IMemberOfMenu, IMemberOfProduct
+    public class MemberService : IMemberOfAuth, IMemberOfMenu, IMemberOfProduct, IMemberOfOrder
     {
         EmployeeRepository EmployeeRep;
         CustomerRepository CustomerRep;

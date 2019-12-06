@@ -81,5 +81,15 @@ namespace WebApplication1.Controllers
 
             return View("ShopCar", shopcar);
         }
+
+        /// <summary>
+        /// 依帳號取得訂單
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public ActionResult Order(string Id)
+        {
+            return RedirectToAction("Index", "Order");
+        }
     }
 }

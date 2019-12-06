@@ -13,9 +13,5 @@ namespace DAL.DBModel
         public short Quantity { get; set; }
 
         public float Discount { get; set; }
-
-        public virtual Orders Orders { get; set; }
-
-        public virtual Products Products { get; set; }
     }
 }

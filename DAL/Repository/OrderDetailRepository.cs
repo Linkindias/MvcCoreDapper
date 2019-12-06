@@ -1,9 +1,11 @@
 ﻿using Base;
+using DAL.DBModel;
 using DAL.DTOModel;
 using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace DAL.Repository
 {
@@ -30,6 +32,32 @@ namespace DAL.Repository
             var result = this.GetList<ProductCountDTO>(sqlCmd, parameters);
 
             return (result.rtn, result.result.ToList());
+        }
+
+        /// <summary>
+        /// 建立訂單明細
+        /// </summary>
+        public virtual (Result rtn, int exeRows) CreateOrderDetail(Order_Details[] orderDetails)
+        {
+            string sqlCmd = @"Insert [Order Details] Values";
+            DynamicParameters parameters = new DynamicParameters();
+
+            for (int i=0; i< orderDetails.Count(); i++)
+            {
+                sqlCmd += "(";
+                foreach (PropertyInfo prop in orderDetails[i].GetType().GetProperties())
+                {
+                    string Column = $"{prop.Name}{i}";
+                    sqlCmd += $"@{Column},";
+                    parameters.Add($"@{Column}", prop.GetValue(orderDetails[i]));
+                }
+                sqlCmd = sqlCmd.Substring(0, sqlCmd.Length - 1); //去除逗號
+                sqlCmd += "),";
+            }
+            sqlCmd = sqlCmd.Substring(0, sqlCmd.Length - 1); //去除逗號
+            var result = this.GetCUDOfRow(sqlCmd, parameters);
+
+            return (result.rtn, result.Rows);
         }
     }
 }
