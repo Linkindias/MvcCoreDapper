@@ -10,5 +10,8 @@ namespace BLL.PageModel
     public class OrderModel : Result
     {
         public List<OrderDTO> orders { get; set; }
+
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
     }
 }

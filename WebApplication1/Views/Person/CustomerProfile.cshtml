@@ -7,19 +7,14 @@
     }
 }
 <style type="text/css">
-    .row {
-        width: 800px !important;
-        margin-top: 10%;
-        margin-left: 20%;
-    }
-
     .name {
         display: flex;
     }
 </style>
-<div class="container">
+<div class="container-md">
     <div class="row">
-        <div class="col-12">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
             @{
                 if (!Model.IsSuccess)
                 {
@@ -72,6 +67,7 @@
                 }
             }
         </div>
+        <div class="col-md-3"></div>
     </div>
     @Html.Partial("BootstrapModal")
 </div>

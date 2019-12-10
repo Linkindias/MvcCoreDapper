@@ -8,18 +8,41 @@
 }
 
 <style type="text/css">
-
 </style>
 
-<div class="container">
+<div class="container-md">
     <div class="row">
+        @using (Html.BeginForm("OrderQuery", "Order", FormMethod.Post, new { id = "OrderForm" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="col-4 form-group">
+                @Html.LabelFor(m => m.StartDate)
+                @Html.TextBoxFor(m => m.StartDate, "", new { @class = "form-control" })
+            </div>
+            <div class="col-4 form-group">
+                @Html.LabelFor(m => m.EndDate)
+                @Html.TextBoxFor(m => m.EndDate, "", new { @class = "form-control" })
+            </div>
+            <div class="col-4">
+                <input type="button" class="btn btn-primary btn-block" id="submit" value="Query" />
+            </div>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        }
     </div>
 </div>
 
 <script type="text/javascript">
 
     $(function () {
+        $("#StartDate").datepicker({
+            format: "yyyy/mm/dd",
+            locale: "zh-tw"
+        });
 
+        $("#EndDate").datepicker({
+            format: "yyyy/mm/dd",
+            locale: "zh-tw"
+        });
     });
 </script>
 

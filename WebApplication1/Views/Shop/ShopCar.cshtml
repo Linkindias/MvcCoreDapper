@@ -7,10 +7,6 @@
     }
 }
 <style type="text/css">
-    .row {
-        margin-top: 10%;
-    }
-
     .products {
         display: flex;
         flex-direction: row;
@@ -19,7 +15,7 @@
         flex-wrap: wrap;
     }
 </style>
-<div class="container">
+<div class="container-md">
     <div class="row">
         @{
             if (!Model.IsSuccess)
@@ -44,21 +40,34 @@
         }
     </div>
     <div>
-        <div>
-            @Html.Label("Items", $"產品品項: {Model.products.Count()}", new { style = "white-space:nowrap" })
+        <div >
+            <label for="Items" class="col-md-1 col-form-label">產品品項</label>
+            <div class="col-md-11">
+                @Html.Label("Count", Model.products.Count().ToString(), new { style = "white-space:nowrap" })
+            </div>
         </div>
-        <div>
-            @Html.Label("TotalAmount", $"總金額: {Model.totalAmount}", new { style = "white-space:nowrap" })
+        <div >
+            <label for="Items" class="col-md-1 col-form-label">總金額</label>
+            <div class="col-md-11">
+                @Html.Label("totalAmount", Model.totalAmount.ToString(), new { style = "white-space:nowrap" })
+            </div>
         </div>
-        <div>
-            @Html.Label("Discount", $"折扣: {Model.discount * 10}", new { style = "white-space:nowrap" })
+        <div >
+            <label for="Items" class="col-md-1 col-form-label">折扣</label>
+            <div class="col-md-11">
+                @Html.Label("discount", $"{Model.discount * 10}", new { style = "white-space:nowrap" })
+            </div>
         </div>
-        <div>
-            @Html.Label("DisAmount", $"付款金額: {Model.disAmount}", new { style = "white-space:nowrap" })
+        <div >
+            <label for="Items" class="col-md-1 col-form-label">付款金額</label>
+            <div class="col-md-11">
+                @Html.Label("disAmount", Model.disAmount.ToString("C"), new { style = "white-space:nowrap" })
+            </div>
         </div>
+       
         <div>
-            <input type="button" class="btn btn-success btn-block bt" id="submit" value="確定訂單" 
-                   onclick="goOrder(); return false;"/>
+            <input type="button" class="btn btn-success btn-block bt" id="submit" value="確定訂單"
+                   onclick="goOrder(); return false;" />
         </div>
     </div>
     @Html.Partial("BootstrapModal")

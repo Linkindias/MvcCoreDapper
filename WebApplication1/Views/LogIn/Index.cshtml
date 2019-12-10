@@ -13,21 +13,15 @@
 <script src="~/lib/crypto-js/sha512.js"></script>
 <script src="~/js/Encryption.js"></script>
 <style type="text/css">
-    .row {
-        width: 400px !important;
-        margin-top: 10%;
-        margin-left: 30%;
-    }
-
     .ui-button{
         margin-top:10px;
     }
 </style>
 
-<div class="container">
+<div class="container-md">
     <div class="row">
-        <div class="col-4"></div>
-        <div class="col-4">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
             @using (Html.BeginForm("In", "LogIn", FormMethod.Post, new { id = "LogInForm" }))
             {
                 @Html.AntiForgeryToken()
@@ -46,7 +40,7 @@
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             }
         </div>
-        <div class="col-4"></div>
+        <div class="col-md-4"></div>
     </div>
     @Html.Partial("BootstrapModal")
 </div>

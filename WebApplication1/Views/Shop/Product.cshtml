@@ -8,22 +8,8 @@
     }
 }
 <style type="text/css">
-    .row {
-        width: 800px !important;
-        margin-top: 10%;
-        margin-left: 20%;
-    }
-
-    .query {
-        display: flex;
-    }
-
-    .div {
-        margin-left: 20px;
-    }
-
-    .querybutton {
-        margin-left: 20%;
+    .detial {
+        margin-top: 5%;
     }
 
     .label {
@@ -46,9 +32,10 @@
         width: 110%
     }
 </style>
-<div class="container">
+<div class="container-md">
     <div class="row">
-        <div class="col-12">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
             @{
                 if (!Model.IsSuccess)
                 {
@@ -60,22 +47,24 @@
 
                 using (Html.BeginForm("Product", "Shop", FormMethod.Get, new { id = "ShopForm", ProductName = @Model.ProductName, CategoryId = @Model.CategoryId }))
                 {
-                    <div class="form-group query">
-                        <div class="div query">
-                            @Html.Label("name", "產品類別", new { style = "white-space:nowrap" })
+                    <div class="row">
+                        <div class="col-md-4">
+                            @Html.Label("category", "產品類別", new { style = "white-space:nowrap" })
                             @Html.DropDownListFor(m => m.CategoryId, Model.Categories, "請選擇產品類別", new { @class = "form-control" })
                         </div>
-                        <div class="div query">
+                        <div class="col-md-6">
                             @Html.Label("name", "產品名稱", new { style = "white-space:nowrap" })
                             @Html.TextBoxFor(m => m.ProductName, "請輸入產品名稱", new { @class = "form-control" })
                         </div>
-                        <div class="querybutton">
+                        <div class="col-md-2">
+                            @Html.Label("submit", "", new { style = "white-space:nowrap" })
                             <input type="submit" class="btn btn-primary btn-block" id="query" value="查詢" />
                         </div>
                     </div>
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 }
-                using (Html.BeginForm("Shopping", "Shop", FormMethod.Post, new { id = "ShoppingForm" }))
+
+                using (Html.BeginForm("Shopping", "Shop", FormMethod.Post, new { id = "ShoppingForm" , @class="detial"}))
                 {
                     @Html.AntiForgeryToken()
                     var Categorys = Model.CategoryId != null
@@ -154,6 +143,7 @@
                 }
             }
         </div>
+        <div class="col-md-2"></div>
     </div>
     @Html.Partial("BootstrapModal")
 </div>

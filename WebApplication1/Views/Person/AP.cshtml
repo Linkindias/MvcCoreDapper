@@ -12,19 +12,14 @@
 <script src="~/lib/crypto-js/sha512.js"></script>
 <script src="~/js/Encryption.js"></script>
 <style type="text/css">
-    .row {
-        width: 400px !important;
-        margin-top: 10%;
-        margin-left: 30%;
-    }
-
     .span {
         color: blue;
     }
 </style>
-<div class="container">
+<div class="container-md">
     <div class="row">
-        <div class="col-12">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
             @{
                 if (!Model.IsSuccess)
                 {
@@ -56,6 +51,7 @@
                 }
             }
         </div>
+        <div class="col-md-4"></div>
     </div>
 </div>
 @Html.Partial("BootstrapModal")

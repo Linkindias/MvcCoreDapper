@@ -3,30 +3,49 @@
 <style type="text/css">
     .div {
         margin: 2%;
+        width: 20%;
     }
 </style>
 <div class="div" id="Product@(Model.ProductID)">
     <form>
-        <div class="form-group" style="display:none;">
+        <div style="display:none;">
             @Html.TextBoxFor(m => m.ProductID)
         </div>
-        <div class="form-group">
-            @Html.Label("ProductName", $"產品: {Model.ProductName}", new { style = "white-space:nowrap" })
+        <div class="row">
+            <label for="NameTitle" class="col-md-4 col-form-label">產品</label>
+            <div class="col-md-8">
+                @Html.Label("ProductName", Model.ProductName, new { style = "white-space:nowrap" })
+            </div>
         </div>
-        <div class="form-group">
-            @Html.Label("UnitPrice", $"單價: {Model.UnitPrice}", new { style = "white-space:nowrap" })
+        <div class="row">
+            <label for="PriceTitle" class="col-md-4 col-form-label">單價</label>
+            <div class="col-md-8">
+                @Html.Label("UnitPrice", Model.UnitPrice.Value.ToString("C"), new { style = "white-space:nowrap" })
+            </div>
         </div>
-        <div class="form-group">
-            @Html.Label("Count", $"數量: {Model.Count}", new { style = "white-space:nowrap" })
+        <div class="row">
+            <label for="CountTitle" class="col-md-4 col-form-label">數量</label>
+            <div class="col-md-8">
+                @Html.Label("Count", Model.Count.ToString(), new { style = "white-space:nowrap" })
+            </div>
         </div>
-        <div class="form-group">
-            @Html.Label("Amount", $"金額: {Model.Amount}", new { style = "white-space:nowrap" })
+        <div class="row">
+            <label for="AmountTitle" class="col-md-4 col-form-label">金額</label>
+            <div class="col-md-8">
+                @Html.Label("Amount", Model.Amount.ToString(), new { style = "white-space:nowrap" })
+            </div>
         </div>
-        <div class="form-group">
-            @Html.Label("CategoryName", $"產品類別: {Model.CategoryName}", new { style = "white-space:nowrap" })
+        <div class="row">
+            <label for="CategoryTitle" class="col-md-4 col-form-label">類別</label>
+            <div class="col-md-8">
+                @Html.Label("CategoryName", Model.CategoryName, new { style = "white-space:nowrap" })
+            </div>
         </div>
-        <div class="form-group">
-            @Html.Label("SupplierCompanyName", $"供應商: {Model.SupplierCompanyName}", new { style = "white-space:nowrap" })
+        <div class="row">
+            <label for="SupplierTitle" class="col-md-4 col-form-label">供應商</label>
+            <div class="col-md-8">
+                @Html.Label("SupplierCompanyName", Model.SupplierCompanyName, new { style = "white-space:nowrap" })
+            </div>
         </div>
         <input type="button" class="btn btn-primary btn-block" id="submit" value="取消產品"
                onclick="cancelProduct('@(Model.ProductID)'); return false;" />
@@ -45,15 +64,13 @@
         else {
             var car = JSON.parse(shopCar);
             var index = car.findIndex(o => o.Id == productId);
-            
+
             if (index != -1) {
                 car.splice(index,1);
-                
+
                 window.localStorage.setItem("shopcar", JSON.stringify(car));
 
                 goShopCar();
-                ////call parent viewcomponent reload
-                //$("#Product" + productId).css('display','none');
             }
         }
         return false;

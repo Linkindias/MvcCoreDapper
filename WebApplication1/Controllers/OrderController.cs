@@ -47,6 +47,28 @@ namespace WebApplication1.Controllers
         }
 
         /// <summary>
+        /// 訂單查詢
+        /// </summary>
+        /// <param name="dtStart"></param>
+        /// <param name="dtEnd"></param>
+        /// <returns></returns>
+        public ActionResult OrderQuery(DateTime dtStart, DateTime dtEnd)
+        {
+            ViewBag.Name = HttpContext.Session.GetString("Name");
+            ViewBag.Id = HttpContext.Session.GetString("Id");
+
+            var Member = memberService.GetMember(ViewBag.Id);
+
+            if (Member != null)
+            {
+                int Day = int.Parse(configuration["OrderScopeDay"]);
+                DateTime dtNow = DateTime.Today.AddDays(1);
+                return View(OrderService.GetOrderById(ViewBag.Id, Member, dtStart, dtEnd));
+            }
+            return View();
+        }
+
+        /// <summary>
         /// 設定訂單
         /// </summary>
         [ValidateAntiForgeryToken]
