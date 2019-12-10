@@ -16,26 +16,40 @@ namespace DAL.Repository
         }
 
         /// <summary>
-        /// 依訂單編號取得訂單資訊
+        /// 依客戶編號取得訂單資訊
         /// </summary>
         /// <param name="Account">帳號</param>
-        public (Result rtn, OrderDTO orderDto) GetOrderById(int OrderId)
+        public (Result rtn, List<OrderDTO> orders) GetOrderById(string CustomerId, int EmployeeId, DateTime Start, DateTime End)
         {
             Result result = new Result();
+
+            DynamicParameters parameters = new DynamicParameters();
             string sqlCmd = @"
 select o.*,od.* from orders as o 
-inner join[Order Details] as od on o.OrderID = od.OrderID
-where o.OrderID = @Id";
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@Id", OrderId);
-            OrderDTO myOrderDTO = null;
+inner join[Order Details] as od on o.OrderID = od.OrderID ";
+
+            if (!string.IsNullOrEmpty(CustomerId))
+            {
+                sqlCmd += "where o.CustomerID = @Id";
+                parameters.Add("@Id", CustomerId);
+            }
+            else
+            {
+                sqlCmd += "where o.EmployeeID = @Id or EmployeeID is null";
+                parameters.Add("@Id", EmployeeId);
+            }
+            sqlCmd += " and @Start <= OrderDate and OrderDate <= @End";
+            parameters.Add("@Start", Start);
+            parameters.Add("@End", End);
+
+            List<OrderDTO> orders = null;
 
             using (var connection = new SqlConnection(this.ConnectionString))
             {
                 var orderDictionary = new Dictionary<int, OrderDTO>();
                 try
                 {
-                    myOrderDTO = connection.Query<OrderDTO, Order_Details, OrderDTO>(
+                    orders = connection.Query<OrderDTO, Order_Details, OrderDTO>(
                         sqlCmd,
                         (order, orderDetail) =>
                         {
@@ -52,7 +66,7 @@ where o.OrderID = @Id";
                             return orderEntry;
                         },
                         parameters,
-                        splitOn: "OrderID").Distinct().FirstOrDefault();
+                        splitOn: "OrderID").Distinct().ToList();
 
                     result.IsSuccess = true;
                 }
@@ -63,7 +77,7 @@ where o.OrderID = @Id";
                 }
             }
 
-            return (result, myOrderDTO);
+            return (result, orders);
         }
 
         /// <summary>

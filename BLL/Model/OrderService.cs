@@ -2,7 +2,9 @@
 using BLL.InterFace;
 using BLL.PageModel;
 using DAL.DBModel;
+using DAL.DTOModel;
 using DAL.Repository;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,23 +14,52 @@ namespace BLL.Model
 {
     public class OrderService
     {
+        IMemberOfOrder memberService;
         OrderRepository OrderRep;
         OrderDetailRepository OrderDetailRep;
-        IMemberOfOrder memberService;
+        OrderModel Order;
 
-        public OrderService(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository,
-            IMemberOfOrder memberOfOrder)
+        public OrderService(IMemberOfOrder memberOfOrder,
+            OrderRepository orderRepository, OrderDetailRepository orderDetailRepository,
+            OrderModel orderModel)
         {
             this.OrderRep = orderRepository;
             this.OrderDetailRep = orderDetailRepository;
             this.memberService = memberOfOrder;
+            this.Order = orderModel;
+        }
+
+        /// <summary>
+        /// 依帳號取得訂單資訊
+        /// </summary>
+        /// <param name="Id">會員編號</param>
+        /// <param name="員工、會員">會員類別</param>
+        /// <param name="Start">起始日期</param>
+        /// <param name="End">終止日期</param>
+        /// <returns></returns>
+        public OrderModel GetOrderById(string Id, dynamic Member, DateTime Start, DateTime End)
+        {
+            Result rtn = new Result();
+            (Result rtn, List<OrderDTO> orderDto) result = (new Result(), new List<OrderDTO>());
+
+            if (Member is CustomerModel)
+                result = OrderRep.GetOrderById(Member.CustomerID , 0, Start, End);
+            else
+                result = OrderRep.GetOrderById(string.Empty , Member.EmployeeID, Start, End);
+
+            Order.orders = result.orderDto;
+            Order.IsSuccess = result.rtn.IsSuccess;
+            Order.SuccessMsg = result.rtn.SuccessMsg;
+            Order.ErrorMsg = result.rtn.ErrorMsg;
+            Order.ErrorCode = result.rtn.ErrorCode;
+            return Order;
         }
 
         /// <summary>
         /// 建立訂單
         /// </summary>
-        /// <param name="Id"></param>
-        /// <param name="shopCar"></param>
+        /// <param name="Id">會員編號</param>
+        /// <param name="shopCar">購物車資訊</param>
         /// <returns></returns>
         public Result CreateOrder(string Id, ShopCarModel shopCar)
         {

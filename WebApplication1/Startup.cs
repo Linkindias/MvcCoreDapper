@@ -54,6 +54,7 @@ namespace WebApplication1
             services.AddTransient<EmployeeModel>(); //員工
             services.AddTransient<ProductModel>(); //產品
             services.AddTransient<ShopCarModel>(); //購物車
+            services.AddTransient<OrderModel>(); //訂單
 
             //Repository
             services.AddSingleton<AuthenticationRepository>(x => new AuthenticationRepository(strCon, cmdTimeOut)); //權限倉

@@ -32,9 +32,7 @@ namespace WebApplication1.Controllers
             if (!string.IsNullOrEmpty(CategoryId)) result.Item2.CategoryId = CategoryId;
             if (!string.IsNullOrEmpty(ProductName)) result.Item2.ProductName = ProductName;
 
-            if (result.Item1.IsSuccess) return View(result.Item2);
-
-            return View();
+            return View(result.Item2);
         }
 
         /// <summary>

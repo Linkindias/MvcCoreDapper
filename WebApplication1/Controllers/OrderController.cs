@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BLL.InterFace;
 using BLL.Model;
 using BLL.PageModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace WebApplication1.Controllers
 {
@@ -13,11 +15,16 @@ namespace WebApplication1.Controllers
     {
         ProductService ProductService;
         OrderService OrderService;
+        IMemberOfOrder memberService;
+        IConfiguration configuration;
 
-        public OrderController(ProductService productService, OrderService orderService)
+        public OrderController(ProductService productService, OrderService orderService,
+            IMemberOfOrder memberOfOrder, IConfiguration configuration)
         {
             this.ProductService = productService;
             this.OrderService = orderService;
+            this.memberService = memberOfOrder;
+            this.configuration = configuration;
         }
 
         /// <summary>
@@ -28,6 +35,14 @@ namespace WebApplication1.Controllers
             ViewBag.Name = HttpContext.Session.GetString("Name");
             ViewBag.Id = HttpContext.Session.GetString("Id");
 
+            var Member = memberService.GetMember(ViewBag.Id);
+
+            if (Member != null)
+            {
+                int Day = int.Parse(configuration["OrderScopeDay"]);
+                DateTime dtNow = DateTime.Today.AddDays(1);
+                return View(OrderService.GetOrderById(ViewBag.Id, Member, dtNow.AddDays(-1 * Day), dtNow));
+            }
             return View();
         }
 
