@@ -10,8 +10,8 @@
       ]
     },
     {
-      "library": "jqueryui@1.12.1",
-      "destination": "wwwroot/lib/jquery-ui/"
+      "library": "bootstrap-datepicker@1.9.0",
+      "destination": "wwwroot/bootstrap-datepicker/"
     }
   ]
 }

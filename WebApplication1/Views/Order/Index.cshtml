@@ -11,37 +11,48 @@
 </style>
 
 <div class="container-md">
+
+    @using (Html.BeginForm("OrderQuery", "Order", FormMethod.Post, new { id = "OrderForm" }))
+    {
+        @Html.AntiForgeryToken()
     <div class="row">
-        @using (Html.BeginForm("OrderQuery", "Order", FormMethod.Post, new { id = "OrderForm" }))
-        {
-            @Html.AntiForgeryToken()
-            <div class="col-4 form-group">
-                @Html.LabelFor(m => m.StartDate)
+        <div class="col-md-4 form-group">
+            <div class="input-group date" id="StartDate">
                 @Html.TextBoxFor(m => m.StartDate, "", new { @class = "form-control" })
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
             </div>
-            <div class="col-4 form-group">
-                @Html.LabelFor(m => m.EndDate)
+        </div>
+        <div class="col-md-4 form-group">
+            <div class="input-group date" id="EndDate">
                 @Html.TextBoxFor(m => m.EndDate, "", new { @class = "form-control" })
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
             </div>
-            <div class="col-4">
-                <input type="button" class="btn btn-primary btn-block" id="submit" value="Query" />
-            </div>
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        }
+        </div>
+        <div class="col-md-2 form-group"></div>
+        <div class="col-md-2">
+            <input type="button" class="btn btn-primary btn-block" id="submit" value="Query" />
+        </div>
     </div>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    }
+        
 </div>
 
 <script type="text/javascript">
-
     $(function () {
-        $("#StartDate").datepicker({
-            format: "yyyy/mm/dd",
-            locale: "zh-tw"
+        $('#StartDate').datepicker({
+            format: "yyyy-mm-dd",
+            defaultDate: new Date(),
+            language:"zh-TW"
         });
-
-        $("#EndDate").datepicker({
-            format: "yyyy/mm/dd",
-            locale: "zh-tw"
+        $('#EndDate').datepicker({
+            format: "yyyy-mm-dd",
+            defaultDate: new Date(),
+            language:"zh-TW"
         });
     });
 </script>
