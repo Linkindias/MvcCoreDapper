@@ -51,19 +51,18 @@ namespace WebApplication1.Controllers
         /// </summary>
         /// <param name="dtStart"></param>
         /// <param name="dtEnd"></param>
-        /// <returns></returns>
-        public ActionResult OrderQuery(DateTime dtStart, DateTime dtEnd)
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult OrderQuery(string StartDate, string EndDate)
         {
             ViewBag.Name = HttpContext.Session.GetString("Name");
             ViewBag.Id = HttpContext.Session.GetString("Id");
 
             var Member = memberService.GetMember(ViewBag.Id);
-
             if (Member != null)
             {
-                int Day = int.Parse(configuration["OrderScopeDay"]);
-                DateTime dtNow = DateTime.Today.AddDays(1);
-                return View(OrderService.GetOrderById(ViewBag.Id, Member, dtStart, dtEnd));
+                OrderModel orderModel = OrderService.GetOrderById(ViewBag.Id, Member, DateTime.Parse(StartDate), DateTime.Parse(EndDate));
+                return View("Index", orderModel);
             }
             return View();
         }

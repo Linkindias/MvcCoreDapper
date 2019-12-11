@@ -8,6 +8,10 @@ namespace DAL.DTOModel
 {
     public class OrderDTO : Orders
     {
-        public List<Order_Details> Details { get; set; }
+        public string CustomerName { get; set; }
+
+        public string EmployeeName { get; set; }
+
+        public List<OrderDetailDTO> Details { get; set; }
     }
 }

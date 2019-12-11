@@ -1,4 +1,6 @@
 ﻿@model BLL.PageModel.OrderModel
+@using System.Reflection;
+@using DAL.DTOModel;
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
 @functions{
     public string GetAntiXsrfRequestToken()
@@ -10,8 +12,18 @@
 <style type="text/css">
 </style>
 
-<div class="container-md">
+<div>
     @{
+        var Ids = new string[] { "CustomerID", "EmployeeID" };
+        var Dates = new string[] { "OrderDate" };
+        if (!Model.IsSuccess)
+        {
+            <script type="text/javascript">
+                            $('#msgModalbody').text('@Model.ErrorMsg').css({ 'color': 'blue'});;
+                $('#msgModal').modal('show');
+            </script>
+        }
+
         using (Html.BeginForm("OrderQuery", "Order", FormMethod.Post, new { id = "OrderForm" }))
         {
             @Html.AntiForgeryToken()
@@ -39,10 +51,61 @@
             </div>
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         }
+        <div class="table-responsive">
+            <table class="table table-sm row">
+                <thead>
+                    <tr class="row">
+                        <th scope="col">#</th>
+                        @{
+                            foreach (PropertyInfo Info in Model.orders[0].GetType().GetProperties())
+                            {
+                                if (Info.PropertyType.Namespace != "System.Collections.Generic" && !Ids.Contains(Info.Name))
+                                {
+                                    <th scope="col">@Info.Name</th>
+                                }
+                            }
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int index = 1;
+                        foreach (OrderDTO order in Model.orders)
+                        {
+                            <tr class="row">
+                                <td>@index</td>
+                                @{
+                                    foreach (PropertyInfo Info in order.GetType().GetProperties())
+                                    {
+                                        if (Info.PropertyType.Namespace != "System.Collections.Generic" && !Ids.Contains(Info.Name))
+                                        {
+                                            if (Dates.Contains(Info.Name))
+                                            {
+                                                <td nowrap>@(((DateTime)Info.GetValue(order)).ToString("yyyy-MM-dd"))</td>
+                                            }
+                                            else
+                                            {
+                                                <td nowrap>@(Info.GetValue(order))</td>
+                                            }
+                                        }
+                                    }
+                                }
+                            </tr>
+                            index++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
     }
+    @Html.Partial("BootstrapModal")
 </div>
 
 <script type="text/javascript">
+    function dateFormat(value) {
+        return moment(value).format('YYYY-MM-DD');
+    }
+
     $(function () {
         var Now = new Date();
         $('#StartDate').datepicker({

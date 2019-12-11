@@ -25,8 +25,13 @@ namespace DAL.Repository
 
             DynamicParameters parameters = new DynamicParameters();
             string sqlCmd = @"
-select o.*,od.* from orders as o 
-inner join[Order Details] as od on o.OrderID = od.OrderID ";
+select o.*,cus.ContactName as 'CustomerName' ,emp.FirstName  + emp.LastName as 'EmployeeName', od.*, p.*, c.*, s.* from orders as o 
+left join Customers as cus on o.CustomerID = cus.CustomerID
+left join Employees as emp on o.EmployeeID = emp.EmployeeID
+inner join [Order Details] as od on o.OrderID = od.OrderID 
+left join Products as p on od.ProductID = p.ProductID
+left join Categories as c on p.CategoryID = c.CategoryID
+left join Suppliers as s on p.SupplierID = s.SupplierID ";
 
             if (!string.IsNullOrEmpty(CustomerId))
             {
@@ -38,7 +43,7 @@ inner join[Order Details] as od on o.OrderID = od.OrderID ";
                 sqlCmd += "where o.EmployeeID = @Id or EmployeeID is null";
                 parameters.Add("@Id", EmployeeId);
             }
-            sqlCmd += " and @Start <= OrderDate and OrderDate <= @End";
+            sqlCmd += " and @Start <= OrderDate and OrderDate <= @End order by o.OrderID Desc";
             parameters.Add("@Start", Start);
             parameters.Add("@End", End);
 
@@ -49,7 +54,7 @@ inner join[Order Details] as od on o.OrderID = od.OrderID ";
                 var orderDictionary = new Dictionary<int, OrderDTO>();
                 try
                 {
-                    orders = connection.Query<OrderDTO, Order_Details, OrderDTO>(
+                    orders = connection.Query<OrderDTO, OrderDetailDTO, OrderDTO>(
                         sqlCmd,
                         (order, orderDetail) =>
                         {
@@ -58,7 +63,7 @@ inner join[Order Details] as od on o.OrderID = od.OrderID ";
                             if (!orderDictionary.TryGetValue(order.OrderID, out orderEntry))
                             {
                                 orderEntry = order;
-                                orderEntry.Details = new List<Order_Details>();
+                                orderEntry.Details = new List<OrderDetailDTO>();
                                 orderDictionary.Add(orderEntry.OrderID, orderEntry);
                             }
 
