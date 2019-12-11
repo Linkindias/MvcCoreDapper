@@ -11,49 +11,48 @@
 </style>
 
 <div class="container-md">
-
-    @using (Html.BeginForm("OrderQuery", "Order", FormMethod.Post, new { id = "OrderForm" }))
-    {
-        @Html.AntiForgeryToken()
-    <div class="row">
-        <div class="col-md-4 form-group">
-            <div class="input-group date" id="StartDate">
-                @Html.TextBoxFor(m => m.StartDate, "", new { @class = "form-control" })
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
+    @{
+        using (Html.BeginForm("OrderQuery", "Order", FormMethod.Post, new { id = "OrderForm" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    <div class="input-group date" id="StartDate">
+                        @Html.TextBoxFor(m => m.StartDate, "", new { @class = "form-control" })
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4 form-group">
+                    <div class="input-group date" id="EndDate">
+                        @Html.TextBoxFor(m => m.EndDate, "", new { @class = "form-control" })
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2 form-group"></div>
+                <div class="col-md-2">
+                    <input type="submit" class="btn btn-primary btn-block" id="query" value="查詢" />
+                </div>
             </div>
-        </div>
-        <div class="col-md-4 form-group">
-            <div class="input-group date" id="EndDate">
-                @Html.TextBoxFor(m => m.EndDate, "", new { @class = "form-control" })
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
-            </div>
-        </div>
-        <div class="col-md-2 form-group"></div>
-        <div class="col-md-2">
-            <input type="button" class="btn btn-primary btn-block" id="submit" value="Query" />
-        </div>
-    </div>
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        }
     }
-        
 </div>
 
 <script type="text/javascript">
     $(function () {
+        var Now = new Date();
         $('#StartDate').datepicker({
             format: "yyyy-mm-dd",
-            defaultDate: new Date(),
-            language:"zh-TW"
-        });
+            language: "zh-TW"
+        }).datepicker("update", new Date(Now.setDate(Now.getDate() - 7)));
         $('#EndDate').datepicker({
             format: "yyyy-mm-dd",
-            defaultDate: new Date(),
-            language:"zh-TW"
-        });
+            language: "zh-TW"
+        }).datepicker("update", new Date());
     });
 </script>
 
