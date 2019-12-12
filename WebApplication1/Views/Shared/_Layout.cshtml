@@ -31,10 +31,6 @@
             margin-top: 5%;
         }
 
-        .navstyle {
-            width: 60%;
-        }
-
         .menu {
             padding: 15px;
             color: white;
@@ -123,7 +119,7 @@
         });
     </script>
     <nav class="navbar navbar-fixed-top bg-primary">
-        <div class="container-md">
+        <div class="container-fluid">
             <div class="navbar-header col-md-2">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -133,8 +129,8 @@
                 </button>
                 <a asp-area="" style="color: white !important;" asp-controller="Home" asp-action="Index" class="navbar-brand">Northwind</a>
             </div>
-            <div class="navbar-collapse collapse ">
-                <ul class="nav navbar-nav navstyle">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav col-md-8">
                     <li>
                         <a class="font" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
