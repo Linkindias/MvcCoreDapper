@@ -8,10 +8,8 @@
         return Xsrf.GetAndStoreTokens(Context).RequestToken;
     }
 }
-
 <style type="text/css">
 </style>
-
 <div>
     @{
         var Ids = new string[] { "CustomerID", "EmployeeID" };
@@ -19,7 +17,7 @@
         if (!Model.IsSuccess)
         {
             <script type="text/javascript">
-                            $('#msgModalbody').text('@Model.ErrorMsg').css({ 'color': 'blue'});;
+                $('#msgModalbody').text('@Model.ErrorMsg').css({ 'color': 'blue'});;
                 $('#msgModal').modal('show');
             </script>
         }
@@ -57,11 +55,14 @@
                     <tr class="row">
                         <th scope="col">#</th>
                         @{
-                            foreach (PropertyInfo Info in Model.orders[0].GetType().GetProperties())
+                            if (Model.orders.Count > 0)
                             {
-                                if (Info.PropertyType.Namespace != "System.Collections.Generic" && !Ids.Contains(Info.Name))
+                                foreach (PropertyInfo Info in Model.orders[0].GetType().GetProperties())
                                 {
-                                    <th scope="col">@Info.Name</th>
+                                    if (Info.PropertyType.Namespace != "System.Collections.Generic" && !Ids.Contains(Info.Name))
+                                    {
+                                        <th scope="col">@Info.Name</th>
+                                    }
                                 }
                             }
                         }
@@ -73,6 +74,11 @@
                         foreach (OrderDTO order in Model.orders)
                         {
                             <tr class="row">
+                                <td>
+                                    <button type="button" data-toggle="collapse" href="#@(order.OrderID)" aria-expanded="false" aria-controls="@(order.OrderID)">
+                                        <span class="glyphicon glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </td>
                                 <td>@index</td>
                                 @{
                                     foreach (PropertyInfo Info in order.GetType().GetProperties())
@@ -90,22 +96,55 @@
                                         }
                                     }
                                 }
+                                <td></td>
+                            </tr>
+                            <tr class="row">
+                                <td colspan="@order.GetType().GetProperties().Length.ToString()">
+                                    <div class="collapse" id="@(order.OrderID)">
+                                        <div class="card card-body">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr class="row">
+                                                        @{
+                                                            foreach (PropertyInfo detialInfo in order.Details[0].GetType().GetProperties())
+                                                            {
+                                                                <th scope="col">@detialInfo.Name</th>
+                                                            }
+                                                        }
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        foreach (OrderDetailDTO orderDetial in order.Details)
+                                                        {
+                                                            <tr class="row">
+                                                                @{
+                                                                    foreach (PropertyInfo InfoDetial in orderDetial.GetType().GetProperties())
+                                                                    {
+                                                                        <td nowrap>@(InfoDetial.GetValue(orderDetial))</td>
+                                                                    }
+                                                                }
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                             index++;
                         }
                     }
                 </tbody>
             </table>
+
         </div>
     }
     @Html.Partial("BootstrapModal")
 </div>
 
 <script type="text/javascript">
-    function dateFormat(value) {
-        return moment(value).format('YYYY-MM-DD');
-    }
-
     $(function () {
         var Now = new Date();
         $('#StartDate').datepicker({
