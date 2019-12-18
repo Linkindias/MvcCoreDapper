@@ -40,7 +40,7 @@ left join Suppliers as s on p.SupplierID = s.SupplierID ";
             }
             else
             {
-                sqlCmd += "where o.EmployeeID = @Id or EmployeeID is null";
+                sqlCmd += "where o.EmployeeID = @Id or o.EmployeeID is null";
                 parameters.Add("@Id", EmployeeId);
             }
             sqlCmd += " and @Start <= OrderDate and OrderDate <= @End order by o.OrderID Desc";
