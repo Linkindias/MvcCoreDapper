@@ -11,21 +11,21 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - WebApplication1</title>
-    <environment include="Development">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-        <link rel="stylesheet" href="~/css/site.css" />
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.9/jquery.validate.unobtrusive.min.js"></script>
-        <script type="text/javascript" src="~/js/site.js" asp-append-version="true"></script>
-    </environment>
     @*<environment include="Development">
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+            <link rel="stylesheet" href="~/css/site.css" />
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.9/jquery.validate.unobtrusive.min.js"></script>
+            <script type="text/javascript" src="~/js/site.js" asp-append-version="true"></script>
+        </environment>*@
+    <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/bootstrap-datepicker/css/bootstrap-datepicker.css" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" >
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     </environment>
     <environment include="Development">
         <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
@@ -34,8 +34,12 @@
         <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script type="text/javascript" src="~/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
         <script type="text/javascript" src="~/js/site.js" asp-append-version="true"></script>
-    </environment>*@
+    </environment>
     <style>
+        .body{
+            padding: 0px !important;
+        }
+
         .row {
             margin-top: 5%;
         }
@@ -70,7 +74,7 @@
     </style>
 </head>
 
-<body>
+<body class="body">
     <script type="text/javascript">
         function goShopCar() {
             $.ajax({
@@ -127,8 +131,8 @@
             }
         });
     </script>
-    <nav class="navbar navbar-fixed-top bg-primary">
-        <div class="container-fluid">
+    <div >
+        <div class="navbar bg-primary">
             <div class="navbar-header col-md-2">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -136,7 +140,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" style="color: white !important;" asp-controller="Home" asp-action="Index" class="navbar-brand">Northwind</a>
+                <a class="navbar-brand font" asp-area="" asp-controller="Home" asp-action="Index">Northwind</a>
             </div>
             <div class="navbar-collapse">
                 <ul class="nav navbar-nav col-md-8">
@@ -164,7 +168,7 @@
                     <li><label class="menu">@ViewBag.Name</label></li>
                 </ul>
             </div>
-            <div>
+            <div class="container-fluid">
                 @{
                     using (Html.BeginForm("ShopCar", "Shop", FormMethod.Post, new { id = "ShopCarForm", @style = "display:none;" }))
                     {
@@ -181,16 +185,15 @@
                     Html.RenderPartial("../Shared/PartViewMenu");
                 }*@
         </div>
-    </nav>
+        <partial name="_CookieConsentPartial" />
 
-    <partial name="_CookieConsentPartial" />
-
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p></p>
-        </footer>
+        <div class="body-content container-fluid">
+            @RenderBody()
+            <hr />
+            <footer>
+                <p></p>
+            </footer>
+        </div>
     </div>
 
 
