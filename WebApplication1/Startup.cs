@@ -10,25 +10,28 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebApplication1.Filters;
 using BLL.InterFace;
+using WebApplication1.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace WebApplication1
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public IConfiguration Config { get; }
+        IHostingEnvironment CurrentEnv { get; set; }
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            Configuration = configuration;
+            this.Config = configuration;
+            this.CurrentEnv = env;
         }
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMemoryCache();
 
-            string strCon = Configuration.GetValue<string>("NorthwindConnection");
-            int cmdTimeOut = Configuration.GetValue<int>("CommandTimeout");
+            string strCon = Config.GetValue<string>("NorthwindConnection");
+            int cmdTimeOut = Config.GetValue<int>("CommandTimeout");
 
             services.AddAuthentication(IISDefaults.AuthenticationScheme);
 
@@ -73,9 +76,8 @@ namespace WebApplication1
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 options.Filters.Add(new AuthorizeActionFilter());
+                options.Filters.Add(new ExceptionFilter(CurrentEnv));
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-            //CacheHelper.CreateCache(); //建立快取
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,7 +89,7 @@ namespace WebApplication1
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
 

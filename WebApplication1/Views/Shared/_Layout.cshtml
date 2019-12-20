@@ -149,7 +149,7 @@
                     </li>
 
                     @{
-                        if (ViewBag.Name == null)
+                        if (ViewBag.Name == null && ViewData["Name"] == null)
                         {
                             <li>
                                 <a class="font" asp-area="" asp-controller="LogIn" asp-action="Index">LogIn</a>
@@ -160,12 +160,12 @@
                 </ul>
                 <ul class="nav navbar-nav right">
                     @{
-                        if (ViewBag.Name != null)
+                        if (ViewBag.Name != null || ViewData["Name"] != null)
                         {
-                            <li><a class="font" asp-route-id="@ViewBag.Id" asp-controller="LogIn" asp-action="Out">LogOut</a></li>
+                            <li><a class="font" asp-route-id="@(ViewBag.Id != null ? ViewBag.Id : ViewData["Id"])" asp-controller="LogIn" asp-action="Out">LogOut</a></li>
                         }
                     }
-                    <li><label class="menu">@ViewBag.Name</label></li>
+                    <li><label class="menu">@(ViewBag.Name != null ? ViewBag.Name : ViewData["Name"])</label></li>
                 </ul>
             </div>
             <div class="container-fluid">
