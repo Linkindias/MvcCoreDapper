@@ -12,6 +12,8 @@ using WebApplication1.Filters;
 using BLL.InterFace;
 using WebApplication1.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System;
 
 namespace WebApplication1
 {
@@ -33,7 +35,17 @@ namespace WebApplication1
             string strCon = Config.GetValue<string>("NorthwindConnection");
             int cmdTimeOut = Config.GetValue<int>("CommandTimeout");
 
-            services.AddAuthentication(IISDefaults.AuthenticationScheme);
+            services.AddAuthentication(options =>
+            {
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => {
+                options.LoginPath = "/LogIn/In";
+                options.LogoutPath = "/LogIn/Out";
+                options.ExpireTimeSpan = TimeSpan.FromHours(1);
+                options.SlidingExpiration = true;
+            });
 
             services.Configure<CookiePolicyOptions>(options =>
             {
