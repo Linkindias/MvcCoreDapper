@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
@@ -36,11 +37,11 @@ namespace WebApplication1
                     ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, Scheme.Name);
                     return AuthenticateResult.Success(new AuthenticationTicket(new ClaimsPrincipal(claimsIdentity), Scheme.Name));
                 }
-                return AuthenticateResult.Fail("Invalid Authorization Header");
+                return AuthenticateResult.Fail("Signed Out!");
             }
-            catch
+            catch (Exception ex)
             {
-                return AuthenticateResult.Fail("Invalid Authorization Header");
+                return AuthenticateResult.Fail(ex.Message);
             }
         }
     }
