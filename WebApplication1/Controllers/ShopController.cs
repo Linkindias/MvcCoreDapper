@@ -1,12 +1,9 @@
-﻿using Base;
-using BLL.Model;
+﻿using BLL.Model;
 using BLL.PageModel;
-using DAL.DBModel;
-using DAL.DTOModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Omu.ValueInjecter;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers
 {
@@ -23,6 +20,7 @@ namespace WebApplication1.Controllers
         /// 取得產品類別及產品資訊數量
         /// </summary>
         [HttpGet]
+        [Authorize]
         public ActionResult Product(string CategoryId = "", string ProductName = "")
         {
             ViewBag.Name = HttpContext.Session.GetString("Name");
@@ -40,6 +38,7 @@ namespace WebApplication1.Controllers
         /// </summary>
         [ValidateAntiForgeryToken]
         [HttpPost]
+        [Authorize]
         public ActionResult GetProducts(List<ShopCarProductModel> shopcars)
         {
             ViewBag.Name = HttpContext.Session.GetString("Name");
@@ -57,6 +56,7 @@ namespace WebApplication1.Controllers
         /// </summary>
         [ValidateAntiForgeryToken]
         [HttpPost]
+        [Authorize]
         public ActionResult ShopCar(ShopCarModel shopcar)
         {
             ViewBag.Name = HttpContext.Session.GetString("Name");
@@ -70,6 +70,8 @@ namespace WebApplication1.Controllers
         /// <summary>
         /// 取得產品類別及產品資訊數量
         /// </summary>
+        [HttpGet]
+        [Authorize]
         public ActionResult ShopCar(string Id)
         {
             ViewBag.Name = HttpContext.Session.GetString("Name");

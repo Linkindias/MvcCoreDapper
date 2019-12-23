@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BLL.InterFace;
+﻿using BLL.InterFace;
 using BLL.Model;
 using BLL.PageModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers
 {
@@ -30,6 +29,7 @@ namespace WebApplication1.Controllers
         /// <summary>
         /// 依帳號取得訂單資訊
         /// </summary>
+        [Authorize]
         public ActionResult Index()
         {
             ViewBag.Name = HttpContext.Session.GetString("Name");
@@ -53,6 +53,7 @@ namespace WebApplication1.Controllers
         /// <param name="dtEnd"></param>
         [ValidateAntiForgeryToken]
         [HttpPost]
+        [Authorize]
         public ActionResult OrderQuery(string StartDate, string EndDate)
         {
             ViewBag.Name = HttpContext.Session.GetString("Name");
@@ -72,6 +73,7 @@ namespace WebApplication1.Controllers
         /// </summary>
         [ValidateAntiForgeryToken]
         [HttpPost]
+        [Authorize]
         public ActionResult SetOrder(List<ShopCarProductModel> shopcars)
         {
             ViewBag.Name = HttpContext.Session.GetString("Name");

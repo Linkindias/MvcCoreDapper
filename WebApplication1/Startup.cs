@@ -14,6 +14,7 @@ using WebApplication1.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System;
+using Microsoft.AspNetCore.Authentication;
 
 namespace WebApplication1
 {
@@ -35,24 +36,9 @@ namespace WebApplication1
             string strCon = Config.GetValue<string>("NorthwindConnection");
             int cmdTimeOut = Config.GetValue<int>("CommandTimeout");
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => {
-                options.LoginPath = "/LogIn/In";
-                options.LogoutPath = "/LogIn/Out";
-                options.ExpireTimeSpan = TimeSpan.FromHours(1);
-                options.SlidingExpiration = true;
-            });
-
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+            // configure basic authentication 
+            services.AddAuthentication("BasicAuthentication")
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
             //Service
             services.AddScoped<AuthService>(); //權限服務

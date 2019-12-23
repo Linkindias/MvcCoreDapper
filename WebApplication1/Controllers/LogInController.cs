@@ -1,12 +1,9 @@
 ﻿using BLL.Model;
 using DAL.DTOModel;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace WebApplication1.Controllers
@@ -36,20 +33,20 @@ namespace WebApplication1.Controllers
                 HttpContext.Session.SetString("Name", result.Name);
                 HttpContext.Session.SetString("Id", result.Id);
 
-                var claims = new List<Claim>() {
-                    new Claim(ClaimTypes.NameIdentifier, result.Id),
-                    new Claim(ClaimTypes.Name, result.Id),
-                };
-                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                HttpContext.User = claimsPrincipal;
-                await HttpContext.Authentication.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                //var claims = new List<Claim>() {
+                //    new Claim(ClaimTypes.NameIdentifier, result.Id),
+                //    new Claim(ClaimTypes.Name, result.Id),
+                //};
+                //ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "BasicAuthentication");
+                //var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                //HttpContext.User = claimsPrincipal;
+                //await HttpContext.Authentication.SignInAsync("BasicAuthentication", claimsPrincipal);
                 return Ok();
             }
             return BadRequest(result.rtn.ErrorMsg);
         }
 
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+        [Authorize]
         public IActionResult Out(string Id)
         {
             var result = AuthService.LogOut(Id);

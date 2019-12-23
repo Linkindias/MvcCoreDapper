@@ -1,6 +1,7 @@
 ﻿using BLL.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers
 {
@@ -13,6 +14,7 @@ namespace WebApplication1.Controllers
             this.MenuService = menuService;
         }
 
+        [Authorize]
         public IActionResult Index(string Id)
         {
             if (!string.IsNullOrEmpty(Id))
@@ -37,6 +39,7 @@ namespace WebApplication1.Controllers
             return BadRequest("Not LogIn Account!");
         }
 
+        [Authorize]
         private string GetSubMenus(List<DAL.DTOModel.MenuDTO> subMenus, string controller, string Id)
         {
             if (subMenus.Count > 0)

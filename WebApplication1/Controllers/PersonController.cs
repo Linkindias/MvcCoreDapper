@@ -19,6 +19,8 @@ namespace WebApplication1.Controllers
         }
 
         //會員資訊
+        [HttpGet]
+        [Authorize]
         public ActionResult Profile(string Id)
         {
             if (!string.IsNullOrEmpty(Id))
@@ -40,6 +42,8 @@ namespace WebApplication1.Controllers
         }
 
         //會員帳密
+        [HttpGet]
+        [Authorize]
         public ActionResult AP(string Id)
         {
             if (!string.IsNullOrEmpty(Id))
@@ -54,9 +58,9 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [HttpPost]
+        [Authorize]
         public ActionResult UpdateCustomer(CustomerModel customer)
         {
             Result result = MemberService.UpdateMember(customer, null);
@@ -66,9 +70,9 @@ namespace WebApplication1.Controllers
             return BadRequest(result.ErrorMsg);
         }
 
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [HttpPost]
+        [Authorize]
         public ActionResult UpdateEmployee(EmployeeModel employee)
         {
             Result result = MemberService.UpdateMember(null, employee);
@@ -78,9 +82,9 @@ namespace WebApplication1.Controllers
             return BadRequest(result.ErrorMsg);
         }
 
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [HttpPost]
+        [Authorize]
         public ActionResult UpdateAuth(AuthModel auth)
         {
             Result result = AuthService.UpdateAuth(auth);
