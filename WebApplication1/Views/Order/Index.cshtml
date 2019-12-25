@@ -10,151 +10,220 @@
 }
 <style type="text/css">
 </style>
-<div>
-    @{
-        var Ids = new string[] { "CustomerID", "EmployeeID" };
-        var Dates = new string[] { "OrderDate" };
-        if (!Model.IsSuccess)
-        {
-            <script type="text/javascript">
+<div class="container-md">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            @{
+                var Ids = new string[] { "CustomerID", "EmployeeID" };
+                var Dates = new string[] { "OrderDate", "RequiredDate", "ShippedDate" };
+                if (!Model.IsSuccess)
+                {
+                    <script type="text/javascript">
                 $('#msgModalbody').text('@Model.ErrorMsg').css({ 'color': 'blue'});;
                 $('#msgModal').modal('show');
-            </script>
-        }
+                    </script>
+                }
 
-        using (Html.BeginForm("OrderQuery", "Order", FormMethod.Post, new { id = "OrderForm" }))
-        {
-            @Html.AntiForgeryToken()
-            <div class="row">
-                <div class="col-md-4 form-group">
-                    <div class="input-group date" id="StartDate">
-                        @Html.TextBoxFor(m => m.StartDate, "", new { @class = "form-control" })
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
+                @using (Html.BeginForm("OrderQuery", "Order", FormMethod.Post, new { id = "OrderForm" }))
+                {
+                    Html.AntiForgeryToken();<div class="col-md-4 form-group">
+                        <div class="input-group date" id="StartDate">
+                            @Html.TextBoxFor(m => m.StartDate, "", new { @class = "form-control" })
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-4 form-group">
-                    <div class="input-group date" id="EndDate">
-                        @Html.TextBoxFor(m => m.EndDate, "", new { @class = "form-control" })
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
+                    <div class="col-md-4 form-group">
+                        <div class="input-group date" id="EndDate">
+                            @Html.TextBoxFor(m => m.EndDate, "", new { @class = "form-control" })
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-2 form-group"></div>
-                <div class="col-md-2">
-                    <input type="submit" class="btn btn-primary btn-block" id="query" value="查詢" />
-                </div>
-            </div>
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        }
-        <div class="table-responsive">
-            <table class="table table-sm row">
-                <thead>
-                    <tr class="row">
-                        <th scope="col">#</th>
-                        @{
-                            if (Model.orders.Count > 0)
-                            {
-                                foreach (PropertyInfo Info in Model.orders[0].GetType().GetProperties())
+                    <div class="col-md-2 form-group"></div>
+                    <input type="hidden" id="Page" name="Page" value="@(Model.CurrentPage)">
+                    <div class="col-md-2">
+                        <input type="submit" class="btn btn-primary btn-block" id="query" value="查詢" />
+                    </div>
+
+                    Html.ValidationSummary(true, "", new { @class = "text-danger" });
+                }
+            }
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <div>
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="table-responsive">
+                <table class="table table-sm row">
+                    <thead>
+                        <tr class="row">
+                            <th scope="col">
+                                <button type="button">
+                                    <span class="glyphicon glyphicon glyphicon-triangle-top"></span>
+                                </button>
+                            </th>
+                            <th scope="col"></th>
+                            @{
+                                if (Model.orders.Count > 0)
                                 {
-                                    if (Info.PropertyType.Namespace != "System.Collections.Generic" && !Ids.Contains(Info.Name))
-                                    {
-                                        <th scope="col">@Info.Name</th>
-                                    }
-                                }
-                            }
-                        }
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
-                        int index = 1;
-                        foreach (OrderDTO order in Model.orders)
-                        {
-                            <tr class="row">
-                                <td>
-                                    <button type="button" data-toggle="collapse" href="#@(order.OrderID)" aria-expanded="false" aria-controls="@(order.OrderID)">
-                                        <span class="glyphicon glyphicon glyphicon-plus"></span>
-                                    </button>
-                                </td>
-                                <td>@index</td>
-                                @{
-                                    foreach (PropertyInfo Info in order.GetType().GetProperties())
+                                    foreach (PropertyInfo Info in Model.orders[0].GetType().GetProperties())
                                     {
                                         if (Info.PropertyType.Namespace != "System.Collections.Generic" && !Ids.Contains(Info.Name))
                                         {
-                                            if (Dates.Contains(Info.Name))
-                                            {
-                                                <td nowrap>@(((DateTime)Info.GetValue(order)).ToString("yyyy-MM-dd"))</td>
-                                            }
-                                            else
-                                            {
-                                                <td nowrap>@(Info.GetValue(order))</td>
-                                            }
+                                            <th scope="col">@Info.Name</th>
                                         }
                                     }
                                 }
-                                <td></td>
-                            </tr>
-                            <tr class="row">
-                                <td colspan="@order.GetType().GetProperties().Length.ToString()">
-                                    <div class="collapse" id="@(order.OrderID)">
-                                        <div class="card card-body">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr class="row">
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int index = 1;
+                            foreach (OrderDTO order in Model.orders)
+                            {
+                                <tr class="row">
+                                    <td>
+                                        <button type="button" data-toggle="collapse" href="#@(order.OrderID)" aria-expanded="false" aria-controls="@(order.OrderID)">
+                                            <span class="glyphicon glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </td>
+                                    <td>@index</td>
+                                    @{
+                                        foreach (PropertyInfo Info in order.GetType().GetProperties())
+                                        {
+                                            if (Info.PropertyType.Namespace != "System.Collections.Generic" && !Ids.Contains(Info.Name))
+                                            {
+                                                if (Dates.Contains(Info.Name))
+                                                {
+                                                    <td nowrap> @(((DateTime?)Info.GetValue(order)).GetValueOrDefault().ToString("yyyy-MM-dd"))</td>
+                                                }
+                                                else
+                                                {
+                                                    <td nowrap>@(Info.GetValue(order))</td>
+                                                }
+                                            }
+                                        }
+                                    }
+                                    <td></td>
+                                </tr>
+                                <tr class="row">
+                                    <td colspan="@order.GetType().GetProperties().Length.ToString()">
+                                        <div class="collapse" id="@(order.OrderID)">
+                                            <div class="card card-body">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr class="row">
+                                                            @{
+                                                                foreach (PropertyInfo detialInfo in order.Details[0].GetType().GetProperties())
+                                                                {
+                                                                    <th scope="col">@detialInfo.Name</th>
+                                                                }
+                                                            }
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
                                                         @{
-                                                            foreach (PropertyInfo detialInfo in order.Details[0].GetType().GetProperties())
+                                                            foreach (OrderDetailDTO orderDetial in order.Details)
                                                             {
-                                                                <th scope="col">@detialInfo.Name</th>
+                                                                <tr class="row">
+                                                                    @{
+                                                                        foreach (PropertyInfo InfoDetial in orderDetial.GetType().GetProperties())
+                                                                        {
+                                                                            <td nowrap>@(InfoDetial.GetValue(orderDetial))</td>
+                                                                        }
+                                                                    }
+                                                                </tr>
                                                             }
                                                         }
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @{
-                                                        foreach (OrderDetailDTO orderDetial in order.Details)
-                                                        {
-                                                            <tr class="row">
-                                                                @{
-                                                                    foreach (PropertyInfo InfoDetial in orderDetial.GetType().GetProperties())
-                                                                    {
-                                                                        <td nowrap>@(InfoDetial.GetValue(orderDetial))</td>
-                                                                    }
-                                                                }
-                                                            </tr>
-                                                        }
-                                                    }
-                                                </tbody>
-                                            </table>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            index++;
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item" onclick="previousPage()">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    @{
+                        for (int i = 1; i <= Model.TotalCount; i++)
+                        {
+                            <li id="Page@(i)" onclick="selectPage(@(i))" class="@(Model.CurrentPage == i ? "page-item active" : "page-item")">
+                                <a class="page-link" href="#">
+                                    @(i)
+                                </a>
+                            </li>
                         }
                     }
-                </tbody>
-            </table>
-
+                    <li class="page-item" onclick="nextPage()">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
-    }
-    @Html.Partial("BootstrapModal")
-</div>
+        <div class="col-md-4"></div>
+    </div>
+        @Html.Partial("BootstrapModal")
+    </div>
+    <script type="text/javascript">
+        function selectPage(page) {
+            $("#Page").val(page);
+            $('.pagination li').removeClass('active');
+            $("#OrderForm").submit();
+        }
 
-<script type="text/javascript">
-    $(function () {
-        var Now = new Date();
-        $('#StartDate').datepicker({
-            format: "yyyy-mm-dd",
-            language: "zh-TW"
-        }).datepicker("update", new Date(Now.setDate(Now.getDate() - 7)));
-        $('#EndDate').datepicker({
-            format: "yyyy-mm-dd",
-            language: "zh-TW"
-        }).datepicker("update", new Date());
-    });
-</script>
+        function nextPage() {
+            var page = parseInt($("#Page").val());
+            if ((page + 1) < ($('.pagination li').length - 2)) {
+                $("#Page").val(page + 1);
+                $('.pagination li').removeClass('active');
+                $("#OrderForm").submit();
+            }
+        }
+
+        function previousPage() {
+            var page = parseInt($("#Page").val());
+            if ((page - 1 ) > 0) {
+                $("#Page").val(page - 1);
+                $('.pagination li').removeClass('active');
+                $("#OrderForm").submit();
+            }
+        }
+
+        $(function () {
+            var Now = new Date();
+            $('#StartDate').datepicker({
+                format: "yyyy-mm-dd",
+                language: "zh-TW"
+            }).datepicker("update", new Date(Now.setDate(Now.getDate() - 7)));
+            $('#EndDate').datepicker({
+                format: "yyyy-mm-dd",
+                language: "zh-TW"
+            }).datepicker("update", new Date());
+        });
+    </script>
 

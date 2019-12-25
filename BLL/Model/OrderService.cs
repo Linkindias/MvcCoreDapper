@@ -10,23 +10,26 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Transactions;
+using System.Linq;
 
 namespace BLL.Model
 {
     public class OrderService
     {
+        IConfiguration configuration;
         IMemberOfOrder memberService;
         OrderRepository OrderRep;
         OrderDetailRepository OrderDetailRep;
         OrderModel Order;
 
-        public OrderService(IMemberOfOrder memberOfOrder,
+        public OrderService(IMemberOfOrder memberOfOrder, IConfiguration configuration,
             OrderRepository orderRepository, OrderDetailRepository orderDetailRepository,
             OrderModel orderModel)
         {
+            this.memberService = memberOfOrder;
+            this.configuration = configuration;
             this.OrderRep = orderRepository;
             this.OrderDetailRep = orderDetailRepository;
-            this.memberService = memberOfOrder;
             this.Order = orderModel;
         }
 
@@ -38,17 +41,25 @@ namespace BLL.Model
         /// <param name="Start">起始日期</param>
         /// <param name="End">終止日期</param>
         /// <returns></returns>
-        public OrderModel GetOrderById(string Id, dynamic Member, DateTime Start, DateTime End)
+        public OrderModel GetOrderById(int currentPage, string Id, dynamic Member, DateTime Start, DateTime End)
         {
             Result rtn = new Result();
             (Result rtn, List<OrderDTO> orderDto) result = (new Result(), new List<OrderDTO>());
+            //頁面數量
+            int PageCount = int.Parse(configuration["PageCount"]);
 
             if (Member is CustomerModel)
                 result = OrderRep.GetOrderById(Member.CustomerID , 0, Start, End);
             else
                 result = OrderRep.GetOrderById(string.Empty , Member.EmployeeID, Start, End);
 
-            Order.orders = result.orderDto;
+            Order.orders = result.orderDto.OrderByDescending(o => o.OrderID)
+                                            .Skip((currentPage - 1) * PageCount)
+                                            .Take(PageCount)
+                                            .ToList();
+            int TotalCount = result.orderDto.ToList().Count;
+            Order.TotalCount = (TotalCount / PageCount) + (TotalCount % PageCount > 0 ? 1 : 0);
+            Order.CurrentPage = currentPage;
             Order.IsSuccess = result.rtn.IsSuccess;
             Order.SuccessMsg = result.rtn.SuccessMsg;
             Order.ErrorMsg = result.rtn.ErrorMsg;

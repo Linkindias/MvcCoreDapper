@@ -41,7 +41,7 @@ namespace WebApplication1.Controllers
             {
                 int Day = int.Parse(configuration["OrderScopeDay"]);
                 DateTime dtNow = DateTime.Today.AddDays(1);
-                return View(OrderService.GetOrderById(ViewBag.Id, Member, dtNow.AddDays(-1 * Day), dtNow));
+                return View(OrderService.GetOrderById(1, ViewBag.Id, Member, dtNow.AddDays(-1 * Day), dtNow));
             }
             return View();
         }
@@ -54,7 +54,7 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         [HttpPost]
         [Authorize]
-        public ActionResult OrderQuery(string StartDate, string EndDate)
+        public ActionResult OrderQuery(int Page, string StartDate, string EndDate)
         {
             ViewBag.Name = HttpContext.Session.GetString("Name");
             ViewBag.Id = HttpContext.Session.GetString("Id");
@@ -62,7 +62,7 @@ namespace WebApplication1.Controllers
             var Member = memberService.GetMember(ViewBag.Id);
             if (Member != null)
             {
-                OrderModel orderModel = OrderService.GetOrderById(ViewBag.Id, Member, DateTime.Parse(StartDate), DateTime.Parse(EndDate));
+                OrderModel orderModel = OrderService.GetOrderById(Page, ViewBag.Id, Member, DateTime.Parse(StartDate), DateTime.Parse(EndDate));
                 return View("Index", orderModel);
             }
             return View();
