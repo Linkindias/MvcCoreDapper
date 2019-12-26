@@ -17,58 +17,65 @@
 </style>
 <div class="container-md">
     <div class="row">
-        @{
-            if (!Model.IsSuccess)
-            {
-                <script type="text/javascript">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            @{
+                if (!Model.IsSuccess)
+                {
+                    <script type="text/javascript">
                             $('#msgModalbody').text('@Model.ErrorMsg').css({ 'color': 'blue'});;
                             $('#msgModal').modal('show');
-                </script>
-            }
-            using (Html.BeginForm("Index", "Order", FormMethod.Post, new { id = "OrderForm" }))
-            {
-                @Html.AntiForgeryToken()
-                <div class="products">
-                    @{
-                        for (int i = 0; i < Model.products.Count(); i++)
-                        {
-                            @Html.Partial("ProductOfShopCar", Model.products[i]);
+                    </script>
+                }
+                using (Html.BeginForm("Index", "Order", FormMethod.Post, new { id = "OrderForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="products">
+                        @{
+                            for (int i = 0; i < Model.products.Count(); i++)
+                            {
+                                @Html.Partial("ProductOfShopCar", Model.products[i]);
+                            }
                         }
-                    }
-                </div>
+                    </div>
+                }
             }
-        }
+        </div>
+        <div class="col-md-2"></div>
     </div>
-    <div>
-        <div >
-            <label for="Items" class="col-md-1 col-form-label">產品品項</label>
-            <div class="col-md-11">
-                @Html.Label("Count", Model.products.Count().ToString(), new { style = "white-space:nowrap" })
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div>
+                <label for="Items" class="col-md-1 col-form-label">產品品項</label>
+                <div class="col-md-11">
+                    @Html.Label("Count", Model.products.Count().ToString(), new { style = "white-space:nowrap" })
+                </div>
+            </div>
+            <div>
+                <label for="Items" class="col-md-1 col-form-label">總金額</label>
+                <div class="col-md-11">
+                    @Html.Label("totalAmount", Model.totalAmount.ToString(), new { style = "white-space:nowrap" })
+                </div>
+            </div>
+            <div>
+                <label for="Items" class="col-md-1 col-form-label">折扣</label>
+                <div class="col-md-11">
+                    @Html.Label("discount", $"{Model.discount * 10}", new { style = "white-space:nowrap" })
+                </div>
+            </div>
+            <div>
+                <label for="Items" class="col-md-1 col-form-label">付款金額</label>
+                <div class="col-md-11">
+                    @Html.Label("disAmount", Model.disAmount.ToString("C"), new { style = "white-space:nowrap" })
+                </div>
+            </div>
+            <div>
+                <input type="button" class="btn btn-success btn-block bt" id="submit" value="確定訂單"
+                       onclick="goOrder(); return false;" />
             </div>
         </div>
-        <div >
-            <label for="Items" class="col-md-1 col-form-label">總金額</label>
-            <div class="col-md-11">
-                @Html.Label("totalAmount", Model.totalAmount.ToString(), new { style = "white-space:nowrap" })
-            </div>
-        </div>
-        <div >
-            <label for="Items" class="col-md-1 col-form-label">折扣</label>
-            <div class="col-md-11">
-                @Html.Label("discount", $"{Model.discount * 10}", new { style = "white-space:nowrap" })
-            </div>
-        </div>
-        <div >
-            <label for="Items" class="col-md-1 col-form-label">付款金額</label>
-            <div class="col-md-11">
-                @Html.Label("disAmount", Model.disAmount.ToString("C"), new { style = "white-space:nowrap" })
-            </div>
-        </div>
-       
-        <div>
-            <input type="button" class="btn btn-success btn-block bt" id="submit" value="確定訂單"
-                   onclick="goOrder(); return false;" />
-        </div>
+        <div class="col-md-1"></div>
     </div>
     @Html.Partial("BootstrapModal")
 </div>
