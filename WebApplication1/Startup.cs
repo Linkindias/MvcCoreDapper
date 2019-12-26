@@ -39,6 +39,10 @@ namespace WebApplication1
             // configure basic authentication 
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+            services.AddAntiforgery(options => {
+                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.HeaderName = "X-XSRF-TOKEN";
+            });
 
             //Service
             services.AddScoped<AuthService>(); //權限服務
@@ -72,7 +76,7 @@ namespace WebApplication1
             services.AddSession();
             services.AddMvc(options =>
             {
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()); //自動动 XSRF 驗證
                 options.Filters.Add(new AuthorizeActionFilter());
                 options.Filters.Add(new ExceptionFilter(CurrentEnv));
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

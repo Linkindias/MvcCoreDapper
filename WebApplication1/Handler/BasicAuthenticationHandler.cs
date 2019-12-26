@@ -23,26 +23,30 @@ namespace WebApplication1
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            try
+            if (Context.Request.Path.Value.IndexOf("api") == -1)
             {
-                string Name = Context.Session.GetString("Name");
-                string Id = Context.Session.GetString("Id");
-
-                if (Name != null && Id != null)
+                try
                 {
-                    var claims = new List<Claim>() {
+                    string Name = Context.Session.GetString("Name");
+                    string Id = Context.Session.GetString("Id");
+
+                    if (Name != null && Id != null)
+                    {
+                        var claims = new List<Claim>() {
                         new Claim(ClaimTypes.NameIdentifier, Id),
                         new Claim(ClaimTypes.Name, Name),
                     };
-                    ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, Scheme.Name);
-                    return AuthenticateResult.Success(new AuthenticationTicket(new ClaimsPrincipal(claimsIdentity), Scheme.Name));
+                        ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, Scheme.Name);
+                        return AuthenticateResult.Success(new AuthenticationTicket(new ClaimsPrincipal(claimsIdentity), Scheme.Name));
+                    }
+                    return AuthenticateResult.Fail("Signed Out!");
                 }
-                return AuthenticateResult.Fail("Signed Out!");
+                catch (Exception ex)
+                {
+                    return AuthenticateResult.Fail(ex.Message);
+                }
             }
-            catch (Exception ex)
-            {
-                return AuthenticateResult.Fail(ex.Message);
-            }
+            return null;
         }
     }
 }

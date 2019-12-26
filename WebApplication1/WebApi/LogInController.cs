@@ -4,10 +4,12 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace WebApplication1.Controllers
+namespace WebApplication1.WebApi
 {
+    [Route("api/[controller]")]
     public class LogInController : Controller
     {
         AuthService AuthService;
@@ -15,11 +17,6 @@ namespace WebApplication1.Controllers
         public LogInController(AuthService authService)
         {
             this.AuthService = authService;
-        }
-
-        public IActionResult Index()
-        {
-            return View();
         }
 
         [AllowAnonymous]
@@ -39,6 +36,7 @@ namespace WebApplication1.Controllers
         }
 
         [Authorize]
+        [HttpGet]
         public IActionResult Out(string Id)
         {
             var result = AuthService.LogOut(Id);
