@@ -4,6 +4,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace WebApplication1.Controllers
@@ -44,7 +46,6 @@ namespace WebApplication1.Controllers
             var result = AuthService.LogOut(Id);
             if (result.IsSuccess)
             {
-                HttpContext.Authentication.SignOutAsync(DefaultAuthenticationTypes.ApplicationCookie);
                 HttpContext.Session.Remove("Id");
                 HttpContext.Session.Remove("Name");
                 return RedirectToAction("Index", "LogIn");

@@ -36,9 +36,9 @@ namespace WebApplication1
             string strCon = Config.GetValue<string>("NorthwindConnection");
             int cmdTimeOut = Config.GetValue<int>("CommandTimeout");
 
-            // configure basic authentication 
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+
             services.AddAntiforgery(options => {
                 options.Cookie.SameSite = SameSiteMode.Lax;
                 options.HeaderName = "X-XSRF-TOKEN";

@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 namespace WebApplication1.WebApi
 {
     [Route("api/[controller]")]
-    public class LogInController : Controller
+    public class AuthController : Controller
     {
         AuthService AuthService;
 
-        public LogInController(AuthService authService)
+        public AuthController(AuthService authService)
         {
             this.AuthService = authService;
         }
