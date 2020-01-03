@@ -19,22 +19,25 @@ namespace UnitTestBLL
     [TestClass]
     public class orderServiceUnitTest
     {
-        static Mock<IMemoryCache> mockCache = null;
+        static Mock<IConfiguration> mockConfig = null;
         static Mock<IMemberOfOrder> mockMember = null;
         static OrderService OrderService = null;
         static Mock<OrderRepository> mockOrder = null;
         static Mock<OrderDetailRepository> mockOrderDetial = null;
+        static Mock<OrderModel> mockOrdetDto = null;
         static string connect = string.Empty;
         static int timeout = 0;
 
         [ClassInitialize]
         public static void orderServiceUnitTestInitialize(TestContext testContext)
         {
-            mockCache = new Mock<IMemoryCache>();
+            mockConfig = new Mock<IConfiguration>();
             mockMember = new Mock<IMemberOfOrder>();
             mockOrder = new Mock<OrderRepository>(new object[] { connect, timeout });
             mockOrderDetial = new Mock<OrderDetailRepository>(new object[] { connect, timeout });
-            OrderService = new OrderService(mockOrder.Object, mockOrderDetial.Object, mockMember.Object);
+            mockOrdetDto = new Mock<OrderModel>();
+            OrderService = new OrderService(mockMember.Object, mockConfig.Object,
+                mockOrder.Object, mockOrderDetial.Object, mockOrdetDto.Object);
         }
 
         [TestMethod()]
@@ -46,10 +49,11 @@ namespace UnitTestBLL
         [ClassCleanup]
         public static void ClassCleanup()
         {
-            mockCache = null;
+            mockConfig = null;
             mockMember = null;
             mockOrder = null;
             mockOrderDetial = null;
+            mockOrdetDto = null;
             OrderService = null;
         }
     }
