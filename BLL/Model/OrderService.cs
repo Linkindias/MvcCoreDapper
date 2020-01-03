@@ -16,7 +16,7 @@ namespace BLL.Model
 {
     public class OrderService
     {
-        IConfiguration configuration;
+        IConfiguration config;
         IMemberOfOrder memberService;
         OrderRepository OrderRep;
         OrderDetailRepository OrderDetailRep;
@@ -27,7 +27,7 @@ namespace BLL.Model
             OrderModel orderModel)
         {
             this.memberService = memberOfOrder;
-            this.configuration = configuration;
+            this.config = configuration;
             this.OrderRep = orderRepository;
             this.OrderDetailRep = orderDetailRepository;
             this.Order = orderModel;
@@ -46,7 +46,7 @@ namespace BLL.Model
             Result rtn = new Result();
             (Result rtn, List<OrderDTO> orderDto) result = (new Result(), new List<OrderDTO>());
             //頁面數量
-            int PageCount = int.Parse(configuration["PageCount"]);
+            int PageCount = int.Parse(config["PageCount"]);
 
             if (Member is CustomerModel)
                 result = OrderRep.GetOrderById(Member.CustomerID , 0, Start, End);
