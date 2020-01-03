@@ -1,6 +1,7 @@
 ﻿using BLL.Model;
 using DAL.DTOModel;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -41,7 +42,7 @@ namespace WebApplication1.Controllers
         }
 
         [Authorize]
-        public IActionResult Out(string Id)
+        public async Task<IActionResult> Out(string Id)
         {
             var result = AuthService.LogOut(Id);
             if (result.IsSuccess)

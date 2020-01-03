@@ -2,14 +2,17 @@
 using DAL.DTOModel;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace WebApplication1.WebApi
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/")]
+    [ApiController]
     public class AuthController : Controller
     {
         AuthService AuthService;
@@ -20,9 +23,9 @@ namespace WebApplication1.WebApi
         }
 
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> In(LogInDTO LogIn)
+        [Route("In")]
+        public IActionResult In([FromBody] LogInDTO LogIn)
         {
             var result = AuthService.LogIn(LogIn.account, LogIn.password);
             if (result.rtn.IsSuccess)
@@ -36,19 +39,27 @@ namespace WebApplication1.WebApi
         }
 
         [Authorize]
-        [HttpGet]
-        public IActionResult Out(string Id)
+        [HttpPost]
+        [Route("Out")]
+        public IActionResult Out([FromQuery] string Id)
         {
             var result = AuthService.LogOut(Id);
             if (result.IsSuccess)
             {
-                HttpContext.Authentication.SignOutAsync(DefaultAuthenticationTypes.ApplicationCookie);
                 HttpContext.Session.Remove("Id");
                 HttpContext.Session.Remove("Name");
                 return RedirectToAction("Index", "LogIn");
             }
 
             return BadRequest(result.ErrorMsg);
+        }
+
+        [HttpGet]
+        [Route("Test")]
+        //[ValidateAntiForgeryToken]
+        public IEnumerable<string> Get()
+        {
+            return new string[] { "value1", "value2" };
         }
     }
 }

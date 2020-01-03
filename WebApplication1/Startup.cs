@@ -1,26 +1,20 @@
-﻿using BLL.Model;
+﻿using BLL.InterFace;
+using BLL.Model;
 using BLL.PageModel;
 using DAL.Repository;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Server.IISIntegration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebApplication1.Filters;
-using BLL.InterFace;
-using WebApplication1.Models;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using System;
-using Microsoft.AspNetCore.Authentication;
 
 namespace WebApplication1
 {
     public class Startup
     {
-        public IConfiguration Config { get; }
+        IConfiguration Config { get; }
         IHostingEnvironment CurrentEnv { get; set; }
 
         public Startup(IConfiguration configuration, IHostingEnvironment env)
@@ -37,12 +31,7 @@ namespace WebApplication1
             int cmdTimeOut = Config.GetValue<int>("CommandTimeout");
 
             services.AddAuthentication("BasicAuthentication")
-                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
-
-            services.AddAntiforgery(options => {
-                options.Cookie.SameSite = SameSiteMode.Lax;
-                options.HeaderName = "X-XSRF-TOKEN";
-            });
+                        .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
             //Service
             services.AddScoped<AuthService>(); //權限服務
@@ -74,6 +63,7 @@ namespace WebApplication1
             services.AddSingleton<SupplierRepository>(x => new SupplierRepository(strCon, cmdTimeOut)); //供應商倉
 
             services.AddSession();
+
             services.AddMvc(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()); //自動动 XSRF 驗證
@@ -82,7 +72,6 @@ namespace WebApplication1
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
