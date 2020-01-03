@@ -31,7 +31,8 @@ namespace WebApplication1
             int cmdTimeOut = Config.GetValue<int>("CommandTimeout");
 
             services.AddAuthentication("BasicAuthentication")
-                        .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+                        .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null)
+                        .AddJwtBearer();
 
             //Service
             services.AddScoped<AuthService>(); //權限服務

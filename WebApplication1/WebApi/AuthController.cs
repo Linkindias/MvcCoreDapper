@@ -30,10 +30,11 @@ namespace WebApplication1.WebApi
             var result = AuthService.LogIn(LogIn.account, LogIn.password);
             if (result.rtn.IsSuccess)
             {
-                HttpContext.Session.SetString("Name", result.Name);
-                HttpContext.Session.SetString("Id", result.Id);
+                string JwtToken = AuthService.CreateToken(result.Name, result.Id, result.guid);
 
-                return Ok();
+                if (string.IsNullOrEmpty(JwtToken)) return BadRequest("Not Generate Token!");
+                    
+                return Ok(JwtToken);
             }
             return BadRequest(result.rtn.ErrorMsg);
         }

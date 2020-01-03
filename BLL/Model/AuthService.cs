@@ -4,8 +4,13 @@ using BLL.PageModel;
 using DAL.DBModel;
 using DAL.Repository;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using static Base.Enums;
@@ -14,19 +19,21 @@ namespace BLL.Model
 {
     public class AuthService
     {
-        AuthenticationRepository AuthRep;
+        IConfiguration config;
         IMemberOfAuth memberService;
         IMemoryCache cache;
+        AuthenticationRepository AuthRep;
 
         static string keyCode = "abcd1234EFGH0987";
         static string ivCode = "ABCD7890efgh4321";
 
-        public AuthService(AuthenticationRepository authenticationRepository,
-            IMemberOfAuth memberOfAuth, IMemoryCache memoryCache)
+        public AuthService(IConfiguration configuration, IMemberOfAuth memberOfAuth, IMemoryCache memoryCache ,
+            AuthenticationRepository authenticationRepository)
         {
-            this.AuthRep = authenticationRepository;
+            this.config = configuration;
             this.memberService = memberOfAuth;
             this.cache = memoryCache;
+            this.AuthRep = authenticationRepository;
         }
 
         /// <summary>
@@ -206,20 +213,57 @@ namespace BLL.Model
             return Convert.ToBase64String(cipherText);
         }
 
-        public byte[] HexStringToByteArray(string strHex)
-        {
-            byte[] r = new byte[strHex.Length / 2];
-            for (int i = 0; i <= strHex.Length - 1; i += 2)
-            {
-                r[i / 2] = Convert.ToByte(Convert.ToInt32(strHex.Substring(i, 2), 16));
-            }
-            return r;
-        }
-
         protected virtual byte[] GenerateKey(string strPassword, byte[] salt, int iterations)
         {
             Rfc2898DeriveBytes rfc2898 = new Rfc2898DeriveBytes(Encoding.UTF8.GetBytes(strPassword), salt, iterations);
             return rfc2898.GetBytes(128 / 8);
+        }
+
+        /// <summary>
+        /// 建立Token
+        /// </summary>
+        /// <param name="Name">姓名</param>
+        /// <param name="Id">編號</param>
+        /// <param name="guid">驗證碼</param>
+        public string CreateToken(string Name, string Id, Guid guid)
+        {
+            DateTime dtExp = DateTime.Now.AddHours(double.Parse(config["ExpHour"]));
+
+            // JWT RFC claims 列舉
+            var claims = new[] {
+                new Claim(JwtRegisteredClaimNames.Sub,CheckValue(Name)),
+                new Claim(JwtRegisteredClaimNames.NameId,CheckValue(Id)),
+                new Claim(JwtRegisteredClaimNames.Jti, guid.ToString()),
+            };
+
+            var userClaimsIdentity = new ClaimsIdentity(claims);
+
+            // 建立一組對稱式加密的金鑰，主要用於 JWT 簽章之用
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenSec"]));
+            // 使用對稱密鑰
+            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Issuer = config["Issuer"],
+                Subject = userClaimsIdentity,
+                Expires = dtExp,
+                SigningCredentials = signingCredentials
+            };
+
+            // 產出所需要的 JWT securityToken 物件，並取得序列化後的 Token 結果(字串格式)
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var securityToken = tokenHandler.CreateToken(tokenDescriptor);
+            var serializeToken = tokenHandler.WriteToken(securityToken);
+
+            return serializeToken;
+        }
+
+        private string CheckValue(string Source)
+        {
+            if (Source == null) return string.Empty;
+
+            return Source;
         }
     }
 }
