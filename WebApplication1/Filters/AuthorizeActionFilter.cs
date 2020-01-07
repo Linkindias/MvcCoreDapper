@@ -15,7 +15,7 @@ namespace WebApplication1.Filters
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             //當不包含路徑下，指檢查權限
-            if (!Paths.Contains(context.HttpContext.Request.Path.Value))
+            if (!Paths.Contains(context.HttpContext.Request.Path.Value) && context.HttpContext.Request.Path.Value.IndexOf("api") == -1)
             {
                 ISession session = context.HttpContext.Session;
 

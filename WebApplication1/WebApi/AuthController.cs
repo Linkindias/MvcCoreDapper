@@ -1,6 +1,7 @@
 ﻿using BLL.Model;
 using DAL.DTOModel;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +13,8 @@ using System.Threading.Tasks;
 namespace WebApplication1.WebApi
 {
     [Route("api/[controller]/")]
+    [IgnoreAntiforgeryToken]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     public class AuthController : Controller
     {
@@ -39,28 +42,14 @@ namespace WebApplication1.WebApi
             return BadRequest(result.rtn.ErrorMsg);
         }
 
-        [Authorize]
         [HttpPost]
         [Route("Out")]
         public IActionResult Out([FromQuery] string Id)
         {
             var result = AuthService.LogOut(Id);
-            if (result.IsSuccess)
-            {
-                HttpContext.Session.Remove("Id");
-                HttpContext.Session.Remove("Name");
-                return RedirectToAction("Index", "LogIn");
-            }
+            if (result.IsSuccess) return Ok(result.SuccessMsg);
 
             return BadRequest(result.ErrorMsg);
-        }
-
-        [HttpGet]
-        [Route("Test")]
-        //[ValidateAntiForgeryToken]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
         }
     }
 }

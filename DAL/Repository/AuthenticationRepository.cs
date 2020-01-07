@@ -137,5 +137,36 @@ End";
 
             return (result.rtn, result.Rows);
         }
+
+        /// <summary>
+        /// 是否驗證
+        /// </summary>
+        /// <param name="EmployeeId">員工編號</param>
+        /// <param name="Guid">驗證碼</param>
+        public (Result rtn, bool isVerify)  IsVerify(string Id, string Guid, int Statue)
+        {
+            if (!string.IsNullOrEmpty(Id) && !string.IsNullOrEmpty(Guid))
+            {
+                int EmployeeId = 0;
+                int.TryParse(Id, out EmployeeId);
+                //實值型別初始化為0
+                if (EmployeeId == 0) EmployeeId = -1;
+
+                string SqlCom = @"
+select * from Authentication
+where (EmployeesId = @EmployeeId or CustomersId = @Id) and State = @State and VerifyCode = @VerifyCode";
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@EmployeeId", EmployeeId);
+                parameters.Add("@Id", Id);
+                parameters.Add("@State", Statue);
+                parameters.Add("@VerifyCode", Guid);
+
+                var result = this.GetSingleDefault<Authentication>(SqlCom, parameters);
+
+                return (result.rtn, result.result != null);
+            }
+            return (new Result() { IsSuccess = false, ErrorMsg = "Id or Guid is null"}, false);
+        }
     }
 }

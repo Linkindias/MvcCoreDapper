@@ -3,11 +3,14 @@ using BLL.Model;
 using BLL.PageModel;
 using DAL.Repository;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using WebApplication1.Filters;
 
 namespace WebApplication1
@@ -27,12 +30,29 @@ namespace WebApplication1
         {
             services.AddMemoryCache();
 
+
             string strCon = Config.GetValue<string>("NorthwindConnection");
             int cmdTimeOut = Config.GetValue<int>("CommandTimeout");
 
+            services.AddCors();
+
             services.AddAuthentication("BasicAuthentication")
                         .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null)
-                        .AddJwtBearer();
+
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                        .AddJwtBearer(options =>
+                        {
+                            options.IncludeErrorDetails = true;
+                            options.TokenValidationParameters = new TokenValidationParameters
+                            {
+                                ValidateIssuer = true,
+                                ValidIssuer = Config["Issuer"],
+                                ValidateAudience = false,
+                                ValidateLifetime = true,
+                                ValidateIssuerSigningKey = true,
+                                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Config["TokenSec"]))
+                            };
+                        });
 
             //Service
             services.AddScoped<AuthService>(); //權限服務
