@@ -5,6 +5,7 @@ using DAL.DBModel;
 using DAL.DTOModel;
 using DAL.Repository;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.Protected;
@@ -17,6 +18,7 @@ namespace UnitTestBLL
     public class authServiceUnitTest
     {
         static AuthService AuthService = null;
+        static Mock<IConfiguration> mockConfig = null;
         static Mock<IMemberOfAuth> mockMember = null;
         static Mock<AuthenticationRepository> mockAuth = null;
         static Mock<IMemoryCache> mockCache = null;
@@ -26,16 +28,17 @@ namespace UnitTestBLL
         [ClassInitialize]
         public static void authServiceUnitTestInitialize(TestContext testContext)
         {
+            mockConfig = new Mock<IConfiguration>();
             mockCache = new Mock<IMemoryCache>();
             mockMember = new Mock<IMemberOfAuth>();
-             mockAuth = new Mock<AuthenticationRepository>(new object[] { connect, timeout });
-            AuthService = new AuthService(mockAuth.Object, mockMember.Object, mockCache.Object);
+            mockAuth = new Mock<AuthenticationRepository>(new object[] { connect, timeout });
+            AuthService = new AuthService(mockConfig.Object ,mockMember.Object, mockCache.Object, mockAuth.Object);
         }
 
         [TestMethod()]
         public void LogIn_當查無帳號_則回傳查無帳號訊息()
         {
-            var mockauth = new Mock<AuthService>(mockAuth.Object, mockMember.Object, mockCache.Object);
+            var mockauth = new Mock<AuthService>(mockConfig.Object, mockMember.Object, mockCache.Object, mockAuth.Object);
             mockauth.Protected().Setup<string>("DecryptAES", new object[] { "Test" }).Returns("Test");
             AuthService = mockauth.Object;
             mockMember.Setup(p => p.IsExistMemberByAccount(It.IsAny<string>())).Returns(() => 
@@ -48,7 +51,7 @@ namespace UnitTestBLL
         [TestMethod()]
         public void LogIn_當查有帳號且帳密不對_則回傳查錯誤訊息()
         {
-            var mockauth = new Mock<AuthService>(mockAuth.Object, mockMember.Object, mockCache.Object);
+            var mockauth = new Mock<AuthService>(mockConfig.Object, mockMember.Object, mockCache.Object, mockAuth.Object);
             mockauth.Protected().Setup<string>("DecryptAES", new object[] { "Test" }).Returns("Test");
             AuthService = mockauth.Object;
             mockMember.Setup(p => p.IsExistMemberByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = true }, 0, string.Empty, string.Empty, string.Empty));
@@ -61,7 +64,7 @@ namespace UnitTestBLL
         [TestMethod()]
         public void LogIn_當查有帳號且帳密對且鎖定帳號_則回傳查錯誤訊息()
         {
-            var mockauth = new Mock<AuthService>(mockAuth.Object, mockMember.Object, mockCache.Object);
+            var mockauth = new Mock<AuthService>(mockConfig.Object, mockMember.Object, mockCache.Object, mockAuth.Object);
             mockauth.Protected().Setup<string>("DecryptAES", new object[] { "Test" }).Returns("Test");
             AuthService = mockauth.Object;
             mockMember.Setup(p => p.IsExistMemberByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = true }, 0, string.Empty, string.Empty, string.Empty));
@@ -79,7 +82,7 @@ namespace UnitTestBLL
         [TestMethod()]
         public void LogIn_當查有帳號且帳密對且無鎖定帳號且離職_則回傳查錯誤訊息()
         {
-            var mockauth = new Mock<AuthService>(mockAuth.Object, mockMember.Object, mockCache.Object);
+            var mockauth = new Mock<AuthService>(mockConfig.Object, mockMember.Object, mockCache.Object, mockAuth.Object);
             mockauth.Protected().Setup<string>("DecryptAES", new object[] { "Test" }).Returns("Test");
             AuthService = mockauth.Object;
             mockMember.Setup(p => p.IsExistMemberByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = true }, 0, string.Empty, string.Empty, string.Empty));
@@ -97,7 +100,7 @@ namespace UnitTestBLL
         [TestMethod()]
         public void LogIn_當查有帳號且帳密對且無鎖定帳號且離職且已登入_則回傳查錯誤訊息()
         {
-            var mockauth = new Mock<AuthService>(mockAuth.Object, mockMember.Object, mockCache.Object);
+            var mockauth = new Mock<AuthService>(mockConfig.Object, mockMember.Object, mockCache.Object, mockAuth.Object);
             mockauth.Protected().Setup<string>("DecryptAES", new object[] { "Test" }).Returns("Test");
             AuthService = mockauth.Object;
             mockMember.Setup(p => p.IsExistMemberByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = true }, 0, string.Empty, string.Empty, string.Empty));
@@ -116,7 +119,7 @@ namespace UnitTestBLL
         [TestMethod()]
         public void LogIn_當查有帳號且帳密對且無鎖定帳號且離職且未登入_則回傳檢查物件()
         {
-            var mockauth = new Mock<AuthService>(mockAuth.Object, mockMember.Object, mockCache.Object);
+            var mockauth = new Mock<AuthService>(mockConfig.Object, mockMember.Object, mockCache.Object, mockAuth.Object);
             mockauth.Protected().Setup<string>("DecryptAES", new object[] { "Test" }).Returns("Test");
             AuthService = mockauth.Object;
             mockMember.Setup(p => p.IsExistMemberByAccount(It.IsAny<string>())).Returns(() => (new Result() { IsSuccess = true }, 1, string.Empty, "1", "Test"));
@@ -165,7 +168,7 @@ namespace UnitTestBLL
         [TestMethod()]
         public void GetAuth_當查依帳號查到權限_則回傳查權限訊息()
         {
-            var mockauth = new Mock<AuthService>(mockAuth.Object, mockMember.Object, mockCache.Object);
+            var mockauth = new Mock<AuthService>(mockConfig.Object, mockMember.Object, mockCache.Object, mockAuth.Object);
             mockauth.Protected().Setup<string>("Encrypt", new object[] { "Test" }).Returns("Test");
             AuthService = mockauth.Object;
 
@@ -193,7 +196,7 @@ namespace UnitTestBLL
         [TestMethod()]
         public void UpdateAuth_當查依權限更新權限成功_則回傳更新權限成功訊息()
         {
-            var mockauth = new Mock<AuthService>(mockAuth.Object, mockMember.Object, mockCache.Object);
+            var mockauth = new Mock<AuthService>(mockConfig.Object, mockMember.Object, mockCache.Object, mockAuth.Object);
             mockauth.Protected().Setup<string>("DecryptAES", new object[] { "Test" }).Returns("Test");
             AuthService = mockauth.Object;
             mockAuth.Setup(p => p.UpdateAuth(It.IsAny<Int32>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Int32>()))
@@ -210,7 +213,7 @@ namespace UnitTestBLL
         [TestMethod()]
         public void UpdateAuth_當查依權限更新權限失敗_則回傳更新權限失敗訊息()
         {
-            var mockauth = new Mock<AuthService>(mockAuth.Object, mockMember.Object, mockCache.Object);
+            var mockauth = new Mock<AuthService>(mockConfig.Object, mockMember.Object, mockCache.Object, mockAuth.Object);
             mockauth.Protected().Setup<string>("DecryptAES", new object[] { "Test" }).Returns("Test");
             AuthService = mockauth.Object;
             mockAuth.Setup(p => p.UpdateAuth(It.IsAny<Int32>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Int32>()))
@@ -230,6 +233,7 @@ namespace UnitTestBLL
         [ClassCleanup]
         public static void ClassCleanup()
         {
+            mockConfig = null;
             mockMember = null;
             mockAuth = null;
             mockCache = null;
