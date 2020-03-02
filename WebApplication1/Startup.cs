@@ -30,11 +30,11 @@ namespace WebApplication1
         {
             services.AddMemoryCache();
 
-
             string strCon = Config.GetValue<string>("NorthwindConnection");
             int cmdTimeOut = Config.GetValue<int>("CommandTimeout");
 
             services.AddCors();
+            services.AddAntiforgery();
 
             services.AddAuthentication("BasicAuthentication")
                         .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null)
@@ -43,7 +43,7 @@ namespace WebApplication1
                         .AddJwtBearer(options =>
                         {
                             options.IncludeErrorDetails = true;
-                            options.TokenValidationParameters = new TokenValidationParameters
+                            options.TokenValidationParameters = new TokenValidationParameters()
                             {
                                 ValidateIssuer = true,
                                 ValidIssuer = Config["Issuer"],

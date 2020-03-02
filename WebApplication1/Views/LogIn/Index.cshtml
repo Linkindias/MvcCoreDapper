@@ -85,6 +85,7 @@
             //if (!checkInput()) return;
 
             if ($("#LogInForm").valid()) {
+                console.log($("#account").val() + ',' + $("#password").val());
                 $.ajax({
                     type: 'POST',
                     url: '@Url.Action("In", "LogIn")',

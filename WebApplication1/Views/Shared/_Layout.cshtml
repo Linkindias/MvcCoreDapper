@@ -21,20 +21,17 @@
             <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.9/jquery.validate.unobtrusive.min.js"></script>
             <script type="text/javascript" src="~/js/site.js" asp-append-version="true"></script>
         </environment>*@
-    <environment include="Development">
+
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/bootstrap-datepicker/css/bootstrap-datepicker.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    </environment>
-    <environment include="Development">
         <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
         <script type="text/javascript" src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
         <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
         <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script type="text/javascript" src="~/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
         <script type="text/javascript" src="~/js/site.js" asp-append-version="true"></script>
-    </environment>
     <style>
         .body{
             padding: 0px !important;
@@ -158,7 +155,7 @@
                     }
                     <div id="menu"></div>
                 </ul>
-                <ul class="nav navbar-nav right">
+                <ul class="nav navbar-nav  col-md-2">
                     @{
                         if (ViewBag.Name != null || ViewData["Name"] != null)
                         {
