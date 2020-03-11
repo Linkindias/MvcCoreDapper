@@ -75,7 +75,7 @@ namespace BLL.Model
                         rtn.ErrorMsg = $"帳號 {account}已離職，無法登入";
 
                     //當已有認證，則已登入中
-                    else if (myAuth.auth.VerifyCode != null || myAuth.auth.VerifyCode == Guid.Parse("00000000-0000-0000-0000-000000000000"))
+                    else if (myAuth.auth.VerifyCode != null && myAuth.auth.VerifyCode != Guid.Parse("00000000-0000-0000-0000-000000000000"))
                         rtn.ErrorMsg = $"帳號 {account}已登入中，無法登入";
 
                     else
