@@ -18,7 +18,11 @@ namespace WebApplication1
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args).UseKestrel()
-                .UseStartup<Startup>();
+            WebHost.CreateDefaultBuilder(args)
+            .ConfigureLogging(log => {
+                log.ClearProviders();
+                log.AddConsole();
+            })
+            .UseStartup<Startup>();
     }
 }

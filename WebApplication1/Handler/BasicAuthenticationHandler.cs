@@ -24,10 +24,12 @@ namespace WebApplication1
     {
         string[] Paths = new string[] { "/", "/LogIn" };
         IConfiguration config;
+        ILogger log;
         AuthenticationRepository AuthRep;
 
         public BasicAuthenticationHandler(
             IConfiguration configuration,
+            ILogger<BasicAuthenticationHandler> log,
             IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
@@ -37,6 +39,7 @@ namespace WebApplication1
             : base(options, logger, encoder, clock)
         {
             this.config = configuration;
+            this.log = log;
             this.AuthRep = authenticationRepository;
         }
 
@@ -44,6 +47,7 @@ namespace WebApplication1
         {
             string path = Context.Request.Path.Value;
 
+            this.log.LogInformation($"BasicAuthenticationHandler:{path}-{!Paths.Contains(path)}-{path.IndexOf("api")}");
             //當路徑為已登入後 且不含webapi，則檢查session是否過期
             if (!Paths.Contains(path) && path.IndexOf("api") == -1)
             {

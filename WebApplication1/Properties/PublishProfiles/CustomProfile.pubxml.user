@@ -7,5 +7,6 @@
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <EncryptedPassword />
+    <_PublishTargetUrl>D:\FTP\MvcCore</_PublishTargetUrl>
   </PropertyGroup>
 </Project>
