@@ -24,12 +24,10 @@ namespace WebApplication1
     {
         string[] Paths = new string[] { "/", "/LogIn" };
         IConfiguration config;
-        ILogger log;
         AuthenticationRepository AuthRep;
 
         public BasicAuthenticationHandler(
             IConfiguration configuration,
-            ILogger<BasicAuthenticationHandler> log,
             IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
@@ -39,7 +37,6 @@ namespace WebApplication1
             : base(options, logger, encoder, clock)
         {
             this.config = configuration;
-            this.log = log;
             this.AuthRep = authenticationRepository;
         }
 
@@ -47,7 +44,6 @@ namespace WebApplication1
         {
             string path = Context.Request.Path.Value;
 
-            this.log.LogInformation($"BasicAuthenticationHandler:{path}-{!Paths.Contains(path)}-{path.IndexOf("api")}");
             //當路徑為已登入後 且不含webapi，則檢查session是否過期
             if (!Paths.Contains(path) && path.IndexOf("api") == -1)
             {
@@ -64,58 +60,60 @@ namespace WebApplication1
                     return AuthenticateResult.Success(new AuthenticationTicket(new ClaimsPrincipal(claimsIdentity), Scheme.Name));
                 }
             }
+            else if (Paths.Contains(path))
+                return AuthenticateResult.NoResult();
             //當路徑為webapi ，則檢查jwtToken
-            if (path.IndexOf("api") > -1)
-            {
-                if (path == "/api/Auth/In") //當為登入Api，則先給予權限
-                {
-                    return AuthenticateResult.Success(new AuthenticationTicket(
-                        new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>(), Scheme.Name)), Scheme.Name));
-                }
-                else
-                {
-                    StringValues Hearder = Context.Request.Headers["Authorization"];
+            //if (path.IndexOf("api") > -1)
+            //{
+            //    if (path == "/api/Auth/In") //當為登入Api，則先給予權限
+            //    {
+            //        return AuthenticateResult.Success(new AuthenticationTicket(
+            //            new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>(), Scheme.Name)), Scheme.Name));
+            //    }
+            //    else
+            //    {
+            //        StringValues Hearder = Context.Request.Headers["Authorization"];
 
-                    //當無Jwt Token且無特別Bearer，則無權限
-                    if (Hearder == string.Empty)   return AuthenticateResult.Fail("Lost Token");
+            //        //當無Jwt Token且無特別Bearer，則無權限
+            //        if (Hearder == string.Empty)   return AuthenticateResult.Fail("Lost Token");
 
-                    string token = Hearder.ToString().StartsWith("Bearer ")
-                                        ? Hearder.ToString().Substring(7) : Hearder.ToString();
+            //        string token = Hearder.ToString().StartsWith("Bearer ")
+            //                            ? Hearder.ToString().Substring(7) : Hearder.ToString();
 
-                    try
-                    {
-                        SecurityToken securityToken;
-                        JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-                        TokenValidationParameters validationParameters = new TokenValidationParameters()
-                        {
-                            ValidIssuer = config["Issuer"],
-                            ValidateAudience = false,
-                            ValidateLifetime = true,
-                            ValidateIssuerSigningKey = true,
-                            LifetimeValidator = this.LifetimeValidator,
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenSec"]))
-                        };
-                        Thread.CurrentPrincipal = handler.ValidateToken(token, validationParameters, out securityToken);
+            //        try
+            //        {
+            //            SecurityToken securityToken;
+            //            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            //            TokenValidationParameters validationParameters = new TokenValidationParameters()
+            //            {
+            //                ValidIssuer = config["Issuer"],
+            //                ValidateAudience = false,
+            //                ValidateLifetime = true,
+            //                ValidateIssuerSigningKey = true,
+            //                LifetimeValidator = this.LifetimeValidator,
+            //                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenSec"]))
+            //            };
+            //            Thread.CurrentPrincipal = handler.ValidateToken(token, validationParameters, out securityToken);
 
-                        JwtSecurityToken jwtST = (JwtSecurityToken)securityToken;
+            //            JwtSecurityToken jwtST = (JwtSecurityToken)securityToken;
 
-                        var claims = new List<Claim>() {
-                            new Claim(ClaimTypes.NameIdentifier, jwtST.Payload["nameid"].ToString()),
-                            new Claim(ClaimTypes.Name, jwtST.Payload["sub"].ToString()),
-                        };
+            //            var claims = new List<Claim>() {
+            //                new Claim(ClaimTypes.NameIdentifier, jwtST.Payload["nameid"].ToString()),
+            //                new Claim(ClaimTypes.Name, jwtST.Payload["sub"].ToString()),
+            //            };
 
-                        return AuthenticateResult.Success(new AuthenticationTicket(new ClaimsPrincipal(new ClaimsIdentity(claims, Scheme.Name)), Scheme.Name));
-                    }
-                    catch (SecurityTokenValidationException e)
-                    {
-                        return AuthenticateResult.Fail($"Token :{e.Message}");
-                    }
-                    catch (Exception ex)
-                    {
-                        return AuthenticateResult.Fail($"Token :{ex.Message}");
-                    }
-                }
-            }
+            //            return AuthenticateResult.Success(new AuthenticationTicket(new ClaimsPrincipal(new ClaimsIdentity(claims, Scheme.Name)), Scheme.Name));
+            //        }
+            //        catch (SecurityTokenValidationException e)
+            //        {
+            //            return AuthenticateResult.Fail($"Token :{e.Message}");
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            return AuthenticateResult.Fail($"Token :{ex.Message}");
+            //        }
+            //    }
+            //}
             return AuthenticateResult.Fail("Signed Out!");
         }
 
