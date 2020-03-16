@@ -7,6 +7,8 @@ using Base;
 using System.Linq;
 using System.Data;
 using static DAL.ConnectionBase;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace DAL
 {
@@ -15,15 +17,20 @@ namespace DAL
         public string ConnectionString { get; set; }
         public int CommandTimeout { get; set; }
 
-        public ConnectionBase()
+        ILogger log;
+
+        public ConnectionBase(IConfiguration con, ILogger<ConnectionBase> log)
         {
+            this.ConnectionString = con["NorthwindConnection"];
+            this.CommandTimeout = int.Parse(con["CommandTimeout"]);
+            this.log = log;
         }
 
-        public ConnectionBase(string con, int timeout)
-        {
-            this.ConnectionString = con;
-            this.CommandTimeout = timeout;
-        }
+        //public ConnectionBase(string con, int timeout)
+        //{
+        //    this.ConnectionString = con;
+        //    this.CommandTimeout = timeout;
+        //}
 
         public (Result rtn ,T result) GetSingleDefault<T>(string sqlCmd , DynamicParameters Params)
         {
@@ -33,15 +40,19 @@ namespace DAL
             {
                 try
                 {
+                    this.log.LogInformation($"ConnectionBase:{sqlCmd}");
+                    this.log.LogInformation($"ConnectionBase:{this.ConnectionString}");
                     result = connection.Query<T>(sqlCmd, Params).SingleOrDefault(); //只允許查出一筆
+
+                    this.log.LogInformation($"ConnectionBase:{(result == null ? string.Empty : result.ToString())}");
                     rtn.IsSuccess = true;
                 }
                 catch (Exception ex)
                 {
+                    this.log.LogInformation($"ConnectionBase Exception:{ex.Message}");
                     rtn.IsSuccess = false;
                     rtn.ErrorMsg = ex.Message.ToString();
                 }
-
             }
             return (rtn, result);
         }

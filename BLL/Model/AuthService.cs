@@ -5,6 +5,7 @@ using DAL.DBModel;
 using DAL.Repository;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -22,18 +23,21 @@ namespace BLL.Model
         IConfiguration config;
         IMemberOfAuth memberService;
         IMemoryCache cache;
+        ILogger logger;
         AuthenticationRepository AuthRep;
 
         static string keyCode = "abcd1234EFGH0987";
         static string ivCode = "ABCD7890efgh4321";
 
         public AuthService(IConfiguration configuration, IMemberOfAuth memberOfAuth, IMemoryCache memoryCache ,
+            ILogger<AuthService> log,
             AuthenticationRepository authenticationRepository)
         {
             this.config = configuration;
             this.memberService = memberOfAuth;
             this.cache = memoryCache;
             this.AuthRep = authenticationRepository;
+            this.logger = log;
         }
 
         /// <summary>
@@ -46,6 +50,7 @@ namespace BLL.Model
             Result rtn = new Result();
             string account = this.DecryptAES(Account);
             Guid guid = Guid.Empty;
+            this.logger.LogInformation($"AuthService:{account}");
 
             var result = memberService.IsExistMemberByAccount(account);
 

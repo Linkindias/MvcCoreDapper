@@ -1,6 +1,8 @@
 ﻿using Base;
 using DAL.DBModel;
 using Dapper;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,9 +11,13 @@ namespace DAL.Repository
 {
     public class CategorieRepository : ConnectionBase
     {
-        public CategorieRepository(string con, int timeout) : base(con, timeout)
+        public CategorieRepository(IConfiguration config, ILogger<ConnectionBase> log) : base(config, log)
         {
         }
+
+        //public CategorieRepository(string con, int timeout) : base(con, timeout)
+        //{
+        //}
 
         /// <summary>
         /// 取得商品種類

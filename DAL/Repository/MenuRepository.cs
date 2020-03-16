@@ -6,14 +6,20 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace DAL.Repository
 {
     public class MenuRepository : ConnectionBase
     {
-        public MenuRepository(string con, int timeout) : base(con, timeout)
+        public MenuRepository(IConfiguration config, ILogger<ConnectionBase> log) : base(config, log)
         {
         }
+
+        //public MenuRepository(string con, int timeout) : base(con, timeout)
+        //{
+        //}
 
         /// <summary>
         /// 依帳號取得選單資訊

@@ -1,6 +1,8 @@
 ﻿using Base;
 using DAL.DBModel;
 using Dapper;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,9 +12,16 @@ namespace DAL.Repository
 {
     public class EmployeeRepository : ConnectionBase
     {
-        public EmployeeRepository(string con, int timeout) : base(con, timeout)
+        ILogger<EmployeeRepository> logger;
+
+        public EmployeeRepository(IConfiguration config, ILogger<EmployeeRepository> log, ILogger<ConnectionBase> l) : base(config, l)
         {
+            this.logger = log;
         }
+
+        //public EmployeeRepository(string con, int timeout) : base(con, timeout)
+        //{
+        //}
 
         /// <summary>
         /// 依帳號取得人員
@@ -20,10 +29,14 @@ namespace DAL.Repository
         /// <param name="Account">帳號</param>
         public virtual (Result rtn ,Employees employee) GetEmployeeByAccount(string Account, int Status)
         {
+            this.logger.LogInformation($"EmployeeRepository:{Account} + {Status}");
+
             string sqlCmd = "SELECT * FROM Employees Where Account = @Account And Status = @Status ";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@Account", Account);
             parameters.Add("@Status", Status);
+
+            this.logger.LogInformation($"EmployeeRepository:{sqlCmd}");
 
             var result = this.GetSingleDefault<Employees>(sqlCmd, parameters);
 

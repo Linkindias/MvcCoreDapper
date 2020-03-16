@@ -1,6 +1,7 @@
 ﻿using BLL.InterFace;
 using BLL.Model;
 using BLL.PageModel;
+using DAL;
 using DAL.Repository;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -69,16 +70,18 @@ namespace WebApplication1
             services.AddTransient<OrderModel>(); //訂單
 
             //Repository
-            services.AddSingleton<AuthenticationRepository>(x => new AuthenticationRepository(strCon, cmdTimeOut)); //權限倉
-            services.AddSingleton<CustomerRepository>(x => new CustomerRepository(strCon, cmdTimeOut)); //客戶倉
-            services.AddSingleton<EmployeeRepository>(x => new EmployeeRepository(strCon, cmdTimeOut)); //員工倉
-            services.AddSingleton<OrderRepository>(x => new OrderRepository(strCon, cmdTimeOut)); //訂單倉
-            services.AddSingleton<MenuRepository>(x => new MenuRepository(strCon, cmdTimeOut)); //選單倉
-            services.AddSingleton<RoleRepository>(x => new RoleRepository(strCon, cmdTimeOut)); //角色倉
-            services.AddSingleton<ProductRepository>(x => new ProductRepository(strCon, cmdTimeOut)); //產品倉
-            services.AddSingleton<CategorieRepository>(x => new CategorieRepository(strCon, cmdTimeOut)); //產品類別倉
-            services.AddSingleton<OrderDetailRepository>(x => new OrderDetailRepository(strCon, cmdTimeOut)); //訂單細部倉
-            services.AddSingleton<SupplierRepository>(x => new SupplierRepository(strCon, cmdTimeOut)); //供應商倉
+            services.AddSingleton<AuthenticationRepository>(); //權限倉
+            services.AddSingleton<CustomerRepository>(); //客戶倉
+            services.AddSingleton<EmployeeRepository>(); //員工倉
+            services.AddSingleton<OrderRepository>(); //訂單倉
+            services.AddSingleton<MenuRepository>(); //選單倉
+            services.AddSingleton<RoleRepository>(); //角色倉
+            services.AddSingleton<ProductRepository>(); //產品倉
+            services.AddSingleton<CategorieRepository>(); //產品類別倉
+            services.AddSingleton<OrderDetailRepository>(); //訂單細部倉
+            services.AddSingleton<SupplierRepository>(); //供應商倉
+
+            services.AddTransient<ConnectionBase>(); //基礎Connection
 
             services.AddSession();
 

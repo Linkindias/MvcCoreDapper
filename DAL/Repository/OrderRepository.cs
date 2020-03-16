@@ -2,6 +2,8 @@
 using DAL.DBModel;
 using DAL.DTOModel;
 using Dapper;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -11,9 +13,13 @@ namespace DAL.Repository
 {
     public class OrderRepository : ConnectionBase
     {
-        public OrderRepository(string con, int timeout) : base(con, timeout)
+        public OrderRepository(IConfiguration config, ILogger<ConnectionBase> log) : base(config, log)
         {
         }
+
+        //public OrderRepository(string con, int timeout) : base(con, timeout)
+        //{
+        //}
 
         /// <summary>
         /// 依客戶編號取得訂單資訊

@@ -6,14 +6,20 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace DAL.Repository
 {
     public class RoleRepository : ConnectionBase
     {
-        public RoleRepository(string con, int timeout) : base(con, timeout)
+        public RoleRepository(IConfiguration config, ILogger<ConnectionBase> log) : base(config, log)
         {
         }
+
+        //public RoleRepository(string con, int timeout) : base(con, timeout)
+        //{
+        //}
 
         /// <summary>
         /// 依帳號取得角色資訊

@@ -5,6 +5,7 @@ using BLL.PageModel;
 using DAL.DBModel;
 using DAL.DTOModel;
 using DAL.Repository;
+using Microsoft.Extensions.Logging;
 using Omu.ValueInjecter;
 using static Base.Enums;
 
@@ -17,15 +18,18 @@ namespace BLL.Model
         RoleRepository RoleRep;
         EmployeeModel Employee;
         CustomerModel Customer;
+        ILogger logger;
 
         public MemberService(EmployeeRepository employeeRepository, CustomerRepository customerRepository, RoleRepository roleRepository,
-            EmployeeModel employee, CustomerModel customer)
+            EmployeeModel employee, CustomerModel customer,
+            ILogger<MemberService> log)
         {
             this.EmployeeRep = employeeRepository;
             this.CustomerRep = customerRepository;
             this.RoleRep = roleRepository;
             this.Employee = employee;
             this.Customer = customer;
+            this.logger = log;
         }
 
         /// <summary>
@@ -106,8 +110,14 @@ namespace BLL.Model
         public (Result rtn, int EmpId, string CusId, string Id, string Name) IsExistMemberByAccount(string account)
         {
             Result rtn = new Result();
+            this.logger.LogInformation($"MemberService:{account} + {(int)DataStatus.Enable}");
+
             var myEmployee = EmployeeRep.GetEmployeeByAccount(account, (int)DataStatus.Enable); //員工
             var myCustomer = CustomerRep.GetCustomerByAccount(account, (int)DataStatus.Enable); //客戶
+
+            this.logger.LogInformation($"MemberService Emp :{myEmployee.rtn.IsSuccess} + {myEmployee.employee == null}");
+
+            this.logger.LogInformation($"MemberService Cus :{myCustomer.rtn.IsSuccess} + {myCustomer.custom == null}");
 
             //當人員不正確，則顯示訊息
             if (myEmployee.employee == null && myCustomer.custom == null)

@@ -1,6 +1,8 @@
 ﻿using Base;
 using DAL.DBModel;
 using Dapper;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,9 +12,16 @@ namespace DAL.Repository
 {
     public class CustomerRepository : ConnectionBase
     {
-        public CustomerRepository(string con, int timeout) : base(con, timeout)
+        ILogger<CustomerRepository> logger;
+
+        public CustomerRepository(IConfiguration config,ILogger<CustomerRepository> log, ILogger<ConnectionBase> l) : base(config, l)
         {
+            this.logger = log;
         }
+
+        //public CustomerRepository(string con, int timeout) : base(con, timeout)
+        //{
+        //}
 
         /// <summary>
         /// 依帳號取得客戶
@@ -20,11 +29,14 @@ namespace DAL.Repository
         /// <param name="Account">帳號</param>
         public virtual (Result rtn, Customers custom) GetCustomerByAccount(string Account, int Status)
         {
+            this.logger.LogInformation($"EmployeeRepository:{Account} + {Status}");
+
             string sqlCmd = "SELECT * FROM Customers Where Account = @Account And Status = @Status ";
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@Account", Account);
             parameters.Add("@Status", Status);
-            Customers custom = null;
+
+            this.logger.LogInformation($"EmployeeRepository:{sqlCmd}");
 
             var result = this.GetSingleDefault<Customers>(sqlCmd, parameters);
 

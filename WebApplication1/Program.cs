@@ -23,6 +23,8 @@ namespace WebApplication1
                 log.ClearProviders();
                 log.AddConsole();
             })
+            .UseKestrel()
+            .UseIISIntegration().UseUrls()
             .UseStartup<Startup>();
     }
 }
