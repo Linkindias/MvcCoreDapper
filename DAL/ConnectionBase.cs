@@ -26,22 +26,17 @@ namespace DAL
             this.log = log;
         }
 
-        //public ConnectionBase(string con, int timeout)
-        //{
-        //    this.ConnectionString = con;
-        //    this.CommandTimeout = timeout;
-        //}
-
         public (Result rtn ,T result) GetSingleDefault<T>(string sqlCmd , DynamicParameters Params)
         {
             Result rtn = new Result();
             T result = (T)Convert.ChangeType(null,typeof(T));
-            using (var connection = new SqlConnection(this.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(this.ConnectionString))
             {
                 try
                 {
                     this.log.LogInformation($"ConnectionBase:{sqlCmd}");
                     this.log.LogInformation($"ConnectionBase:{this.ConnectionString}");
+                    connection.Open();
                     result = connection.Query<T>(sqlCmd, Params).SingleOrDefault(); //只允許查出一筆
 
                     this.log.LogInformation($"ConnectionBase:{(result == null ? string.Empty : result.ToString())}");
@@ -49,9 +44,14 @@ namespace DAL
                 }
                 catch (Exception ex)
                 {
+                    this.log.LogInformation($"ConnectionBase Exception:{ex.StackTrace}");
                     this.log.LogInformation($"ConnectionBase Exception:{ex.Message}");
                     rtn.IsSuccess = false;
                     rtn.ErrorMsg = ex.Message.ToString();
+                }
+                finally
+                {
+                    connection.Close();
                 }
             }
             return (rtn, result);
@@ -61,7 +61,7 @@ namespace DAL
         {
             Result rtn = new Result();
             List<T> result = null;
-            using (var connection = new SqlConnection(this.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(this.ConnectionString))
             {
                 try
                 {
@@ -81,7 +81,7 @@ namespace DAL
         {
             Result rtn = new Result();
             List<T> result = null;
-            using (var connection = new SqlConnection(this.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(this.ConnectionString))
             {
                 try
                 {
@@ -101,7 +101,7 @@ namespace DAL
         {
             Result rtn = new Result();
             int Rows = 0;
-            using (var connection = new SqlConnection(this.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(this.ConnectionString))
             {
                 try
                 {
@@ -122,7 +122,7 @@ namespace DAL
         public (Result rtn, DynamicParameters Params) GetStoredProcedureOfParams(string sqlCmd, DynamicParameters Params)
         {
             Result rtn = new Result();
-            using (var connection = new SqlConnection(this.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(this.ConnectionString))
             {
                 try
                 {
@@ -144,7 +144,7 @@ namespace DAL
         {
             Result rtn = new Result();
             int Rows = 0;
-            using (var connection = new SqlConnection(this.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(this.ConnectionString))
             {
                 try
                 {

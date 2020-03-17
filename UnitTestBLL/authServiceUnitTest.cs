@@ -1,16 +1,17 @@
 using Base;
 using BLL.InterFace;
 using BLL.Model;
+using DAL;
 using DAL.DBModel;
 using DAL.DTOModel;
 using DAL.Repository;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.Protected;
 using System;
-using System.Data.SqlTypes;
 
 namespace UnitTestBLL
 {
@@ -20,18 +21,19 @@ namespace UnitTestBLL
         static AuthService AuthService = null;
         static Mock<IConfiguration> mockConfig = null;
         static Mock<IMemberOfAuth> mockMember = null;
-        static Mock<AuthenticationRepository> mockAuth = null;
         static Mock<IMemoryCache> mockCache = null;
-        static string connect = string.Empty;
-        static int timeout = 0;
+        static Mock<ILogger<ConnectionBase>> mockLog = null;
+        static Mock<AuthenticationRepository> mockAuth = null;
 
         [ClassInitialize]
         public static void authServiceUnitTestInitialize(TestContext testContext)
         {
             mockConfig = new Mock<IConfiguration>();
+            mockConfig.SetupGet(p => p[It.IsAny<String>()]).Returns("1");
             mockCache = new Mock<IMemoryCache>();
             mockMember = new Mock<IMemberOfAuth>();
-            mockAuth = new Mock<AuthenticationRepository>(new object[] { connect, timeout });
+            mockLog = new Mock<ILogger<ConnectionBase>>();
+            mockAuth = new Mock<AuthenticationRepository>(mockConfig.Object, mockLog.Object);
             AuthService = new AuthService(mockConfig.Object ,mockMember.Object, mockCache.Object, mockAuth.Object);
         }
 

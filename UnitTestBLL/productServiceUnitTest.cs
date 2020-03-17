@@ -2,11 +2,13 @@
 using BLL.InterFace;
 using BLL.Model;
 using BLL.PageModel;
+using DAL;
 using DAL.DBModel;
 using DAL.DTOModel;
 using DAL.Repository;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.Protected;
@@ -20,6 +22,7 @@ namespace UnitTestBLL
     public class productServiceUnitTest
     {
         static Mock<IConfiguration> mockConfig = null;
+        static Mock<ILogger<ConnectionBase>> mockLog = null;
         static Mock<IMemoryCache> mockCache = null;
         static Mock<IMemberOfProduct> mockMember = null;
         static ProductService ProductService = null;
@@ -36,12 +39,14 @@ namespace UnitTestBLL
         public static void memberServiceUnitTestInitialize(TestContext testContext)
         {
             mockConfig = new Mock<IConfiguration>();
+            mockConfig.SetupGet(p => p[It.IsAny<String>()]).Returns("1");
+            mockLog = new Mock<ILogger<ConnectionBase>>();
             mockCache = new Mock<IMemoryCache>();
             mockMember = new Mock<IMemberOfProduct>();
-            mockProduct = new Mock<ProductRepository>(new object[] { connect, timeout });
-            mockCategory = new Mock<CategorieRepository>(new object[] { connect, timeout });
-            mockOrderDetail = new Mock<OrderDetailRepository>(new object[] { connect, timeout });
-            mockSupplier = new Mock<SupplierRepository>(new object[] { connect, timeout });
+            mockProduct = new Mock<ProductRepository>(mockConfig.Object, mockLog.Object);
+            mockCategory = new Mock<CategorieRepository>(mockConfig.Object, mockLog.Object);
+            mockOrderDetail = new Mock<OrderDetailRepository>(mockConfig.Object, mockLog.Object);
+            mockSupplier = new Mock<SupplierRepository>(mockConfig.Object, mockLog.Object);
             mockProductModel = new Mock<ProductModel>();
             mockShopCarModel = new Mock<ShopCarModel>();
             ProductService = new ProductService(mockConfig.Object, mockCache.Object, mockMember.Object,

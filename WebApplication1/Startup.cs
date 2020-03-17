@@ -28,9 +28,6 @@ namespace WebApplication1
         {
             services.AddMemoryCache();
 
-            string strCon = Config.GetValue<string>("NorthwindConnection");
-            int cmdTimeOut = Config.GetValue<int>("CommandTimeout");
-
             services.AddCors();
             services.AddAntiforgery();
 

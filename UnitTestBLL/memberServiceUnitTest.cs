@@ -1,13 +1,14 @@
 ﻿using Base;
 using BLL.Model;
 using BLL.PageModel;
+using DAL;
 using DAL.DBModel;
 using DAL.Repository;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using Microsoft.Extensions.Configuration;
 
 namespace UnitTestBLL
 {
@@ -15,20 +16,27 @@ namespace UnitTestBLL
     public class memberServiceUnitTest
     {
         static MemberService MemberService = null;
+        static Mock<IConfiguration> mockConfig = null;
+        static Mock<ILogger<ConnectionBase>> mockLog = null;
+        static Mock<ILogger<EmployeeRepository>> mockEmpLog = null;
+        static Mock<ILogger<CustomerRepository>> mockCusLog = null;
         static Mock<EmployeeRepository> mockEmp = null;
         static Mock<CustomerRepository> mockCus = null;
         static Mock<RoleRepository> mockRole = null;
         static Mock<CustomerModel> mockCusM = null;
         static Mock<EmployeeModel> mockEmpM = null;
-        static string connect = string.Empty;
-        static int timeout = 0;
 
         [ClassInitialize]
         public static void memberServiceUnitTestInitialize(TestContext testContext)
         {
-            mockEmp = new Mock<EmployeeRepository>(new object[] { connect, timeout });
-            mockCus = new Mock<CustomerRepository>(new object[] { connect, timeout });
-            mockRole = new Mock<RoleRepository>(new object[] { connect, timeout });
+            mockConfig = new Mock<IConfiguration>();
+            mockConfig.SetupGet(p => p[It.IsAny<string>()]).Returns("1");
+            mockLog = new Mock<ILogger<ConnectionBase>>();
+            mockEmpLog = new Mock<ILogger<EmployeeRepository>>();
+            mockCusLog = new Mock<ILogger<CustomerRepository>>();
+            mockEmp = new Mock<EmployeeRepository>(mockConfig.Object, mockEmpLog.Object, mockLog.Object);
+            mockCus = new Mock<CustomerRepository>(mockConfig.Object, mockCusLog.Object, mockLog.Object);
+            mockRole = new Mock<RoleRepository>(mockConfig.Object, mockLog.Object);
             mockCusM = new Mock<CustomerModel>();
             mockEmpM = new Mock<EmployeeModel>();
             MemberService = new MemberService(mockEmp.Object, mockCus.Object, mockRole.Object, mockEmpM.Object, mockCusM.Object);
@@ -300,8 +308,15 @@ namespace UnitTestBLL
         [ClassCleanup]
         public static void ClassCleanup()
         {
+            mockConfig = null;
+            mockLog = null;
+            mockEmpLog = null;
+            mockCusLog = null;
             mockEmp = null;
             mockCus = null;
+            mockRole = null;
+            mockCusM = null;
+            mockEmpM = null;
             MemberService = null;
         }
     }

@@ -1,9 +1,12 @@
 ﻿using Base;
 using BLL.InterFace;
 using BLL.Model;
+using DAL;
 using DAL.DTOModel;
 using DAL.Repository;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.Protected;
@@ -17,17 +20,20 @@ namespace UnitTestBLL
     public class menuServiceUnitTest
     {
         static MenuService MenuService = null;
+        static Mock<IConfiguration> mockConfig = null;
+        static Mock<ILogger<ConnectionBase>> mockLog = null;
         static Mock<MenuRepository> mockMenu = null;
         static Mock<IMemberOfMenu> mockMember = null;
         static Mock<IMemoryCache> mockCache = null;
-        static string connect = string.Empty;
-        static int timeout = 0;
 
         [ClassInitialize]
         public static void memberServiceUnitTestInitialize(TestContext testContext)
         {
+            mockConfig = new Mock<IConfiguration>();
+            mockConfig.SetupGet(p => p[It.IsAny<String>()]).Returns("1");
+            mockLog = new Mock<ILogger<ConnectionBase>>();
             mockCache = new Mock<IMemoryCache>();
-            mockMenu = new Mock<MenuRepository>(new object[] { connect, timeout });
+            mockMenu = new Mock<MenuRepository>(mockConfig.Object, mockLog.Object);
             mockMember = new Mock<IMemberOfMenu>();
             MenuService = new MenuService(mockMenu.Object, mockMember.Object, mockCache.Object);
         }
@@ -105,6 +111,8 @@ namespace UnitTestBLL
         [ClassCleanup]
         public static void ClassCleanup()
         {
+            mockConfig = null;
+            mockLog = null;
             mockMenu = null;
             mockMember = null;
             mockCache = null;
