@@ -24,7 +24,7 @@ namespace WebApplication1
                 log.AddConsole();
             })
             .UseKestrel()
-            .UseIISIntegration().UseUrls("http://localhost/MvcCore/")
+            .UseIISIntegration()
             .UseStartup<Startup>();
     }
 }

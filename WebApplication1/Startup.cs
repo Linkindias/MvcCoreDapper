@@ -3,12 +3,15 @@ using BLL.Model;
 using BLL.PageModel;
 using DAL;
 using DAL.Repository;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using WebApplication1.Filters;
 
 namespace WebApplication1
@@ -17,6 +20,7 @@ namespace WebApplication1
     {
         IConfiguration Config { get; }
         IHostingEnvironment CurrentEnv { get; set; }
+        IAntiforgery Antiforgery { get; set; }
 
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
@@ -29,10 +33,11 @@ namespace WebApplication1
             services.AddMemoryCache();
 
             services.AddCors();
-            services.AddAntiforgery();
 
-            services.AddAuthentication("BasicAuthentication")
-                        .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+            //For WebApi CSRF Token
+            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+
+            services.AddAuthentication("BasicAuthentication").AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
             //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         //.AddJwtBearer(options =>
@@ -90,8 +95,10 @@ namespace WebApplication1
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IAntiforgery antiforgery)
         {
+            this.Antiforgery = antiforgery;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -101,6 +108,21 @@ namespace WebApplication1
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+
+            //For WebApi CSRF Token
+            app.Use(next => context =>
+            {
+                if (
+                    string.Equals(context.Request.Path.Value, "/", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(context.Request.Path.Value, "/index.html", StringComparison.OrdinalIgnoreCase))
+                {
+                    // We can send the request token as a JavaScript-readable cookie, and Angular will use it by default.
+                    var tokens = antiforgery.GetAndStoreTokens(context);
+                    context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false });
+                }
+
+                return next(context);
+            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
